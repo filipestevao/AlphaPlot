@@ -75,7 +75,7 @@ AlphaPlot may require the following packages ...
 |:--------------|:---------------------------------------------|
 | Qt            | https://www.qt.io/                           |
 | QCustomPlot   | https://www.qcustomplot.com/                 |
-| muParser      | http://muparser.beltoforion.de/              |
+| muParser      | https://beltoforion.de/en/muparser/          |
 | GSL           | http://www.gnu.org/software/gsl/             |
 
 Out of this, QCustomPlot and muParser sources(s) are already present in 3rdparty folder and will be statically built to AlphaPlot. So these packages need not be installed on your system.
