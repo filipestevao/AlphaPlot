@@ -69,29 +69,29 @@ SyntaxHighlighter::SyntaxHighlighter(QTextDocument *parent)
                   << "super";
 
   foreach (const QString &pattern, keywords) {
-    rule.pattern = QRegExp("\\b" + pattern + "\\b");
+    rule.pattern = QRegularExpression("\\b" + pattern + "\\b");
     rule.format = keywordFormat;
     highlightingRules.append(rule);
   }
 
   classFormat.setForeground(Qt::darkMagenta);
-  rule.pattern = QRegExp("\\bMath\\b");
+  rule.pattern = QRegularExpression("\\bMath\\b");
   rule.format = classFormat;
   highlightingRules.append(rule);
 
   QTextCharFormat trueFalseFormat;
   trueFalseFormat.setForeground(QColor(174, 129, 255));
-  rule.pattern = QRegExp("\\b(true|false|this)\\b");
+  rule.pattern = QRegularExpression("\\b(true|false|this)\\b");
   rule.format = trueFalseFormat;
   highlightingRules.append(rule);
 
   quotationFormat.setForeground(Qt::darkGreen);
-  rule.pattern = QRegExp("\".*\"");
+  rule.pattern = QRegularExpression("\".*\"");
   rule.format = quotationFormat;
   highlightingRules.append(rule);
 
   singleQuotationFormat.setForeground(Qt::darkGreen);
-  rule.pattern = QRegExp("'.*'");
+  rule.pattern = QRegularExpression("'.*'");
   rule.format = singleQuotationFormat;
   highlightingRules.append(rule);
 
@@ -106,26 +106,26 @@ SyntaxHighlighter::SyntaxHighlighter(QTextDocument *parent)
         : keywordExcludePatterns.append(QString("|%1").arg(pattern));
   }
 
-  rule.pattern = QRegExp(
+  rule.pattern = QRegularExpression(
       QString("\\b(?!(%1)+[\\s]*[/]?(?=\\())([A-Za-z0-9_]+[\\s]*[/]?(?=\\())")
           .arg(keywordExcludePatterns));
   rule.format = functionFormat;
   highlightingRules.append(rule);
 
   singleLineCommentFormat.setForeground(QColor(128, 128, 128));
-  rule.pattern = QRegExp("//[^\n]*");
+  rule.pattern = QRegularExpression("//[^\n]*");
   rule.format = singleLineCommentFormat;
   highlightingRules.append(rule);
 
   multiLineCommentFormat.setForeground(QColor(128, 128, 128));
 
-  commentStartExpression = QRegExp("/\\*");
-  commentEndExpression = QRegExp("\\*/");
+  commentStartExpression = QRegularExpression("/\\*");
+  commentEndExpression = QRegularExpression("\\*/");
 }
 
 void SyntaxHighlighter::highlightBlock(const QString &text) {
   foreach (const HighlightingRule &rule, highlightingRules) {
-    QRegExp expression(rule.pattern);
+    QRegularExpression expression(rule.pattern);
     int index = expression.indexIn(text);
     while (index >= 0) {
       int length = expression.matchedLength();

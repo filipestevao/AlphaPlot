@@ -38,7 +38,7 @@
 #include "Folder.h"
 #include <math.h>
 #include <QtCore/QByteArray>
-#include <QtCore/QRegExp>
+#include <QtCore/QRegularExpression>
 
 /**
  * \class MuParserScript
@@ -491,7 +491,7 @@ Column *MuParserScript::resolveColumnPath(const QString &path) {
   // Split path into components.
   // While escape handling would be possible using a regular expression, it
   // would require
-  // lookbehind assertions, which are currently not supported by QRegExp. Thus,
+  // lookbehind assertions, which are currently not supported by QRegularExpression. Thus,
   // we can't simply
   // use QString::split() and have to explicitly loop over the characters in
   // path.
@@ -594,7 +594,7 @@ Column *MuParserScript::resolveColumnPath(const QString &path) {
  * argument of the new column() and cell() functions (see resolveColumnPath()).
  */
 bool MuParserScript::translateLegacyFunctions(QString &input) {
-  QRegExp legacyFunction("(\\W||^)(col|tablecol|cell)\\s*\\(");
+  QRegularExpression legacyFunction("(\\W||^)(col|tablecol|cell)\\s*\\(");
 
   int functionStart = legacyFunction.indexIn(input, 0);
   while (functionStart != -1) {
@@ -788,7 +788,7 @@ bool MuParserScript::compile(bool asFunction) {
     intermediate.remove(commentStart, intermediate.size() - commentStart);
 
   // simplify statement separators
-  intermediate.replace(QRegExp("([;\\n]\\s*)+"), ", ");
+  intermediate.replace(QRegularExpression("([;\\n]\\s*)+"), ", ");
 
   // recursively translate legacy functions col(), tablecol() and cell()
   if (Context && Context->inherits("Table"))

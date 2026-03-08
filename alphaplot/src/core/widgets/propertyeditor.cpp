@@ -183,7 +183,7 @@ PropertyEditor::PropertyEditor(QWidget *parent, ApplicationWindow *app)
   mywidgetwindownameitem_ = stringManager_->addProperty(tr("Name"));
   mywidgetwindowlabelitem_ = stringManager_->addProperty(tr("Label"));
   stringManager_->setRegExp(mywidgetwindownameitem_,
-                            QRegExp("^[a-zA-Z0-9-]*$"));
+                            QRegularExpression("^[a-zA-Z0-9-]*$"));
 
   // Plot Canvas properties
   canvaspropertycoloritem_ = colorManager_->addProperty(tr("Background Color"));

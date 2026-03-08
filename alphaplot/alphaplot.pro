@@ -5,10 +5,17 @@ DEFINES += QCUSTOMPLOT_USE_OPENGL
 
 # Qt modules
 QT += core gui widgets opengl network svg
-QT += script scripttools printsupport datavisualization
+QT += printsupport datavisualization
 
-# enable C++11 support
-CONFIG += c++11
+# Qt 6 specific modules
+greaterThan(QT_MAJOR_VERSION, 5) {
+    QT += core5compat
+} else {
+    QT += script scripttools
+}
+
+# enable C++11/C++17 runtime support
+CONFIG += c++17
 CONFIG += qt warn_on exceptions opengl thread
 
 

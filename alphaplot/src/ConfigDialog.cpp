@@ -50,7 +50,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QRadioButton>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSpinBox>
 #include <QStackedWidget>
 #include <QStyleFactory>
@@ -1039,7 +1039,7 @@ void ConfigDialog::apply() {
   sep.replace(tr("SPACE"), " ");
   sep.replace("\\s", " ");
 
-  if (sep.contains(QRegExp("[0-9.eE+-]")) != 0) {
+  if (sep.contains(QRegularExpression("[0-9.eE+-]")) != 0) {
     QMessageBox::warning(app_, tr("Import options error"),
                          tr("The separator must not contain the following "
                             "characters: 0-9eE.+-"));

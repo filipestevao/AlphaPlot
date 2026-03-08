@@ -9,8 +9,8 @@ CustomCharacterDialog::CustomCharacterDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui_CustomCharacterDialog) {
   ui->setupUi(this);
   setWindowTitle("Custom Char");
-  QRegExp rxThreeHexAtTheEnd("(?:[0-9a-fA-F]{5})");
-  QRegExpValidator *validator = new QRegExpValidator(rxThreeHexAtTheEnd, this);
+  QRegularExpression rxThreeHexAtTheEnd("(?:[0-9a-fA-F]{5})");
+  QRegularExpressionValidator *validator = new QRegularExpressionValidator(rxThreeHexAtTheEnd, this);
   ui->lineEdit->setValidator(validator);
   connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=]() {
     if (!ui->lineEdit->text().trimmed().isEmpty()) {

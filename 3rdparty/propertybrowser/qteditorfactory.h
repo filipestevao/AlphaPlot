@@ -195,7 +195,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtLineEditFactory
   Q_PRIVATE_SLOT(d_func(),
                  void slotPropertyChanged(QtProperty *, const QString &))
   Q_PRIVATE_SLOT(d_func(),
-                 void slotRegExpChanged(QtProperty *, const QRegExp &))
+                 void slotRegExpChanged(QtProperty *, const QRegularExpression &))
   Q_PRIVATE_SLOT(d_func(), void slotSetValue(const QString &))
   Q_PRIVATE_SLOT(d_func(), void slotEditorDestroyed(QObject *))
 };

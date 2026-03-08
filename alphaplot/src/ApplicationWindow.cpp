@@ -3347,7 +3347,7 @@ void ApplicationWindow::loadSettings() {
     recentProjects = recentProjects[0].split("^e", QString::SkipEmptyParts);
   else if (recentProjects.count() == 1) {
     QString s = recentProjects[0];
-    if (s.remove(QRegExp("\\s")).isEmpty()) recentProjects = QStringList();
+    if (s.remove(QRegularExpression("\\s")).isEmpty()) recentProjects = QStringList();
   }
 #endif
 
@@ -4288,7 +4288,7 @@ bool ApplicationWindow::renameWindow(MyWidget *w, const QString &text) {
   if (newName.isEmpty()) {
     QMessageBox::critical(this, tr("Error"), tr("Please enter a valid name!"));
     return false;
-  } else if (!newName.contains(QRegExp("^[a-zA-Z0-9-]*$"))) {
+  } else if (!newName.contains(QRegularExpression("^[a-zA-Z0-9-]*$"))) {
     QMessageBox::critical(this, tr("Error"),
                           tr("The name you chose is not valid: only letters, "
                              "digits and hyphen are allowed!") +

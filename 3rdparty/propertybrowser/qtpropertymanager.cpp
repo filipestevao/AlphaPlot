@@ -1230,9 +1230,9 @@ class QtStringPropertyManagerPrivate {
   struct Data {
     Data()
         : regExp(QString(QLatin1Char('*')), Qt::CaseSensitive,
-                 QRegExp::Wildcard) {}
+                 QRegularExpression::Wildcard) {}
     QString val;
-    QRegExp regExp;
+    QRegularExpression regExp;
   };
 
   typedef QMap<const QtProperty *, Data> PropertyValueMap;
@@ -1272,7 +1272,7 @@ class QtStringPropertyManagerPrivate {
 
 /*!
     \fn void QtStringPropertyManager::regExpChanged(QtProperty *property, const
-   QRegExp &regExp)
+   QRegularExpression &regExp)
 
     This signal is emitted whenever a property created by this manager
     changes its currenlty set regular expression, passing a pointer to
@@ -1318,10 +1318,10 @@ QString QtStringPropertyManager::value(const QtProperty *property) const {
 
     \sa setRegExp()
 */
-QRegExp QtStringPropertyManager::regExp(const QtProperty *property) const {
-  return getData<QRegExp>(d_ptr->m_values,
+QRegularExpression QtStringPropertyManager::regExp(const QtProperty *property) const {
+  return getData<QRegularExpression>(d_ptr->m_values,
                           &QtStringPropertyManagerPrivate::Data::regExp,
-                          property, QRegExp());
+                          property, QRegularExpression());
 }
 
 /*!
@@ -1371,7 +1371,7 @@ void QtStringPropertyManager::setValue(QtProperty *property,
     \sa regExp(), setValue(), regExpChanged()
 */
 void QtStringPropertyManager::setRegExp(QtProperty *property,
-                                        const QRegExp &regExp) {
+                                        const QRegularExpression &regExp) {
   const QtStringPropertyManagerPrivate::PropertyValueMap::iterator it =
       d_ptr->m_values.find(property);
   if (it == d_ptr->m_values.end()) return;

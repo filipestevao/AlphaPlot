@@ -37,7 +37,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QVBoxLayout>
 
 FindDialog::FindDialog(QWidget *parent, Qt::WindowFlags fl)

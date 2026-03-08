@@ -554,7 +554,7 @@ void FitDialog::saveUserFunction() {
                           tr("Please enter a function name!"));
     boxName->setFocus();
     return;
-  } else if (boxParam->text().remove(QRegExp("[,;\\s]")).isEmpty()) {
+  } else if (boxParam->text().remove(QRegularExpression("[,;\\s]")).isEmpty()) {
     QMessageBox::critical(this, tr("Input function error"),
                           tr("Please enter at least one parameter name!"));
     boxParam->setFocus();
@@ -638,7 +638,7 @@ void FitDialog::showFitPage() {
 
   QString par = boxParam->text().simplified();
   QStringList paramList =
-      par.split(QRegExp("[,;]+[\\s]*"), QString::SkipEmptyParts);
+      par.split(QRegularExpression("[,;]+[\\s]*"), QString::SkipEmptyParts);
   int parameters = paramList.count();
   boxParams->setRowCount(parameters);
   boxParams->hideColumn(2);

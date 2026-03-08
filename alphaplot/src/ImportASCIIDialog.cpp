@@ -37,7 +37,7 @@
 #include <QHBoxLayout>
 #include <QGroupBox>
 #include <QPushButton>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QMessageBox>
 
 ImportASCIIDialog::ImportASCIIDialog(bool import_mode_enabled, QWidget *parent,
@@ -239,7 +239,7 @@ const QString ImportASCIIDialog::columnSeparator() const {
   sep.replace("\\t", "\t");
 
   /* TODO
-  if (sep.contains(QRegExp("[0-9.eE+-]")))
+  if (sep.contains(QRegularExpression("[0-9.eE+-]")))
           QMessageBox::warning(this, tr("Import options error"),
                           tr("The separator must not contain the following
   characters: 0-9eE.+-"));
