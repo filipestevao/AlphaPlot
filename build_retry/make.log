@@ -1,0 +1,240 @@
+cd alphaplot/ && ( test -e Makefile || /usr/bin/qmake6 -o Makefile /var/home/filipe/AlphaPlot/alphaplot/alphaplot.pro ) && make -f Makefile 
+Project MESSAGE: Build configuration: Linux all dynamic
+make[1]: Entering directory '/var/home/filipe/AlphaPlot/build_retry/alphaplot'
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/future/matrix/matrixcontroltabs.ui -o ui_matrixcontroltabs.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/future/table/controltabs.ui -o ui_controltabs.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/core/widgets/propertyeditor.ui -o ui_propertyeditor.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/scripting/widgets/ConsoleWidget.ui -o ui_ConsoleWidget.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/widgets/CustomCharacterDialog.ui -o ui_CustomCharacterDialog.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/GeneralApplicationSettings.ui -o ui_GeneralApplicationSettings.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/GeneralAppreanceSettings.ui -o ui_GeneralAppreanceSettings.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/GeneralConfirmationSettings.ui -o ui_GeneralConfirmationSettings.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/FittingSettings.ui -o ui_FittingSettings.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/GeneralNumericFormatSettings.ui -o ui_GeneralNumericFormatSettings.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/TableBasicSettings.ui -o ui_TableBasicSettings.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/TableColorSettings.ui -o ui_TableColorSettings.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/TableFontSettings.ui -o ui_TableFontSettings.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/SettingsDialog.ui -o ui_SettingsDialog.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/PropertiesDialog.ui -o ui_PropertiesDialog.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/ui/RandomDistributionDialog.ui -o ui_RandomDistributionDialog.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/About.ui -o ui_About.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/future/core/ProjectConfigPage.ui -o ui_ProjectConfigPage.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/2Dplot/widgets/Function2DDialog.ui -o ui_Function2DDialog.h
+/usr/lib64/qt6/libexec/uic ../../alphaplot/src/2Dplot/widgets/SwapLayout2DDialog.ui -o ui_SwapLayout2DDialog.h
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/muParser.o ../../3rdparty/muparser/muParser.cpp
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/muParserBase.o ../../3rdparty/muparser/muParserBase.cpp
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/muParserBytecode.o ../../3rdparty/muparser/muParserBytecode.cpp
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/muParserCallback.o ../../3rdparty/muparser/muParserCallback.cpp
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/muParserError.o ../../3rdparty/muparser/muParserError.cpp
+../../3rdparty/muparser/muParserBytecode.cpp: In member function ‘void mu::ParserByteCode::AddOp(mu::ECmdCode)’:
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmLE’ not handled in switch [-Wswitch]
+  213 |         switch(a_Oprt)
+      |               ^
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmGE’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmNEQ’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmEQ’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmLT’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmGT’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmLAND’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmLOR’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmASSIGN’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmBO’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmBC’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmIF’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmELSE’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmENDIF’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmARG_SEP’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmVAR’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmVAL’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmVARPOW2’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmVARPOW3’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmVARPOW4’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmVARMUL’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmPOW2’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmFUNC’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmFUNC_STR’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmFUNC_BULK’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmSTRING’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmOPRT_BIN’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmOPRT_POSTFIX’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmOPRT_INFIX’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmEND’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBytecode.cpp:213:15: warning: enumeration value ‘cmUNKNOWN’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp: In member function ‘void mu::ParserBase::AddCallback(const mu::string_type&, const mu::ParserCallback&, mu::funmap_type&, const mu::char_type*)’:
+../../3rdparty/muparser/muParserBase.cpp:360:28: warning: implicitly-declared ‘constexpr mu::ParserCallback& mu::ParserCallback::operator=(const mu::ParserCallback&)’ is deprecated [-Wdeprecated-copy]
+  360 |     a_Storage[a_strName] = a_Callback;
+      |                            ^~~~~~~~~~
+In file included from ../../3rdparty/muparser/muParserToken.h:36,
+                 from ../../3rdparty/muparser/muParserStack.h:35,
+                 from ../../3rdparty/muparser/muParserBase.h:39,
+                 from ../../3rdparty/muparser/muParserBase.cpp:26:
+../../3rdparty/muparser/muParserCallback.h:83:5: note: because ‘mu::ParserCallback’ has user-provided ‘mu::ParserCallback::ParserCallback(const mu::ParserCallback&)’
+   83 |     ParserCallback(const ParserCallback &a_Fun);
+      |     ^~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp: In member function ‘void mu::ParserBase::ApplyFunc(mu::ParserStack<mu::ParserToken<double, std::__cxx11::basic_string<char> > >&, mu::ParserStack<mu::ParserToken<double, std::__cxx11::basic_string<char> > >&, int) const’:
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmLE’ not handled in switch [-Wswitch]
+  838 |     switch(funTok.GetCode())
+      |           ^
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmGE’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmNEQ’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmEQ’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmLT’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmGT’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmADD’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmSUB’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmMUL’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmDIV’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmPOW’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmLAND’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmLOR’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmASSIGN’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmBO’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmBC’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmIF’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmELSE’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmENDIF’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmARG_SEP’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmVAR’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmVAL’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmVARPOW2’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmVARPOW3’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmVARPOW4’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmVARMUL’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmPOW2’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmSTRING’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmEND’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp:838:11: warning: enumeration value ‘cmUNKNOWN’ not handled in switch [-Wswitch]
+../../3rdparty/muparser/muParserBase.cpp: In member function ‘mu::value_type mu::ParserBase::ParseCmdCodeBulk(int, int) const’:
+../../3rdparty/muparser/muParserBase.cpp:1101:50: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::fun_type1’ {aka ‘double (*)(double)’} [-Wcast-function-type]
+ 1101 |               case 1:            Stack[sidx] = (*(fun_type1)pTok->Fun.ptr)(Stack[sidx]);   continue;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1102:50: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::fun_type2’ {aka ‘double (*)(double, double)’} [-Wcast-function-type]
+ 1102 |               case 2: sidx -= 1; Stack[sidx] = (*(fun_type2)pTok->Fun.ptr)(Stack[sidx], Stack[sidx+1]); continue;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1103:50: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::fun_type3’ {aka ‘double (*)(double, double, double)’} [-Wcast-function-type]
+ 1103 |               case 3: sidx -= 2; Stack[sidx] = (*(fun_type3)pTok->Fun.ptr)(Stack[sidx], Stack[sidx+1], Stack[sidx+2]); continue;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1104:50: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::fun_type4’ {aka ‘double (*)(double, double, double, double)’} [-Wcast-function-type]
+ 1104 |               case 4: sidx -= 3; Stack[sidx] = (*(fun_type4)pTok->Fun.ptr)(Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3]); continue;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1105:50: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::fun_type5’ {aka ‘double (*)(double, double, double, double, double)’} [-Wcast-function-type]
+ 1105 |               case 5: sidx -= 4; Stack[sidx] = (*(fun_type5)pTok->Fun.ptr)(Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4]); continue;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1106:50: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::fun_type6’ {aka ‘double (*)(double, double, double, double, double, double)’} [-Wcast-function-type]
+ 1106 |               case 6: sidx -= 5; Stack[sidx] = (*(fun_type6)pTok->Fun.ptr)(Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4], Stack[sidx+5]); continue;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1107:50: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::fun_type7’ {aka ‘double (*)(double, double, double, double, double, double, double)’} [-Wcast-function-type]
+ 1107 |               case 7: sidx -= 6; Stack[sidx] = (*(fun_type7)pTok->Fun.ptr)(Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4], Stack[sidx+5], Stack[sidx+6]); continue;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1108:50: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::fun_type8’ {aka ‘double (*)(double, double, double, double, double, double, double, double)’} [-Wcast-function-type]
+ 1108 |               case 8: sidx -= 7; Stack[sidx] = (*(fun_type8)pTok->Fun.ptr)(Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4], Stack[sidx+5], Stack[sidx+6], Stack[sidx+7]); continue;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1109:50: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::fun_type9’ {aka ‘double (*)(double, double, double, double, double, double, double, double, double)’} [-Wcast-function-type]
+ 1109 |               case 9: sidx -= 8; Stack[sidx] = (*(fun_type9)pTok->Fun.ptr)(Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4], Stack[sidx+5], Stack[sidx+6], Stack[sidx+7], Stack[sidx+8]); continue;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1110:50: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::fun_type10’ {aka ‘double (*)(double, double, double, double, double, double, double, double, double, double)’} [-Wcast-function-type]
+ 1110 |               case 10:sidx -= 9; Stack[sidx] = (*(fun_type10)pTok->Fun.ptr)(Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4], Stack[sidx+5], Stack[sidx+6], Stack[sidx+7], Stack[sidx+8], Stack[sidx+9]); continue;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1116:32: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::multfun_type’ {aka ‘double (*)(const double*, int)’} [-Wcast-function-type]
+ 1116 |                 Stack[sidx] =(*(multfun_type)pTok->Fun.ptr)(&Stack[sidx], -iArgCount);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1132:39: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::strfun_type1’ {aka ‘double (*)(const char*)’} [-Wcast-function-type]
+ 1132 |               case 0: Stack[sidx] = (*(strfun_type1)pTok->Fun.ptr)(m_vStringBuf[iIdxStack].c_str()); continue;
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1133:39: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::strfun_type2’ {aka ‘double (*)(const char*, double)’} [-Wcast-function-type]
+ 1133 |               case 1: Stack[sidx] = (*(strfun_type2)pTok->Fun.ptr)(m_vStringBuf[iIdxStack].c_str(), Stack[sidx]); continue;
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1134:39: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::strfun_type3’ {aka ‘double (*)(const char*, double, double)’} [-Wcast-function-type]
+ 1134 |               case 2: Stack[sidx] = (*(strfun_type3)pTok->Fun.ptr)(m_vStringBuf[iIdxStack].c_str(), Stack[sidx], Stack[sidx+1]); continue;
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1147:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type0’ {aka ‘double (*)(int, int)’} [-Wcast-function-type]
+ 1147 |                 case 0: sidx += 1; Stack[sidx] = (*(bulkfun_type0 )pTok->Fun.ptr)(nOffset, nThreadID); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1148:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type1’ {aka ‘double (*)(int, int, double)’} [-Wcast-function-type]
+ 1148 |                 case 1:            Stack[sidx] = (*(bulkfun_type1 )pTok->Fun.ptr)(nOffset, nThreadID, Stack[sidx]); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1149:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type2’ {aka ‘double (*)(int, int, double, double)’} [-Wcast-function-type]
+ 1149 |                 case 2: sidx -= 1; Stack[sidx] = (*(bulkfun_type2 )pTok->Fun.ptr)(nOffset, nThreadID, Stack[sidx], Stack[sidx+1]); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1150:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type3’ {aka ‘double (*)(int, int, double, double, double)’} [-Wcast-function-type]
+ 1150 |                 case 3: sidx -= 2; Stack[sidx] = (*(bulkfun_type3 )pTok->Fun.ptr)(nOffset, nThreadID, Stack[sidx], Stack[sidx+1], Stack[sidx+2]); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1151:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type4’ {aka ‘double (*)(int, int, double, double, double, double)’} [-Wcast-function-type]
+ 1151 |                 case 4: sidx -= 3; Stack[sidx] = (*(bulkfun_type4 )pTok->Fun.ptr)(nOffset, nThreadID, Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3]); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1152:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type5’ {aka ‘double (*)(int, int, double, double, double, double, double)’} [-Wcast-function-type]
+ 1152 |                 case 5: sidx -= 4; Stack[sidx] = (*(bulkfun_type5 )pTok->Fun.ptr)(nOffset, nThreadID, Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4]); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1153:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type6’ {aka ‘double (*)(int, int, double, double, double, double, double, double)’} [-Wcast-function-type]
+ 1153 |                 case 6: sidx -= 5; Stack[sidx] = (*(bulkfun_type6 )pTok->Fun.ptr)(nOffset, nThreadID, Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4], Stack[sidx+5]); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1154:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type7’ {aka ‘double (*)(int, int, double, double, double, double, double, double, double)’} [-Wcast-function-type]
+ 1154 |                 case 7: sidx -= 6; Stack[sidx] = (*(bulkfun_type7 )pTok->Fun.ptr)(nOffset, nThreadID, Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4], Stack[sidx+5], Stack[sidx+6]); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1155:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type8’ {aka ‘double (*)(int, int, double, double, double, double, double, double, double, double)’} [-Wcast-function-type]
+ 1155 |                 case 8: sidx -= 7; Stack[sidx] = (*(bulkfun_type8 )pTok->Fun.ptr)(nOffset, nThreadID, Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4], Stack[sidx+5], Stack[sidx+6], Stack[sidx+7]); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1156:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type9’ {aka ‘double (*)(int, int, double, double, double, double, double, double, double, double, double)’} [-Wcast-function-type]
+ 1156 |                 case 9: sidx -= 8; Stack[sidx] = (*(bulkfun_type9 )pTok->Fun.ptr)(nOffset, nThreadID, Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4], Stack[sidx+5], Stack[sidx+6], Stack[sidx+7], Stack[sidx+8]); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1157:52: warning: cast between incompatible function types from ‘mu::generic_fun_type’ {aka ‘double (*)()’} to ‘mu::bulkfun_type10’ {aka ‘double (*)(int, int, double, double, double, double, double, double, double, double, double, double)’} [-Wcast-function-type]
+ 1157 |                 case 10:sidx -= 9; Stack[sidx] = (*(bulkfun_type10)pTok->Fun.ptr)(nOffset, nThreadID, Stack[sidx], Stack[sidx+1], Stack[sidx+2], Stack[sidx+3], Stack[sidx+4], Stack[sidx+5], Stack[sidx+6], Stack[sidx+7], Stack[sidx+8], Stack[sidx+9]); continue;
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp: In member function ‘void mu::ParserBase::CheckOprt(const mu::string_type&, const mu::ParserCallback&, const mu::string_type&) const’:
+../../3rdparty/muparser/muParserBase.cpp:379:33: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  379 |       case cmOPRT_POSTFIX: Error(ecINVALID_POSTFIX_IDENT, -1, a_sName);
+      |                            ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:380:7: note: here
+  380 |       case cmOPRT_INFIX:   Error(ecINVALID_INFIX_IDENT, -1, a_sName);
+      |       ^~~~
+../../3rdparty/muparser/muParserBase.cpp:380:33: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  380 |       case cmOPRT_INFIX:   Error(ecINVALID_INFIX_IDENT, -1, a_sName);
+      |                            ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:381:7: note: here
+  381 |       default:             Error(ecINVALID_NAME, -1, a_sName);
+      |       ^~~~~~~
+../../3rdparty/muparser/muParserBase.cpp: In member function ‘void mu::ParserBase::CreateRPN() const’:
+../../3rdparty/muparser/muParserBase.cpp:1230:17: warning: this statement may fall through [-Wimplicit-fallthrough=]
+ 1230 |                 ++stArgCount.top();
+      |                 ^~~~~~~~~~~~~~~~~~
+../../3rdparty/muparser/muParserBase.cpp:1233:9: note: here
+ 1233 |         case cmEND:
+      |         ^~~~
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/muParserTokenReader.o ../../3rdparty/muparser/muParserTokenReader.cpp
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/AppearanceManager.o ../../alphaplot/src/core/AppearanceManager.cpp
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/IconLoader.o ../../alphaplot/src/core/IconLoader.cpp
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/Utilities.o ../../alphaplot/src/core/Utilities.cpp
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/MyTreeWidget.o ../../alphaplot/src/core/widgets/MyTreeWidget.cpp
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/propertyeditor.o ../../alphaplot/src/core/widgets/propertyeditor.cpp
+g++ -c -pipe -O2 -std=gnu++1z -D_REENTRANT -Wall -Wextra -DLEGACY_CODE_0_2_x -DQCUSTOMPLOT_USE_OPENGL -DSCRIPTING_CONSOLE -DSCRIPTING_MUPARSER -DSCRIPTING_DIALOG -DSEARCH_FOR_UPDATES -DQ_BUILD_64 -DQT_PLUGIN -DTS_PATH=\"/usr/share/alphaplot/translations\" -DDOC_PATH=\"/usr/share/doc/alphaplot\" -DMANUAL_PATH=\"/usr/share/doc/alphaplot/manual\" -DPLUGIN_PATH=\"/usr/lib/alphaplot/plugins\" -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_DATAVISUALIZATION_LIB -DQT_OPENGL_LIB -DQT_SVG_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I../../alphaplot -I. -I/home/filipe/usr/include -Ialphaplot -Ialphaplot/src -I../../data/translations -I../../alphaplot/src -I../../alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtCore -I../tmp/alphaplot -I. -I/usr/lib64/qt6/mkspecs/linux-g++ -o ../tmp/alphaplot/ColorLabel.o ../../alphaplot/src/widgets/ColorLabel.cpp
+In file included from ../../alphaplot/src/core/Utilities.cpp:19:
+../../alphaplot/src/core/Utilities.h:33:10: error: ‘QDateTime’ does not name a type
+   33 |   static QDateTime stripDateTimeToFormat(const QDateTime &datetime,
+      |          ^~~~~~~~~
+In file included from ../../alphaplot/src/ApplicationWindow.h:33,
+                 from ../../alphaplot/src/2Dplot/widgets/AddPlot2DDialog.h:7,
+                 from ../../alphaplot/src/core/widgets/MyTreeWidget.cpp:18:
+../../alphaplot/src/Table.h:38:10: fatal error: QtScript: No such file or directory
+   38 | #include <QtScript>
+      |          ^~~~~~~~~~
+compilation terminated.
+make[1]: *** [Makefile:5145: ../tmp/alphaplot/MyTreeWidget.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+In file included from ../../alphaplot/src/ApplicationWindow.h:33,
+                 from ../../alphaplot/src/core/widgets/propertyeditor.h:24,
+                 from ../../alphaplot/src/core/widgets/propertyeditor.cpp:17:
+../../alphaplot/src/Table.h:38:10: fatal error: QtScript: No such file or directory
+   38 | #include <QtScript>
+      |          ^~~~~~~~~~
+compilation terminated.
+make[1]: *** [Makefile:5211: ../tmp/alphaplot/propertyeditor.o] Error 1
+../../alphaplot/src/core/Utilities.cpp:278:11: error: no declaration matches ‘QDateTime Utilities::stripDateTimeToFormat(const QDateTime&, const QString&)’
+  278 | QDateTime Utilities::stripDateTimeToFormat(const QDateTime& datetime,
+      |           ^~~~~~~~~
+../../alphaplot/src/core/Utilities.cpp:278:11: note: no functions named ‘QDateTime Utilities::stripDateTimeToFormat(const QDateTime&, const QString&)’
+../../alphaplot/src/core/Utilities.h:23:7: note: ‘class Utilities’ defined here
+   23 | class Utilities {
+      |       ^~~~~~~~~
+make[1]: *** [Makefile:5093: ../tmp/alphaplot/Utilities.o] Error 1
+make[1]: Leaving directory '/var/home/filipe/AlphaPlot/build_retry/alphaplot'
+make: *** [Makefile:52: sub-alphaplot-make_first-ordered] Error 2

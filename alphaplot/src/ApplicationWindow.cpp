@@ -101,7 +101,7 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QProgressDialog>
-#include <QScriptValue>
+#include <QJSValue>
 #include <QSettings>
 #include <QShortcut>
 #include <QSignalMapper>
@@ -9859,128 +9859,49 @@ bool ApplicationWindow::isActiveSubWindow(
 
 //----------------------------scripting related code---------------------------
 void ApplicationWindow::attachQtScript() {
-  // pass mainwindow as global object
-  QScriptValue objectValue = consoleWindow->engine->newQObject(this);
-  consoleWindow->engine->globalObject().setProperty("Alpha", objectValue);
+  if (!consoleWindow || !consoleWindow->engine) return;
 
-  QScriptValue clearFunction = consoleWindow->engine->newFunction(&openProj);
-  clearFunction.setData(objectValue);
-  consoleWindow->engine->globalObject().setProperty("openAproj", clearFunction);
+  QJSEngine *engine = consoleWindow->engine;
+  // Expose the main window as 'Alpha' — all Q_INVOKABLE methods and public
+  // slots on ApplicationWindow become callable from JavaScript.
+  QJSValue objectValue = engine->newQObject(this);
+  engine->globalObject().setProperty("Alpha", objectValue);
 
-  qScriptRegisterMetaType<Table *>(consoleWindow->engine,
-                                   tableObjectToScriptValue,
-                                   tableObjectFromScriptValue);
-  qScriptRegisterMetaType<Note *>(consoleWindow->engine,
-                                  tableObjectToScriptValue,
-                                  tableObjectFromScriptValue);
-  qScriptRegisterMetaType<Matrix *>(consoleWindow->engine,
-                                    tableObjectToScriptValue,
-                                    tableObjectFromScriptValue);
-  qScriptRegisterMetaType<Column *>(consoleWindow->engine,
-                                    tableObjectToScriptValue,
-                                    tableObjectFromScriptValue);
-  qScriptRegisterMetaType<QVector<int>>(consoleWindow->engine, toScriptValue,
-                                        fromScriptValue);
-  qScriptRegisterMetaType<QVector<float>>(consoleWindow->engine, toScriptValue,
-                                          fromScriptValue);
-  qScriptRegisterMetaType<QVector<double>>(consoleWindow->engine, toScriptValue,
-                                           fromScriptValue);
-  qScriptRegisterMetaType<QVector<long>>(consoleWindow->engine, toScriptValue,
-                                         fromScriptValue);
-  qScriptRegisterMetaType<QVector<QString>>(consoleWindow->engine,
-                                            toScriptValue, fromScriptValue);
-  qScriptRegisterMetaType<QVector<QDate>>(consoleWindow->engine, toScriptValue,
-                                          fromScriptValue);
-  qScriptRegisterMetaType<QVector<QDateTime>>(consoleWindow->engine,
-                                              toScriptValue, fromScriptValue);
+  // Inject JS convenience wrappers
+  engine->evaluate(
+    "function openAproj(path) { Alpha.open(path); }\n"
+  );
 }
 
-Table *ApplicationWindow::getTableHandle() {
-  if (context()->argumentCount() != 1 || !context()->argument(0).isString()) {
-    context()->throwError(tr("getTableHandle(string) take one argument!"));
-  }
-
-  bool namedWidgetPresent = false;
+Table *ApplicationWindow::getTableHandle(const QString &name) {
   QList<QMdiSubWindow *> subwindowlist = subWindowsList();
   foreach (QMdiSubWindow *subwindow, subwindowlist) {
-    if (subwindow->objectName() == context()->argument(0).toString()) {
-      if (qobject_cast<Table *>(subwindow)) {
-        namedWidgetPresent = true;
-        Table *table = qobject_cast<Table *>(subwindow);
-        return table;
-      } else {
-        context()->throwError(context()->argument(0).toString() +
-                              tr(" is not a valid Table object name!"));
-      }
+    if (subwindow->objectName() == name) {
+      Table *table = qobject_cast<Table *>(subwindow);
+      if (table) return table;
     }
   }
-
-  if (!namedWidgetPresent) {
-    context()->throwError(context()->argument(0).toString() +
-                          tr(" is not a valid Table object name!"));
-  }
-
-  // will never reach here
   return nullptr;
 }
 
-Matrix *ApplicationWindow::getMatrixHandle() {
-  if (context()->argumentCount() != 1 || !context()->argument(0).isString()) {
-    context()->throwError(tr("getMatrixHandle(string) take one argument!"));
-  }
-
-  bool namedWidgetPresent = false;
+Matrix *ApplicationWindow::getMatrixHandle(const QString &name) {
   QList<QMdiSubWindow *> subwindowlist = subWindowsList();
   foreach (QMdiSubWindow *subwindow, subwindowlist) {
-    if (subwindow->objectName() == context()->argument(0).toString()) {
-      if (qobject_cast<Matrix *>(subwindow)) {
-        namedWidgetPresent = true;
-        Matrix *matrix = qobject_cast<Matrix *>(subwindow);
-        return matrix;
-      } else {
-        context()->throwError(context()->argument(0).toString() +
-                              tr(" is not a valid Matrix object name!"));
-      }
+    if (subwindow->objectName() == name) {
+      Matrix *matrix = qobject_cast<Matrix *>(subwindow);
+      if (matrix) return matrix;
     }
   }
-
-  if (!namedWidgetPresent) {
-    context()->throwError(context()->argument(0).toString() +
-                          tr(" is not a valid Matrix object name!"));
-  }
-
-  // will never reach here
   return nullptr;
 }
 
-Note *ApplicationWindow::getNoteHandle() {
-  if (context()->argumentCount() != 1 || !context()->argument(0).isString()) {
-    context()->throwError(tr("getNoteHandle(string) take one argument!"));
-  }
-
-  bool namedWidgetPresent = false;
+Note *ApplicationWindow::getNoteHandle(const QString &name) {
   QList<QMdiSubWindow *> subwindowlist = subWindowsList();
   foreach (QMdiSubWindow *subwindow, subwindowlist) {
-    if (subwindow->objectName() == context()->argument(0).toString()) {
-      if (qobject_cast<Note *>(subwindow)) {
-        namedWidgetPresent = true;
-        Note *note = qobject_cast<Note *>(subwindow);
-        if (!note) {
-          context()->throwError(tr("Unable to get Note handle!"));
-        }
-        return note;
-      } else {
-        context()->throwError(context()->argument(0).toString() +
-                              tr(" is not a valid Note object name!"));
-      }
+    if (subwindow->objectName() == name) {
+      Note *note = qobject_cast<Note *>(subwindow);
+      if (note) return note;
     }
   }
-
-  if (!namedWidgetPresent) {
-    context()->throwError(context()->argument(0).toString() +
-                          tr(" is not a valid Note object name!"));
-  }
-
-  // will never reach here
   return nullptr;
 }

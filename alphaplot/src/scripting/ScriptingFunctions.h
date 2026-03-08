@@ -1,13 +1,13 @@
 #ifndef SCRIPTINGFUNCTIONS_H
 #define SCRIPTINGFUNCTIONS_H
 
-#include <QScriptEngine>
+#include <QJSEngine>
 #include <../Table.h>
 #include <../Note.h>
 #include <../Matrix.h>
 #include <../future/core/column/Column.h>
 
-class QScriptEngine;
+class QJSEngine;
 class Table;
 
 // Register types
@@ -25,47 +25,46 @@ Q_DECLARE_METATYPE(QVector<QDateTime>)
 
 // Registered type to from conversion
 template <class AlphaWindowObject>
-QScriptValue tableObjectToScriptValue(QScriptEngine *engine,
+QJSValue tableObjectToScriptValue(QJSEngine *engine,
                                       const AlphaWindowObject &in) {
   return engine->newQObject(in);
 }
 
 template <class AlphaWindowObject>
-void tableObjectFromScriptValue(const QScriptValue &object,
+void tableObjectFromScriptValue(const QJSValue &object,
                                 AlphaWindowObject &out) {
   out = qobject_cast<AlphaWindowObject>(object.toQObject());
 }
 
 // Register QVector<>
 template <class Container>
-QScriptValue toScriptValue(QScriptEngine *eng, const Container &cont)
+QJSValue toScriptValue(QJSEngine *eng, const Container &cont)
 {
-    QScriptValue a = eng->newArray();
-    typename Container::const_iterator begin = cont.begin();
-    typename Container::const_iterator end = cont.end();
+    QJSValue a = eng->newArray(cont.size());
     typename Container::const_iterator it;
-    for (it = begin; it != end; ++it)
-        a.setProperty(quint32(it - begin), qScriptValueFromValue(eng, *it));
+    int i = 0;
+    for (it = cont.begin(); it != cont.end(); ++it, ++i)
+        a.setProperty(i, eng->toScriptValue(*it));
     return a;
 }
 
 template <class Container>
-void fromScriptValue(const QScriptValue &value, Container &cont)
+void fromScriptValue(const QJSValue &value, Container &cont)
 {
     quint32 len = value.property("length").toUInt32();
     for (quint32 i = 0; i < len; ++i) {
-        QScriptValue item = value.property(i);
+        QJSValue item = value.property(i);
         typedef typename Container::value_type ContainerValue;
-        cont.push_back(qscriptvalue_cast<ContainerValue>(item));
+        cont.push_back(item.toVariant().value<ContainerValue>());
     }
 }
 
 // Console Basic Functions
-QScriptValue print(QScriptContext *context, QScriptEngine *egne);
-QScriptValue clear(QScriptContext *context, QScriptEngine *egne);
-QScriptValue collectGarbage(QScriptContext *context, QScriptEngine *egne);
-QScriptValue attachDebugger(QScriptContext *context, QScriptEngine *egne);
+QJSValue print(QJSEngine *engine, QJSValue thisObject, QJSValue arguments);
+QJSValue clear(QJSEngine *engine, QJSValue thisObject, QJSValue arguments);
+QJSValue collectGarbage(QJSEngine *engine, QJSValue thisObject, QJSValue arguments);
+QJSValue attachDebugger(QJSEngine *engine, QJSValue thisObject, QJSValue arguments);
 // Core functions
-QScriptValue openProj(QScriptContext *context, QScriptEngine *egne);
+QJSValue openProj(QJSEngine *engine, QJSValue thisObject, QJSValue arguments);
 
 #endif  // SCRIPTINGFUNCTIONS_H

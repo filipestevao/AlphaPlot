@@ -19,8 +19,7 @@
 #define CONSOLEWIDGET_H
 
 #include <QDockWidget>
-#include <QScriptEngine>
-#include <QScriptEngineDebugger>
+#include <QJSEngine>
 #include <QTextStream>
 #include <QItemDelegate>
 
@@ -34,13 +33,20 @@ class ConsoleWidget : public QDockWidget {
  public:
   explicit ConsoleWidget(QWidget *parent = nullptr);
   ~ConsoleWidget();
-  QScriptEngine *engine;
-  QScriptEngineDebugger *debugger;
+  QJSEngine *engine;
   QWidget *normalTitleWidget;
   QWidget *hiddenTitleWidget;
   void printError(QString err);
   void setSplitterPosition(QByteArray state);
   QByteArray getSplitterPosition();
+
+  // Q_INVOKABLE methods callable from JavaScript via QJSEngine
+  Q_INVOKABLE void jsPrint(const QString &text);
+  Q_INVOKABLE void jsClear();
+  Q_INVOKABLE void jsCollectGarbage();
+  Q_INVOKABLE void jsAttachDebugger(bool /*attach*/) {
+    qDebug() << "attachDebugger not available in Qt 6 (QJSEngine)";
+  }
 
  signals:
   void printResult(QString);

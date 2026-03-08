@@ -35,7 +35,7 @@
 #include <QHash>
 #include <QMap>
 #include <QVarLengthArray>
-#include <QtScript>
+#include <QVarLengthArray>
 
 #include "MyWidget.h"
 
@@ -47,7 +47,7 @@
 #include "scripting/ScriptingEnv.h"
 /*!\brief MDI window providing a spreadsheet table with column logic.
  */
-class Table : public TableView, public scripted, public QScriptable {
+class Table : public TableView, public scripted {
   Q_OBJECT
 
  public:

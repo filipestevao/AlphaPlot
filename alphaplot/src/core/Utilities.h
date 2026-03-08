@@ -19,6 +19,7 @@
 #include <QColor>
 #include <QImage>
 #include <QString>
+#include <QDateTime>
 
 class Utilities {
  public:
