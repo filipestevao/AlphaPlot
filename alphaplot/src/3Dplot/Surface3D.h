@@ -14,7 +14,7 @@ class DataBlockSurface3D;
 class XmlStreamWriter;
 class XmlStreamReader;
 class ApplicationWindow;
-using namespace QtDataVisualization;
+
 
 class Surface3D : public QObject {
   Q_OBJECT

@@ -132,7 +132,7 @@ QString Integration::logInfo() {
   QString curvename = associateddata_->table->name() + "_" +
                       associateddata_->xcol->name() + "_" +
                       associateddata_->ycol->name();
-  QString logInfo = "[" + QDateTime::currentDateTime().toString(Qt::LocalDate) +
+  QString logInfo = "[" + QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat) +
                     "\t" + tr("Plot") + ": ''" + curvename + "'']\n";
   logInfo += "\n" + tr("Numerical integration of") + ": " + curvename +
              tr(" using ") + method_name + tr("Interpolation") + "\n";

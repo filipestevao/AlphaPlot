@@ -2,9 +2,9 @@
 #define DATAMANAGER3D_H
 
 #include <QList>
-#include <QtDataVisualization/QBarDataArray>
-#include <QtDataVisualization/QScatterDataArray>
-#include <QtDataVisualization/QSurfaceDataArray>
+#include <QtDataVisualization/QBarDataProxy>
+#include <QtDataVisualization/QScatterDataProxy>
+#include <QtDataVisualization/QSurfaceDataProxy>
 
 #include "Graph3DCommon.h"
 

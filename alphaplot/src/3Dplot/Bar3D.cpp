@@ -8,6 +8,9 @@
 #include "future/core/column/Column.h"
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
+ 
+using namespace QtDataVisualization;
+
 
 Bar3D::Bar3D(Q3DBars *bar)
     : graph_(bar), data_(QVector<DataBlockBar3D *>()), counter_(0) {

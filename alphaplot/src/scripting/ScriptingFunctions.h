@@ -51,7 +51,7 @@ QJSValue toScriptValue(QJSEngine *eng, const Container &cont)
 template <class Container>
 void fromScriptValue(const QJSValue &value, Container &cont)
 {
-    quint32 len = value.property("length").toUInt32();
+    quint32 len = value.property("length").toUInt();
     for (quint32 i = 0; i < len; ++i) {
         QJSValue item = value.property(i);
         typedef typename Container::value_type ContainerValue;

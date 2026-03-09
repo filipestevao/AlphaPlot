@@ -2300,7 +2300,7 @@ void ApplicationWindow::matrixDeterminant() {
   if (!matrix) return;
 
   QDateTime dt = QDateTime::currentDateTime();
-  QString info = dt.toString(Qt::LocalDate);
+  QString info = QLocale().toString(dt, QLocale::ShortFormat);
   info += "\n" + tr("Determinant of ") + QString(matrix->name()) + ":\t";
   info += "det = " + QString::number(matrix->determinant()) + "\n";
   info += "-------------------------------------------------------------\n";
@@ -3659,7 +3659,7 @@ void ApplicationWindow::loadSettings() {
   strip_spaces = settings.value("StripSpaces", false).toBool();
   simplify_spaces = settings.value("SimplifySpaces", false).toBool();
   d_ASCII_file_filter = settings.value("AsciiFileTypeFilter", "*").toString();
-  d_ASCII_import_locale = settings.value("AsciiImportLocale", "C").toString();
+  d_ASCII_import_locale = QLocale(settings.value("AsciiImportLocale", "C").toString());
   d_convert_to_numeric = settings.value("ConvertToNumeric", true).toBool();
   settings.endGroup();  // Import ASCII
 
@@ -3671,7 +3671,7 @@ void ApplicationWindow::loadSettings() {
   d_export_resolution = settings.value("Resolution", 72).toInt();
   d_export_color = settings.value("ExportColor", true).toBool();
   d_export_vector_size =
-      settings.value("ExportPageSize", QPrinter::Custom).toInt();
+      settings.value("ExportPageSize", QPageSize::Custom).toInt();
   d_keep_plot_aspect = settings.value("KeepAspect", true).toBool();
   d_export_orientation =
       settings.value("Orientation", QPrinter::Landscape).toInt();
@@ -5278,7 +5278,7 @@ void ApplicationWindow::addTimeStamp() {
     return;
   }
 
-  QString date = QDateTime::currentDateTime().toString(Qt::LocalDate);
+  QString date = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
   axisrect->addTextItem2D(date);
 }
 
@@ -8123,8 +8123,8 @@ void ApplicationWindow::folderProperties() {
       (saved) ? properties.status = tr("Saved")
               : properties.status = tr("Not Saved");
       properties.size = QString::number(fileInfo.size());
-      properties.created = fileInfo.birthTime().toString(Qt::LocalDate);
-      properties.modified = fileInfo.lastModified().toString(Qt::LocalDate);
+      properties.created = QLocale().toString(fileInfo.birthTime(), QLocale::ShortFormat);
+      properties.modified = QLocale().toString(fileInfo.lastModified(), QLocale::ShortFormat);
       properties.label = "";
     } else {
       properties.path = projectname;

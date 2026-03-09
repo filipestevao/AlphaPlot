@@ -34,6 +34,8 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QPrinter>
+#include <QPageSize>
+#include <QPageLayout>
 #include <QSpinBox>
 
 #include "ui/ExtensibleFileDialog.h"
@@ -87,10 +89,10 @@ class ImageExportDlg : public ExtensibleFileDialog {
   bool keepAspect() const { return d_keep_aspect->isChecked(); }
   //! For vector formats: returns a standard output page size (default:
   //! QPrinter::Custom).
-  QPrinter::PageSize pageSize() const;
-  void setPageSize(QPrinter::PageSize size);
-  QPrinter::Orientation pageOrientation() const;
-  void setOrientation(QPrinter::Orientation orientation);
+  QPageSize::PageSizeId pageSize() const;
+  void setPageSize(QPageSize::PageSizeId size);
+  QPageLayout::Orientation pageOrientation() const;
+  void setOrientation(QPageLayout::Orientation orientation);
   //! Return the quality (in percent) the user selected for export to raster
   //! formats.
   int quality() const { return d_quality->value(); }

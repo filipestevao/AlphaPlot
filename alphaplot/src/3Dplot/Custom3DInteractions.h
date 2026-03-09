@@ -3,7 +3,7 @@
 
 #include <QtDataVisualization/QAbstract3DInputHandler>
 
-using namespace QtDataVisualization;
+
 
 class Custom3DInteractions : public QAbstract3DInputHandler {
   Q_OBJECT

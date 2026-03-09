@@ -221,7 +221,7 @@ void Fit::generateFunction(bool yes, int points) {
 QString Fit::logFitInfo(const std::vector<double> &par, int iterations,
                         int status, const QString &plotName) {
   QDateTime dt = QDateTime::currentDateTime();
-  QString info = "[" + dt.toString(Qt::LocalDate) + "\t" + tr("Plot") + ": ''" +
+  QString info = "[" + QLocale().toString(dt, QLocale::ShortFormat) + "\t" + tr("Plot") + ": ''" +
                  plotName + "'']\n";
   info += d_explanation + " " + tr("fit of dataset") + ": " +
           associateddata_->table->name() + "_" + associateddata_->xcol->name() +

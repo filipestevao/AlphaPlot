@@ -6,6 +6,9 @@
 #include "future/core/column/Column.h"
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
+ 
+using namespace QtDataVisualization;
+
 
 Scatter3D::Scatter3D(Q3DScatter *scatter)
     : graph_(scatter), data_(QVector<DataBlockScatter3D *>()), counter_(0) {

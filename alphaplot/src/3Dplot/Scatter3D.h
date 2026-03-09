@@ -13,7 +13,7 @@ class Column;
 class DataBlockScatter3D;
 class XmlStreamWriter;
 class XmlStreamReader;
-using namespace QtDataVisualization;
+
 
 class Scatter3D : public QObject {
   Q_OBJECT

@@ -95,7 +95,7 @@ void Table::init() {
   TableView::setTable(d_future_table);
   setMinimumSize(QSize(400, 300));
 
-  birthdate = d_future_table->creationTime().toString(Qt::LocalDate);
+  birthdate = QLocale().toString(d_future_table->creationTime(), QLocale::ShortFormat);
   ui.formula_tab_layout->removeWidget(ui.formula_box);
   delete ui.formula_box;
   ui.formula_box = new ScriptEdit(scriptEnv, ui.formula_tab);

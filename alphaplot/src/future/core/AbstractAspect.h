@@ -282,7 +282,7 @@ class AbstractAspect : public QObject {
 
  public:
   void importV0x0001XXCreationTime(const QString &str) {
-    setCreationTime(QDateTime::fromString(str, Qt::LocalDate));
+    setCreationTime(QLocale().toDateTime(str, QLocale::ShortFormat));
   }
 
  signals:

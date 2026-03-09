@@ -1,6 +1,9 @@
 #include "Custom3DInteractions.h"
 
 #include <QtDataVisualization/Q3DCamera>
+ 
+using namespace QtDataVisualization;
+
 
 const int Custom3DInteractions::deltazoom_ = 1;
 

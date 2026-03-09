@@ -55,7 +55,7 @@ Note::~Note() {}
 void Note::init(ScriptingEnv* env) {
   autoExec = false;
   QDateTime dt = QDateTime::currentDateTime();
-  setBirthDate(dt.toString(Qt::LocalDate));
+  setBirthDate(QLocale().toString(dt, QLocale::ShortFormat));
 
   textedit_ = new ScriptEdit(env, this, name());
   textedit_->setContext(this);
@@ -71,7 +71,7 @@ void Note::modifiedNote() { emit modifiedWindow(this); }
 
 void Note::save(QXmlStreamWriter* xmlwriter) {
   xmlwriter->writeStartElement("note");
-  QDateTime datetime = QDateTime::fromString(birthDate(), Qt::LocalDate);
+  QDateTime datetime = QLocale().toDateTime(birthDate(), QLocale::ShortFormat);
   xmlwriter->writeAttribute("creation_time",
                             datetime.toString("yyyy-dd-MM hh:mm:ss:zzz"));
   xmlwriter->writeAttribute("caption_spec", QString::number(captionPolicy()));
@@ -116,9 +116,9 @@ bool Note::load(XmlStreamReader* xmlreader) {
       xmlreader->raiseWarning(
           tr("Invalid creation time for '%1'. Using current time.")
               .arg(name()));
-      setBirthDate(QDateTime::currentDateTime().toString(Qt::LocalDate));
+      setBirthDate(QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat));
     } else
-      setBirthDate(creation_time.toString(Qt::LocalDate));
+      setBirthDate(QLocale().toString(creation_time, QLocale::ShortFormat));
     // read caption spec
     basicattr =
         attribs.value(xmlreader->namespaceUri().toString(), "caption_spec")

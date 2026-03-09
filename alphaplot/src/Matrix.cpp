@@ -86,7 +86,7 @@ void Matrix::init(int rows, int cols) {
   d_future_matrix->setCoordinates(1.0, 10.0, 1.0, 10.0);
   dMatrix = nullptr;
 
-  birthdate = d_future_matrix->creationTime().toString(Qt::LocalDate);
+  birthdate = QLocale().toString(d_future_matrix->creationTime(), QLocale::ShortFormat);
 
   // this is not very nice but works for the moment
   ui._2->removeWidget(ui.formula_box);

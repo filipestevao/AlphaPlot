@@ -282,7 +282,7 @@ class Matrix : public MatrixView, public scripted {
 
   //! Return the creation date
   virtual QString birthDate() {
-    return d_future_matrix->creationTime().toString(Qt::LocalDate);
+    return QLocale().toString(d_future_matrix->creationTime(), QLocale::ShortFormat);
   }
 
  signals:

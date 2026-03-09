@@ -35,7 +35,7 @@ class QLabel;
 class QListWidget;
 class QPushButton;
 class QTableWidget;
-class QStringList;
+#include <QStringList>
 class Table;
 class QMdiSubWindow;
 class AxisRect2D;

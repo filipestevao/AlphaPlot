@@ -375,10 +375,10 @@ Folder *AprojHandler::readxmlstream(ApplicationWindow *app, QFile *file,
       if (ok) {
         table->setBirthDate(
             QDateTime::fromString(time, "yyyy-dd-MM hh:mm:ss:zzz")
-                .toString(Qt::LocalDate));
+                .toString(Qt::ISODate)); // Using ISODate instead of LocalDate for proj files if appropriate, or QLocale().toString()
       } else {
         table->setBirthDate(
-            QDateTime::currentDateTime().toString(Qt::LocalDate));
+            QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat));
         xmlreader->raiseWarning(
             tr("Invalid creation time. Using current time insted."));
       }
