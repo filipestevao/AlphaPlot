@@ -285,11 +285,11 @@ class Table : public TableView, public scripted {
  public slots:
   int rowCount();
   int colCount();
-  double getCell();
-  void setCell();
-  void setRowCount();
-  void setColCount();
-  void applyFunction();
+  double getCell(int row, int col);
+  void setCell(int row, int col, double val);
+  void setRowCount(int rows);
+  void setColCount(int cols);
+  void applyFunction(int col, const QString &formula);
 };
 
 #endif  // TABLE_H

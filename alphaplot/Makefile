@@ -3163,6 +3163,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3201,6 +3202,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3237,11 +3239,10 @@ compiler_moc_header_clean:
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h \
 		../tmp/alphaplot/moc_predefs.h \
@@ -3257,11 +3258,10 @@ compiler_moc_header_clean:
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h \
 		../tmp/alphaplot/moc_predefs.h \
@@ -3275,6 +3275,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3316,6 +3317,7 @@ compiler_moc_header_clean:
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -3402,6 +3404,7 @@ compiler_moc_header_clean:
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -3477,6 +3480,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3498,6 +3502,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3522,6 +3527,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3546,6 +3552,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3570,6 +3577,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3594,6 +3602,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3618,6 +3627,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3642,6 +3652,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3671,6 +3682,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3700,6 +3712,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3729,6 +3742,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3754,6 +3768,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3784,6 +3799,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3814,6 +3830,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3839,6 +3856,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3864,6 +3882,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3890,6 +3909,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -3915,6 +3935,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -4396,6 +4417,7 @@ compiler_moc_header_clean:
 		src/MyWidget.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/lib/macros.h \
 		../tmp/alphaplot/moc_predefs.h \
 		/usr/lib64/qt6/libexec/moc
@@ -4410,6 +4432,7 @@ compiler_moc_header_clean:
 		src/MyWidget.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		../tmp/alphaplot/moc_predefs.h \
 		/usr/lib64/qt6/libexec/moc
 	/usr/lib64/qt6/libexec/moc $(DEFINES) --include /var/home/filipe/AlphaPlot/tmp/alphaplot/moc_predefs.h -I/usr/lib64/qt6/mkspecs/linux-g++ -I/var/home/filipe/AlphaPlot/alphaplot -I'/var/home/filipe/AlphaPlot/alphaplot/$(HOME)/usr/include' -I/var/home/filipe/AlphaPlot/alphaplot/alphaplot -I/var/home/filipe/AlphaPlot/alphaplot/alphaplot/src -I/var/home/filipe/AlphaPlot/data/translations -I/var/home/filipe/AlphaPlot/alphaplot/src -I/var/home/filipe/AlphaPlot/alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtQml -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtQmlIntegration -I/usr/include/qt6/QtCore -I/usr/include/c++/15 -I/usr/include/c++/15/x86_64-redhat-linux -I/usr/include/c++/15/backward -I/usr/lib/gcc/x86_64-redhat-linux/15/include -I/usr/local/include -I/usr/include src/future/matrix/MatrixView.h -o ../tmp/alphaplot/moc_MatrixView.cpp
@@ -4439,6 +4462,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		../tmp/alphaplot/moc_predefs.h \
 		/usr/lib64/qt6/libexec/moc
 	/usr/lib64/qt6/libexec/moc $(DEFINES) --include /var/home/filipe/AlphaPlot/tmp/alphaplot/moc_predefs.h -I/usr/lib64/qt6/mkspecs/linux-g++ -I/var/home/filipe/AlphaPlot/alphaplot -I'/var/home/filipe/AlphaPlot/alphaplot/$(HOME)/usr/include' -I/var/home/filipe/AlphaPlot/alphaplot/alphaplot -I/var/home/filipe/AlphaPlot/alphaplot/alphaplot/src -I/var/home/filipe/AlphaPlot/data/translations -I/var/home/filipe/AlphaPlot/alphaplot/src -I/var/home/filipe/AlphaPlot/alphaplot/src/future -I/usr/include/qt6 -I/usr/include/qt6/QtPrintSupport -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtDataVisualization -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtSvg -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtQml -I/usr/include/qt6/QtNetwork -I/usr/include/qt6/QtCore5Compat -I/usr/include/qt6/QtQmlIntegration -I/usr/include/qt6/QtCore -I/usr/include/c++/15 -I/usr/include/c++/15/x86_64-redhat-linux -I/usr/include/c++/15/backward -I/usr/lib/gcc/x86_64-redhat-linux/15/include -I/usr/local/include -I/usr/include src/future/table/TableView.h -o ../tmp/alphaplot/moc_TableView.cpp
@@ -4697,6 +4721,7 @@ compiler_moc_header_clean:
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -4793,6 +4818,7 @@ ui_ApplicationWindow.h: src/ApplicationWindow.ui \
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -4921,11 +4947,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/muParser.o ../3rdparty/muparser/muParser.cpp
@@ -4933,11 +4958,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ../tmp/alphaplot/muParserBase.o: ../3rdparty/muparser/muParserBase.cpp ../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/muParserBase.o ../3rdparty/muparser/muParserBase.cpp
@@ -4948,7 +4972,6 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserError.h \
 		../3rdparty/muparser/muParserToken.h \
 		../3rdparty/muparser/muParserCallback.h \
-		../3rdparty/muparser/muParserStack.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/muParserBytecode.o ../3rdparty/muparser/muParserBytecode.cpp
 
@@ -4969,7 +4992,6 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserError.h \
 		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBase.h \
-		../3rdparty/muparser/muParserStack.h \
 		../3rdparty/muparser/muParserBytecode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/muParserTokenReader.o ../3rdparty/muparser/muParserTokenReader.cpp
 
@@ -4981,6 +5003,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5121,6 +5144,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5158,6 +5182,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5223,11 +5248,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h \
 		src/scripting/MuParserScripting.h \
@@ -5246,6 +5270,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/MyWidget.h \
 		src/future/table/TableView.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5274,11 +5299,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h \
 		src/scripting/MuParserScripting.h \
@@ -5289,6 +5313,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5305,11 +5330,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/MyParser.o src/scripting/MyParser.cpp
@@ -5321,6 +5345,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5355,6 +5380,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5383,6 +5409,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5412,6 +5439,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5439,6 +5467,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5464,6 +5493,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -5498,6 +5528,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5513,6 +5544,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -5558,6 +5590,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5582,11 +5615,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/FilterDialog.o src/analysis/FilterDialog.cpp
@@ -5610,6 +5642,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5633,11 +5666,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/FFTDialog.o src/analysis/FFTDialog.cpp
@@ -5658,6 +5690,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -5694,6 +5727,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5743,6 +5777,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5765,6 +5800,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5785,6 +5821,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5821,11 +5858,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h \
 		src/scripting/MuParserScripting.h
@@ -5839,11 +5875,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h \
 		src/scripting/MuParserScripting.h
@@ -5861,6 +5896,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5878,6 +5914,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5903,6 +5940,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -5922,6 +5960,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -5964,6 +6003,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6002,6 +6042,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6038,6 +6079,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6067,6 +6109,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6096,6 +6139,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6131,6 +6175,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6168,6 +6213,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6192,11 +6238,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/IntDialog.o src/analysis/IntDialog.cpp
@@ -6212,6 +6257,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6244,6 +6290,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6268,11 +6315,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/InterpolationDialog.o src/analysis/InterpolationDialog.cpp
@@ -6288,6 +6334,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6318,6 +6365,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6342,11 +6390,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/SmoothCurveDialog.o src/analysis/SmoothCurveDialog.cpp
@@ -6362,6 +6409,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6405,6 +6453,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6428,6 +6477,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6467,6 +6517,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6501,6 +6552,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6532,6 +6584,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6568,6 +6621,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6592,6 +6646,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6615,6 +6670,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6653,6 +6709,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6676,6 +6733,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6691,11 +6749,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/NonLinearFit.o src/analysis/NonLinearFit.cpp
@@ -6722,6 +6779,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6754,10 +6812,9 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/scripting/MyParser.h \
 		../3rdparty/muparser/muParser.h \
 		../3rdparty/muparser/muParserBase.h \
-		../3rdparty/muparser/muParserStack.h \
+		../3rdparty/muparser/muParserTokenReader.h \
 		../3rdparty/muparser/muParserToken.h \
 		../3rdparty/muparser/muParserCallback.h \
-		../3rdparty/muparser/muParserTokenReader.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/FitDialog.o src/analysis/FitDialog.cpp
@@ -6771,6 +6828,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6798,6 +6856,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6817,6 +6876,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -6854,34 +6914,6 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 ../tmp/alphaplot/ConsoleWidget.o: src/scripting/widgets/ConsoleWidget.cpp src/scripting/widgets/ConsoleWidget.h \
 		ui_ConsoleWidget.h \
-		src/scripting/ScriptingFunctions.h \
-		src/Table.h \
-		src/MyWidget.h \
-		src/future/table/TableView.h \
-		src/globals.h \
-		src/future/lib/IntervalAttribute.h \
-		src/future/lib/Interval.h \
-		ui_controltabs.h \
-		src/future/table/future_Table.h \
-		src/ui/RandomDistributionDialog.h \
-		src/future/core/AbstractPart.h \
-		src/future/core/AbstractAspect.h \
-		src/scripting/Script.h \
-		src/scripting/customevents.h \
-		src/scripting/ScriptingEnv.h \
-		src/Note.h \
-		src/scripting/ScriptEdit.h \
-		src/Matrix.h \
-		src/future/matrix/MatrixView.h \
-		ui_matrixcontroltabs.h \
-		src/future/matrix/future_Matrix.h \
-		src/future/lib/macros.h \
-		src/future/core/column/Column.h \
-		src/future/core/AbstractSimpleFilter.h \
-		src/future/core/AbstractFilter.h \
-		src/future/core/AbstractColumn.h \
-		src/future/lib/XmlStreamReader.h \
-		src/future/core/datatypes/NumericDateTimeBaseFilter.h \
 		src/scripting/widgets/Console.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/ConsoleWidget.o src/scripting/widgets/ConsoleWidget.cpp
 
@@ -6916,7 +6948,8 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/scripting/Script.h \
 		src/scripting/customevents.h \
 		src/scripting/ScriptingEnv.h \
-		ui_GeneralApplicationSettings.h
+		ui_GeneralApplicationSettings.h \
+		src/widgets/ColorLabel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/GeneralApplicationSettings.o src/ui/GeneralApplicationSettings.cpp
 
 ../tmp/alphaplot/GeneralAppreanceSettings.o: src/ui/GeneralAppreanceSettings.cpp src/ui/GeneralAppreanceSettings.h \
@@ -6961,6 +6994,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -6996,7 +7030,8 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ../tmp/alphaplot/FittingSettings.o: src/ui/FittingSettings.cpp src/ui/FittingSettings.h \
 		src/ui/SettingsPage.h \
 		src/core/IconLoader.h \
-		ui_FittingSettings.h
+		ui_FittingSettings.h \
+		src/ColorBox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/FittingSettings.o src/ui/FittingSettings.cpp
 
 ../tmp/alphaplot/GeneralNumericFormatSettings.o: src/ui/GeneralNumericFormatSettings.cpp src/ui/GeneralNumericFormatSettings.h \
@@ -7040,6 +7075,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -7072,6 +7108,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -7320,6 +7357,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/MyWidget.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/lib/macros.h \
 		src/core/IconLoader.h \
 		src/Matrix.h \
@@ -7338,6 +7376,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -7352,6 +7391,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/MyWidget.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -7371,6 +7411,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/MyWidget.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/lib/macros.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../tmp/alphaplot/matrixcommands.o src/future/matrix/matrixcommands.cpp
 
@@ -7412,6 +7453,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/table/TableView.h \
 		src/MyWidget.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_SortDialog.h \
 		src/future/table/tablecommands.h \
 		src/future/core/column/ColumnPrivate.h
@@ -7441,6 +7483,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/core/AbstractFilter.h \
 		src/future/core/AbstractAspect.h \
 		src/future/core/AbstractColumn.h \
@@ -7604,6 +7647,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -7617,11 +7661,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h \
 		ui_Function2DDialog.h
@@ -7705,6 +7748,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/Matrix.h \
 		src/future/matrix/MatrixView.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -7752,6 +7796,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -7806,6 +7851,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/Matrix.h \
 		src/future/matrix/MatrixView.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -7888,6 +7934,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -7944,6 +7991,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -7986,6 +8034,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/MyWidget.h \
 		src/future/table/TableView.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -8006,6 +8055,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -8043,6 +8093,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -8086,6 +8137,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/MyWidget.h \
 		src/future/table/TableView.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -8110,6 +8162,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -8137,6 +8190,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -8187,6 +8241,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -8234,6 +8289,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -8291,6 +8347,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -8328,6 +8385,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -8360,6 +8418,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \
@@ -8395,6 +8454,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -8426,6 +8486,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/matrix/MatrixView.h \
 		src/globals.h \
 		ui_matrixcontroltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/matrix/future_Matrix.h \
 		src/future/core/AbstractPart.h \
 		src/future/core/AbstractAspect.h \
@@ -8455,11 +8516,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		../3rdparty/muparser/muParserBase.h \
 		../3rdparty/muparser/muParserDef.h \
 		../3rdparty/muparser/muParserFixes.h \
-		../3rdparty/muparser/muParserStack.h \
-		../3rdparty/muparser/muParserError.h \
-		../3rdparty/muparser/muParserToken.h \
-		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserTokenReader.h \
+		../3rdparty/muparser/muParserToken.h \
+		../3rdparty/muparser/muParserError.h \
+		../3rdparty/muparser/muParserCallback.h \
 		../3rdparty/muparser/muParserBytecode.h \
 		../3rdparty/muparser/muParserTemplateMagic.h \
 		src/ApplicationWindow.h \
@@ -8470,6 +8530,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 		src/future/lib/IntervalAttribute.h \
 		src/future/lib/Interval.h \
 		ui_controltabs.h \
+		src/future/core/ControlWidget.h \
 		src/future/table/future_Table.h \
 		src/ui/RandomDistributionDialog.h \
 		src/future/core/AbstractPart.h \

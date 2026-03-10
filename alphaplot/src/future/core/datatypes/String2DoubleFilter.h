@@ -116,7 +116,7 @@ class String2DoubleFilter : public AbstractSimpleFilter {
     auto tstr = QString(str);
     if (accept_any_decimal_separator) {
       QChar decimalSeparator =
-          locale.decimalPoint();  // get the decimal separator for this locale
+          locale.decimalPoint().at(0);  // get the decimal separator for this locale
       QChar foreignSeparator =
           decimalSeparator;  // safeguard initialization just in case
                              // there are other decimal separators.

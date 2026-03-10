@@ -1,10 +1,13 @@
 #ifndef DATAMANAGER3D_H
 #define DATAMANAGER3D_H
 
-#include <QList>
-#include <QtDataVisualization/QBarDataProxy>
-#include <QtDataVisualization/QScatterDataProxy>
-#include <QtDataVisualization/QSurfaceDataProxy>
+#include <QtDataVisualization/QAbstract3DSeries>
+#include <QtDataVisualization/QBar3DSeries>
+#include <QtDataVisualization/QItemModelBarDataProxy>
+#include <QtDataVisualization/QItemModelScatterDataProxy>
+#include <QtDataVisualization/QItemModelSurfaceDataProxy>
+#include <QtDataVisualization/QScatter3DSeries>
+#include <QtDataVisualization/QSurface3DSeries>
 
 #include "Graph3DCommon.h"
 
@@ -21,7 +24,6 @@ class QBar3DSeries;
 class QItemModelBarDataProxy;
 class QScatterDataProxy;
 class QScatter3DSeries;
-class QItemModelScatterDataProxy;
 class QAbstract3DSeries;
 }  // namespace QtDataVisualization
 

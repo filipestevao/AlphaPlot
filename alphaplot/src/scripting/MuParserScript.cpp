@@ -594,18 +594,19 @@ Column *MuParserScript::resolveColumnPath(const QString &path) {
  * argument of the new column() and cell() functions (see resolveColumnPath()).
  */
 bool MuParserScript::translateLegacyFunctions(QString &input) {
-  QRegularExpression legacyFunction("(\\W||^)(col|tablecol|cell)\\s*\\(");
+  QRegularExpression legacyFunction("(\\W|^)(col|tablecol|cell)\\s*\\(");
 
-  int functionStart = legacyFunction.indexIn(input, 0);
-  while (functionStart != -1) {
+  QRegularExpressionMatch match = legacyFunction.match(input);
+  while (match.hasMatch()) {
+    int functionStart = match.capturedStart();
     QStringList arguments;
     int functionEnd = functionStart;  // initialization is a failsafe
     QString replacement;
 
     // parse arguments of function
     QString currentArgument;
-    for (int i = functionStart + legacyFunction.matchedLength(),
-             parenthesisLevel = 1;
+    int parenthesisLevel = 1;
+    for (int i = functionStart + match.capturedLength();
          parenthesisLevel > 0 && i < input.size(); i++) {
       switch (input.at(i).toLatin1()) {
         case '"':
@@ -649,7 +650,7 @@ bool MuParserScript::translateLegacyFunctions(QString &input) {
 
     // select replacement function call
     Table *table = qobject_cast<Table *>(Context);
-    if (legacyFunction.cap(2) == "col") {
+    if (match.captured(2) == "col") {
       QString columnArgument;
       bool numericColumn = false;
       if (arguments.at(0).startsWith("\"")) {
@@ -680,7 +681,7 @@ bool MuParserScript::translateLegacyFunctions(QString &input) {
       } else
         replacement = QString("column") + (numericColumn ? "_" : "") + "(" +
                       columnArgument + ")";
-    } else if (legacyFunction.cap(2) == "tablecol") {
+    } else if (match.captured(2) == "tablecol") {
       // assert number of arguments == 2
       if (arguments.size() != 2) {
         emit_error(tr("tablecol: wrong number of arguments (need 2, got %1)")
@@ -710,7 +711,7 @@ bool MuParserScript::translateLegacyFunctions(QString &input) {
         replacement =
             QString("column__(") + arguments.at(0) + "," + rowArgument + ")";
       }
-    } else {  // legacyFunction.cap(2) == "cell"
+    } else {  // match.captured(2) == "cell"
       // assert number of arguments == 2
       if (arguments.size() != 2) {
         emit_error(tr("cell: wrong number of arguments (need 2, got %1)")
@@ -737,7 +738,7 @@ bool MuParserScript::translateLegacyFunctions(QString &input) {
     }
 
     // do replacement
-    if (legacyFunction.cap(1).isEmpty())
+    if (match.captured(1).isEmpty())
       // matched with ^, not \W (lookbehind assertion would be darn handy...)
       input.replace(functionStart, functionEnd - functionStart + 1,
                     replacement);
@@ -746,9 +747,8 @@ bool MuParserScript::translateLegacyFunctions(QString &input) {
       input.replace(functionStart + 1, functionEnd - functionStart,
                     replacement);
     // search for next match, starting at the end of the replaced text
-    functionStart =
-        legacyFunction.indexIn(input, functionStart + replacement.length());
-  }  // while (functionStart != -1)
+    match = legacyFunction.match(input, functionStart + replacement.length());
+  }  // while (match.hasMatch())
   return true;
 }
 
