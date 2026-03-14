@@ -30,6 +30,7 @@
 #define SYNTAXHIGHLIGHTER_H
 
 #include <QSyntaxHighlighter>
+#include <QRegularExpression>
 
 class SyntaxHighlighter : public QSyntaxHighlighter {
   Q_OBJECT

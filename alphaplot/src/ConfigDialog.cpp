@@ -106,7 +106,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Qt::WindowFlags fl)
 
   QHBoxLayout *topLayout = new QHBoxLayout();
   topLayout->setSpacing(5);
-  topLayout->setMargin(5);
+  topLayout->setContentsMargins(5, 5, 5, 5);
   topLayout->addWidget(itemsList);
   topLayout->addLayout(rightLayout);
 
@@ -804,8 +804,8 @@ void ConfigDialog::languageChange() {
   QFontMetrics fm(itemsList->font());
   int width = 32, i;
   for (i = 0; i < itemsList->count(); i++)
-    if (fm.width(itemsList->item(i)->text()) > width)
-      width = fm.width(itemsList->item(i)->text());
+    if (fm.horizontalAdvance(itemsList->item(i)->text()) > width)
+      width = fm.horizontalAdvance(itemsList->item(i)->text());
   itemsList->setMaximumWidth(itemsList->iconSize().width() + width + 50);
   // resize the list to the maximum width
   itemsList->resize(itemsList->maximumWidth(), itemsList->height());
@@ -1163,8 +1163,8 @@ void ConfigDialog::apply() {
   QFontMetrics fm(itemsList->font());
   int width = 32, i;
   for (i = 0; i < itemsList->count(); i++)
-    if (fm.width(itemsList->item(i)->text()) > width)
-      width = fm.width(itemsList->item(i)->text());
+    if (fm.horizontalAdvance(itemsList->item(i)->text()) > width)
+      width = fm.horizontalAdvance(itemsList->item(i)->text());
   itemsList->setMaximumWidth(itemsList->iconSize().width() + width + 50);
   // resize the list to the maximum width
   itemsList->resize(itemsList->maximumWidth(), itemsList->height());

@@ -1,13 +1,18 @@
 #ifndef DATAMANAGER3D_H
 #define DATAMANAGER3D_H
 
-#include <QtDataVisualization/QAbstract3DSeries>
-#include <QtDataVisualization/QBar3DSeries>
-#include <QtDataVisualization/QItemModelBarDataProxy>
-#include <QtDataVisualization/QItemModelScatterDataProxy>
-#include <QtDataVisualization/QItemModelSurfaceDataProxy>
-#include <QtDataVisualization/QScatter3DSeries>
-#include <QtDataVisualization/QSurface3DSeries>
+//#include <QtDataVisualization//* QAbstract3DSeries */>
+//#include <QtDataVisualization/QBar3DSeries>
+//#include <QtDataVisualization/QItemModelBarDataProxy>
+//#include <QtDataVisualization/QItemModelScatterDataProxy>
+//#include <QtDataVisualization/QItemModelSurfaceDataProxy>
+//#include <QtDataVisualization/QScatter3DSeries>
+//#include <QtDataVisualization/QSurface3DSeries>
+//#include <QtDataVisualization/QSurfaceDataProxy>
+//#include <QtDataVisualization/QBarDataProxy>
+//#include <QtDataVisualization/QScatterDataProxy>
+#include <QList>
+#include <QVector>
 
 #include "Graph3DCommon.h"
 
@@ -15,17 +20,14 @@ class Matrix;
 class Table;
 class Column;
 
-namespace QtDataVisualization {
-class QSurfaceDataProxy;
-class QSurface3DSeries;
-class QItemModelSurfaceDataProxy;
-class QBarDataProxy;
-class QBar3DSeries;
-class QItemModelBarDataProxy;
-class QScatterDataProxy;
-class QScatter3DSeries;
-class QAbstract3DSeries;
-}  // namespace QtDataVisualization
+#include <QtDataVisualization/qsurfacedataproxy.h>
+#include <QtDataVisualization/qsurface3dseries.h>
+#include <QtDataVisualization/qbardataproxy.h>
+#include <QtDataVisualization/qbar3dseries.h>
+#include <QtDataVisualization/qscatterdataproxy.h>
+#include <QtDataVisualization/qscatter3dseries.h>
+#include <QtDataVisualization/qabstract3dseries.h>
+// Manual forward declarations of QtDataVisualization classes are removed to avoid ambiguity with headers.
 
 class DataBlockAbstract3D {
  public:
@@ -43,7 +45,7 @@ class DataBlockAbstract3D {
   void setxcolumn(Column *column) { xcolumn_ = column; }
   void setycolumn(Column *column) { ycolumn_ = column; }
   void setzcolumns(Column *column) { zcolumn_ = column; }
-  void setgradient(QtDataVisualization::QAbstract3DSeries *series,
+  void setgradient(QAbstract3DSeries *series,
                    const Graph3DCommon::Gradient &gradient);
 
  protected:
@@ -76,14 +78,14 @@ class DataBlockSurface3D : public DataBlockAbstract3D {
       QList<QPair<QPair<double, double>, double>> *data);
 
   // getters
-  QtDataVisualization::QSurfaceDataArray *getvaluedataarray() {
+  QSurfaceDataArray *getvaluedataarray() {
     return valueDataArray_;
   }
-  QtDataVisualization::QSurfaceDataProxy *getvaluedataproxy() {
+  QSurfaceDataProxy *getvaluedataproxy() {
     return valueDataProxy_;
   }
-  QtDataVisualization::QSurface3DSeries *getdataseries() { return dataSeries_; }
-  QtDataVisualization::QItemModelSurfaceDataProxy *getmodeldataproxy() {
+  QSurface3DSeries *getdataseries() { return dataSeries_; }
+  QItemModelSurfaceDataProxy *getmodeldataproxy() {
     return modelDataProxy_;
   }
   bool ismatrix();
@@ -100,10 +102,10 @@ class DataBlockSurface3D : public DataBlockAbstract3D {
 
  private:
   Graph3DCommon::Function3DData funcData_;
-  QtDataVisualization::QSurfaceDataArray *valueDataArray_;
-  QtDataVisualization::QSurfaceDataProxy *valueDataProxy_;
-  QtDataVisualization::QSurface3DSeries *dataSeries_;
-  QtDataVisualization::QItemModelSurfaceDataProxy *modelDataProxy_;
+  QSurfaceDataArray *valueDataArray_;
+  QSurfaceDataProxy *valueDataProxy_;
+  QSurface3DSeries *dataSeries_;
+  QItemModelSurfaceDataProxy *modelDataProxy_;
 };
 
 class DataBlockBar3D : public DataBlockAbstract3D {
@@ -117,23 +119,23 @@ class DataBlockBar3D : public DataBlockAbstract3D {
   void regenerateDataBlockXYZValue();
 
   // getters
-  QtDataVisualization::QBarDataArray *getvaluedataarray() {
+  QBarDataArray *getvaluedataarray() {
     return valueDataArray_;
   }
-  QtDataVisualization::QBarDataProxy *getvaluedataproxy() {
+  QBarDataProxy *getvaluedataproxy() {
     return valueDataProxy_;
   }
-  QtDataVisualization::QBar3DSeries *getdataseries() { return dataSeries_; }
-  QtDataVisualization::QItemModelBarDataProxy *getmodeldataproxy() {
+  QBar3DSeries *getdataseries() { return dataSeries_; }
+  QItemModelBarDataProxy *getmodeldataproxy() {
     return modelDataProxy_;
   }
   bool ismatrix();
 
  private:
-  QtDataVisualization::QBarDataArray *valueDataArray_;
-  QtDataVisualization::QBarDataProxy *valueDataProxy_;
-  QtDataVisualization::QBar3DSeries *dataSeries_;
-  QtDataVisualization::QItemModelBarDataProxy *modelDataProxy_;
+  QBarDataArray *valueDataArray_;
+  QBarDataProxy *valueDataProxy_;
+  QBar3DSeries *dataSeries_;
+  QItemModelBarDataProxy *modelDataProxy_;
 };
 
 class DataBlockScatter3D : public DataBlockAbstract3D {
@@ -147,19 +149,19 @@ class DataBlockScatter3D : public DataBlockAbstract3D {
   void regenerateDataBlockXYZValue();
 
   // getters
-  QtDataVisualization::QScatterDataArray *getvaluedataarray() {
+  QScatterDataArray *getvaluedataarray() {
     return valueDataArray_;
   }
-  QtDataVisualization::QScatterDataProxy *getvaluedataproxy() {
+  QScatterDataProxy *getvaluedataproxy() {
     return valueDataProxy_;
   }
-  QtDataVisualization::QScatter3DSeries *getdataseries() { return dataSeries_; }
+  QScatter3DSeries *getdataseries() { return dataSeries_; }
   bool ismatrix();
 
  private:
-  QtDataVisualization::QScatterDataArray *valueDataArray_;
-  QtDataVisualization::QScatterDataProxy *valueDataProxy_;
-  QtDataVisualization::QScatter3DSeries *dataSeries_;
+  QScatterDataArray *valueDataArray_;
+  QScatterDataProxy *valueDataProxy_;
+  QScatter3DSeries *dataSeries_;
 };
 
 #endif  // DATAMANAGER3D_H

@@ -3674,7 +3674,7 @@ void ApplicationWindow::loadSettings() {
       settings.value("ExportPageSize", QPageSize::Custom).toInt();
   d_keep_plot_aspect = settings.value("KeepAspect", true).toBool();
   d_export_orientation =
-      settings.value("Orientation", QPrinter::Landscape).toInt();
+      settings.value("Orientation", QPageLayout::Landscape).toInt();
   settings.endGroup();  // ExportImage
 }
 
@@ -6888,7 +6888,7 @@ void ApplicationWindow::setAppColors() {
     QPalette palet = qApp->palette();
     palet.setColor(QPalette::Text, panelsTextColor);
     palet.setColor(QPalette::WindowText, panelsTextColor);
-    palet.setColor(QPalette::Foreground, panelsTextColor);
+    palet.setColor(QPalette::WindowText, QColor(Qt::darkGray));
     palet.setColor(QPalette::ToolTipText, panelsTextColor);
     palet.setColor(QPalette::PlaceholderText, panelsTextColor);
     palet.setColor(QPalette::ButtonText, panelsTextColor);

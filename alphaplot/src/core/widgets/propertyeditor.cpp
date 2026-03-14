@@ -23,6 +23,9 @@
 #include <QtDataVisualization/QBar3DSeries>
 #include <QtDataVisualization/QScatter3DSeries>
 #include <QtDataVisualization/QSurface3DSeries>
+#include <QtDataVisualization/Q3DTheme>
+#include <QtDataVisualization/QValue3DAxis>
+#include <QtDataVisualization/QCategory3DAxis>
 #include <limits>
 
 #include "../3rdparty/propertybrowser/qteditorfactory.h"
@@ -57,7 +60,7 @@
 #include "future/core/column/Column.h"
 #include "ui_propertyeditor.h"
 
-using namespace QtDataVisualization;
+
 
 PropertyEditor::PropertyEditor(QWidget *parent, ApplicationWindow *app)
     : QDockWidget(parent),
@@ -5882,7 +5885,7 @@ void PropertyEditor::Surface3DSeriesPropertyBlock(DataBlockSurface3D *block) {
     boolManager_->setValue(plot3dsurfaceseriesflatshadingstatusitem_,
                            block->getdataseries()->isFlatShadingEnabled());
   enumManager_->setValue(plot3dsurfaceseriesdrawitem_,
-                         block->getdataseries()->drawMode() - 1);
+                         static_cast<int>(block->getdataseries()->drawMode()) - 1);
   boolManager_->setValue(plot3dsurfaceseriesmeshsmoothitem_,
                          block->getdataseries()->isMeshSmooth());
   enumManager_->setValue(plot3dsurfaceseriescolorstyleitem_,

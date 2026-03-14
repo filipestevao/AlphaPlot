@@ -135,8 +135,8 @@ void AssociationsDialog::changePlotAssociation(int curve, const QString &text) {
 
 QString AssociationsDialog::plotAssociation(const QString &text) {
   QString s = text;
-  QStringList lst = s.split(": ", QString::SkipEmptyParts);
-  QStringList cols = lst[1].split(",", QString::SkipEmptyParts);
+  QStringList lst = s.split(": ", Qt::SkipEmptyParts);
+  QStringList cols = lst[1].split(",", Qt::SkipEmptyParts);
 
   QString tableName = lst[0];
   s = tableName + "_" + cols[0];
@@ -157,7 +157,7 @@ void AssociationsDialog::initTablesList(QList<QMdiSubWindow *> *lst,
 
 Table *AssociationsDialog::findTable(int index) {
   QString text = associations->item(index)->text();
-  QStringList lst = text.split(":", QString::SkipEmptyParts);
+  QStringList lst = text.split(":", Qt::SkipEmptyParts);
   for (int i = 0; i < (int)tables->count(); i++) {
     if (tables->at(i)->objectName() == lst[0]) return (Table *)tables->at(i);
   }
@@ -199,8 +199,8 @@ void AssociationsDialog::updateTable(int index) {
 
 void AssociationsDialog::updateColumnTypes() {
   QString text = associations->currentItem()->text();
-  QStringList lst = text.split(": ", QString::SkipEmptyParts);
-  QStringList cols = lst[1].split(",", QString::SkipEmptyParts);
+  QStringList lst = text.split(": ", Qt::SkipEmptyParts);
+  QStringList cols = lst[1].split(",", Qt::SkipEmptyParts);
 
   QString xColName = cols[0].remove("(X)");
   QString yColName = cols[1].remove("(Y)");
@@ -315,8 +315,8 @@ void AssociationsDialog::setAxisRect(AxisRect2D *axisrect) {
 void AssociationsDialog::updatePlotAssociation(int row, int col) {
   int index = associations->currentRow();
   QString text = associations->currentItem()->text();
-  QStringList lst = text.split(": ", QString::SkipEmptyParts);
-  QStringList cols = lst[1].split(",", QString::SkipEmptyParts);
+  QStringList lst = text.split(": ", Qt::SkipEmptyParts);
+  QStringList cols = lst[1].split(",", Qt::SkipEmptyParts);
 
   if (col == 1) {
     cols[0] = table->item(row, 0)->text() + "(X)";
@@ -356,7 +356,7 @@ void AssociationsDialog::updatePlotAssociation(int row, int col) {
     QString as = plotAssociationsList[i];
     if (as.contains(old_as) &&
         (as.contains("(xErr)") || as.contains("(yErr)"))) {
-      QStringList ls = as.split(",", QString::SkipEmptyParts);
+      QStringList ls = as.split(",", Qt::SkipEmptyParts);
       as = text + "," + ls[2];
       plotAssociationsList[i] = as;
     }

@@ -1,40 +1,40 @@
-src/3Dplot/DataManager3D.h:79:24: error: ‘QSurfaceDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QSurfaceDataProxy’?
-src/3Dplot/DataManager3D.h:103:24: error: ‘QSurfaceDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QSurfaceDataProxy’?
-src/3Dplot/DataManager3D.h:120:24: error: ‘QBarDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QBarDataProxy’?
-src/3Dplot/DataManager3D.h:133:24: error: ‘QBarDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QBarDataProxy’?
-src/3Dplot/DataManager3D.h:150:24: error: ‘QScatterDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QScatterDataProxy’?
-src/3Dplot/DataManager3D.h:160:24: error: ‘QScatterDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QScatterDataProxy’?
-src/3Dplot/DataManager3D.h:79:24: error: ‘QSurfaceDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QSurfaceDataProxy’?
-src/3Dplot/DataManager3D.h:103:24: error: ‘QSurfaceDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QSurfaceDataProxy’?
-src/3Dplot/DataManager3D.h:120:24: error: ‘QBarDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QBarDataProxy’?
-src/3Dplot/DataManager3D.h:133:24: error: ‘QBarDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QBarDataProxy’?
-src/3Dplot/DataManager3D.h:150:24: error: ‘QScatterDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QScatterDataProxy’?
-src/3Dplot/DataManager3D.h:160:24: error: ‘QScatterDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QScatterDataProxy’?
-src/PlotWizard.cpp:154:50: error: ‘SkipEmptyParts’ is not a member of ‘QString’
-src/3Dplot/Surface3D.h:29:42: error: invalid use of incomplete type ‘class QtDataVisualization::QSurface3DSeries’
-src/core/widgets/propertyeditor.cpp:1944:5: error: reference to ‘Q3DTheme’ is ambiguous
-src/core/widgets/propertyeditor.cpp:1944:15: error: ‘theme’ was not declared in this scope
-src/core/widgets/propertyeditor.cpp:1944:23: error: parse error in template argument list
-src/core/widgets/propertyeditor.cpp:1944:49: error: no matching function for call to ‘PropertyEditor::getgraph2dobject<<expression error> >(QTreeWidgetItem*)’
-src/core/widgets/propertyeditor.cpp:1944:49: error: template argument 1 is invalid
-src/core/widgets/propertyeditor.cpp:1947:5: error: reference to ‘Q3DTheme’ is ambiguous
-src/3Dplot/DataManager3D.h:79:24: error: ‘QSurfaceDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QSurfaceDataProxy’?
-src/3Dplot/DataManager3D.h:103:24: error: ‘QSurfaceDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QSurfaceDataProxy’?
-src/3Dplot/DataManager3D.h:120:24: error: ‘QBarDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QBarDataProxy’?
-src/3Dplot/DataManager3D.h:133:24: error: ‘QBarDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QBarDataProxy’?
-src/3Dplot/DataManager3D.h:150:24: error: ‘QScatterDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QScatterDataProxy’?
-src/3Dplot/DataManager3D.h:160:24: error: ‘QScatterDataArray’ in namespace ‘QtDataVisualization’ does not name a type; did you mean ‘QScatterDataProxy’?
-src/core/widgets/propertyeditor.cpp:1947:15: error: ‘theme’ was not declared in this scope
-src/core/widgets/propertyeditor.cpp:1947:23: error: parse error in template argument list
-src/core/widgets/propertyeditor.cpp:1947:49: error: no matching function for call to ‘PropertyEditor::getgraph2dobject<<expression error> >(QTreeWidgetItem*)’
-src/core/widgets/propertyeditor.cpp:1947:49: error: template argument 1 is invalid
-src/core/widgets/propertyeditor.cpp:1950:5: error: reference to ‘Q3DTheme’ is ambiguous
-src/core/widgets/propertyeditor.cpp:1950:15: error: ‘theme’ was not declared in this scope
-src/core/widgets/propertyeditor.cpp:1950:23: error: parse error in template argument list
-src/core/widgets/propertyeditor.cpp:1950:49: error: no matching function for call to ‘PropertyEditor::getgraph2dobject<<expression error> >(QTreeWidgetItem*)’
-src/core/widgets/propertyeditor.cpp:1950:49: error: template argument 1 is invalid
-src/core/widgets/propertyeditor.cpp:1953:5: error: reference to ‘Q3DTheme’ is ambiguous
-src/core/widgets/propertyeditor.cpp:1953:15: error: ‘theme’ was not declared in this scope
-src/core/widgets/propertyeditor.cpp:1953:23: error: parse error in template argument list
-src/core/widgets/propertyeditor.cpp:1953:49: error: no matching function for call to ‘PropertyEditor::getgraph2dobject<<expression error> >(QTreeWidgetItem*)’
-src/core/widgets/propertyeditor.cpp:1953:49: error: template argument 1 is invalid
+src/ColorButton.cpp:53:6: error: ‘class QHBoxLayout’ has no member named ‘setMargin’
+src/3Dplot/Surface3D.h:30:42: error: invalid use of incomplete type ‘class QtDataVisualization::QSurface3DSeries’
+src/ApplicationWindow.cpp:3677:47: error: ‘Landscape’ is not a member of ‘QPrinter’
+src/AssociationsDialog.cpp:138:44: error: ‘SkipEmptyParts’ is not a member of ‘QString’
+src/AssociationsDialog.cpp:139:49: error: ‘SkipEmptyParts’ is not a member of ‘QString’
+src/AssociationsDialog.cpp:160:46: error: ‘SkipEmptyParts’ is not a member of ‘QString’
+src/AssociationsDialog.cpp:202:47: error: ‘SkipEmptyParts’ is not a member of ‘QString’
+src/AssociationsDialog.cpp:203:49: error: ‘SkipEmptyParts’ is not a member of ‘QString’
+src/AssociationsDialog.cpp:318:47: error: ‘SkipEmptyParts’ is not a member of ‘QString’
+src/AssociationsDialog.cpp:319:49: error: ‘SkipEmptyParts’ is not a member of ‘QString’
+src/AssociationsDialog.cpp:359:47: error: ‘SkipEmptyParts’ is not a member of ‘QString’
+src/ApplicationWindow.cpp:6891:30: error: ‘Foreground’ is not a member of ‘QPalette’
+src/3Dplot/Surface3D.h:30:42: error: invalid use of incomplete type ‘class QtDataVisualization::QSurface3DSeries’
+src/core/widgets/propertyeditor.cpp:1945:10: error: invalid use of incomplete type ‘class QtDataVisualization::Q3DTheme’
+src/core/widgets/propertyeditor.cpp:1948:10: error: invalid use of incomplete type ‘class QtDataVisualization::Q3DTheme’
+src/core/widgets/propertyeditor.cpp:1951:10: error: invalid use of incomplete type ‘class QtDataVisualization::Q3DTheme’
+src/core/widgets/propertyeditor.cpp:1954:10: error: invalid use of incomplete type ‘class QtDataVisualization::Q3DTheme’
+src/core/widgets/propertyeditor.cpp:1956:5: error: reference to ‘QValue3DAxis’ is ambiguous
+src/core/widgets/propertyeditor.cpp:1956:19: error: ‘axis’ was not declared in this scope
+src/core/widgets/propertyeditor.cpp:1957:9: error: parse error in template argument list
+src/core/widgets/propertyeditor.cpp:1957:39: error: no matching function for call to ‘PropertyEditor::getgraph2dobject<<expression error> >(QTreeWidgetItem*)’
+src/core/widgets/propertyeditor.cpp:1957:39: error: template argument 1 is invalid
+src/core/widgets/propertyeditor.cpp:1960:5: error: reference to ‘QValue3DAxis’ is ambiguous
+src/core/widgets/propertyeditor.cpp:1960:19: error: ‘axis’ was not declared in this scope
+src/core/widgets/propertyeditor.cpp:1961:9: error: parse error in template argument list
+src/core/widgets/propertyeditor.cpp:1961:39: error: no matching function for call to ‘PropertyEditor::getgraph2dobject<<expression error> >(QTreeWidgetItem*)’
+src/core/widgets/propertyeditor.cpp:1961:39: error: template argument 1 is invalid
+src/core/widgets/propertyeditor.cpp:1964:5: error: reference to ‘QValue3DAxis’ is ambiguous
+src/core/widgets/propertyeditor.cpp:1964:19: error: ‘axis’ was not declared in this scope
+src/core/widgets/propertyeditor.cpp:1965:9: error: parse error in template argument list
+src/core/widgets/propertyeditor.cpp:1965:39: error: no matching function for call to ‘PropertyEditor::getgraph2dobject<<expression error> >(QTreeWidgetItem*)’
+src/core/widgets/propertyeditor.cpp:1965:39: error: template argument 1 is invalid
+src/core/widgets/propertyeditor.cpp:1968:5: error: reference to ‘QValue3DAxis’ is ambiguous
+src/core/widgets/propertyeditor.cpp:1968:19: error: ‘axis’ was not declared in this scope
+src/core/widgets/propertyeditor.cpp:1969:9: error: parse error in template argument list
+src/core/widgets/propertyeditor.cpp:1969:39: error: no matching function for call to ‘PropertyEditor::getgraph2dobject<<expression error> >(QTreeWidgetItem*)’
+src/core/widgets/propertyeditor.cpp:1969:39: error: template argument 1 is invalid
+src/core/widgets/propertyeditor.cpp:1972:5: error: reference to ‘QCategory3DAxis’ is ambiguous
+src/core/widgets/propertyeditor.cpp:1972:22: error: ‘axis’ was not declared in this scope
+src/core/widgets/propertyeditor.cpp:1973:9: error: parse error in template argument list

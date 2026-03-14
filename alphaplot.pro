@@ -1,6 +1,6 @@
 #######################################################
 #              AlphaPlot main project file            #
-# run "qmake AlphaPlot.pro" to generate the Makefile  #
+# run "qmake6 AlphaPlot.pro" to generate the Makefile  #
 #######################################################
 
 TEMPLATE = subdirs

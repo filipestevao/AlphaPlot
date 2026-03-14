@@ -66,13 +66,10 @@ class QtColorEditorFactory;
 class QtFontEditorFactory;
 class QtDateTimeEditFactory;
 
-namespace QtDataVisualization {
 class QAbstract3DGraph;
 class Q3DTheme;
 class QValue3DAxis;
-class QValue3DAxis;
 class QCategory3DAxis;
-}  // namespace QtDataVisualization
 
 class PropertyEditor : public QDockWidget {
   Q_OBJECT
@@ -123,10 +120,10 @@ class PropertyEditor : public QDockWidget {
   void ColorMap2DPropertyBlock(ColorMap2D *colormap, AxisRect2D *axisrect);
   void ErrorBar2DPropertyBlock(ErrorBar2D *errorbar, AxisRect2D *axisrect);
   // 3dplot
-  void Canvas3DPropertyBlock(QtDataVisualization::QAbstract3DGraph *graph);
-  void Theme3DPropertyBlock(QtDataVisualization::Q3DTheme *theme);
-  void Axis3DValuePropertyBlock(QtDataVisualization::QValue3DAxis *axis);
-  void Axis3DCatagoryPropertyBlock(QtDataVisualization::QCategory3DAxis *axis);
+  void Canvas3DPropertyBlock(QAbstract3DGraph *graph);
+  void Theme3DPropertyBlock(Q3DTheme *theme);
+  void Axis3DValuePropertyBlock(QValue3DAxis *axis);
+  void Axis3DCatagoryPropertyBlock(QCategory3DAxis *axis);
   void Surface3DPropertyBlock(Surface3D *surface);
   void Bar3DPropertyBlock(Bar3D *bar);
   void Scatter3DPropertyBlock(Scatter3D *scatter);
