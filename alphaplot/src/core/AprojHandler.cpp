@@ -492,8 +492,6 @@ bool AprojHandler::saveproject(const QString &filename, Folder *folder) {
         std::unique_ptr<XmlStreamWriter>(new XmlStreamWriter(bytearray.get()));
   }
 
-  xmlwriter->setCodec("UTF-8");
-
   xmlwriter->setAutoFormatting(false);
   Folder *root = folder;
   xmlwriter->writeStartDocument();
@@ -587,7 +585,6 @@ bool AprojHandler::saveTemplate(const QString &filename, MyWidget *mywidget) {
   }
   std::unique_ptr<XmlStreamWriter> xmlwriter =
       std::unique_ptr<XmlStreamWriter>(new XmlStreamWriter(file.get()));
-  xmlwriter->setCodec("UTF-8");
   xmlwriter->setAutoFormatting(false);
 
   xmlwriter->writeStartDocument();

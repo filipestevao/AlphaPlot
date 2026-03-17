@@ -17,11 +17,10 @@
    Description : AlphaPlot main function
 */
 
-#include <QAction>
 #include <QApplication>
 #include <QSplashScreen>
 #include <QTimer>
-#include <QtMsgHandler>
+#include <QtGlobal>
 #include <typeinfo>
 
 #include "ApplicationWindow.h"
@@ -129,7 +128,6 @@ int main(int argc, char** argv) {
 #endif  // Q_OS_WIN
 
   // https://vicrucann.github.io/tutorials/osg-qt-high-dpi/
-  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   Application* app = new Application(argc, argv);
 
   // icon initiation (mandatory)

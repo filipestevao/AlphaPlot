@@ -19,6 +19,7 @@
 #include <QPainter>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QJSValueIterator>
 #include "ui_ConsoleWidget.h"
 
 #include "scripting/widgets/Console.h"
@@ -111,33 +112,26 @@ void ConsoleWidget::addScriptGlobalsToTableView() {
                                                       << "variables"
                                                       << "values");
   QJSValue globalObj = engine->globalObject();
-  QJSValue propertyNames = globalObj.propertyNames();
-  quint32 length = propertyNames.property("length").toUInt32();
-  
-  for (quint32 i = 0; i < length; ++i) {
-    QString name = propertyNames.property(i).toString();
-    QJSValue value = globalObj.property(name);
-    
+  QJSValueIterator it(globalObj);
+  while (it.hasNext()) {
+    it.next();
+    QString name = it.name();
+    QJSValue value = it.value();
+
     if (value.isArray()) {
-      // Array variables
       rowPair.first = name + QString("[%0]").arg(
                                        value.property("length").toString());
       QString arrayValue;
-      double arrayLength = value.property("length").toInt();
-      for (quint32 j = 0; j < 3; j++) {
+      int arrayLength = value.property("length").toInt();
+      for (int j = 0; j < 3; j++) {
         if (j < arrayLength)
           arrayValue += value.property(j).toString() + " ,";
       }
-      if (arrayLength > 3) {
-        arrayValue += "...";
-      }
+      if (arrayLength > 3) arrayValue += "...";
       rowPair.second = arrayValue;
       appendRowToTableView(rowPair);
-
     } else if (!value.isCallable() && !value.isObject()) {
-      if (name != "NaN" && name != "Infinity" &&
-          name != "undefined") {
-        // Other variables
+      if (name != "NaN" && name != "Infinity" && name != "undefined") {
         rowPair.first = name;
         rowPair.second = value.toString();
         appendRowToTableView(rowPair);

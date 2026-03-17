@@ -144,11 +144,13 @@ int AbstractAspect::Private::indexOfMatchingBrace(const QString &str,
 QString AbstractAspect::Private::caption() const {
   QString result = d_caption_spec;
   QRegularExpression magic("%(.)");
-  for (int pos = magic.indexIn(result, 0); pos >= 0;
-       pos = magic.indexIn(result, pos)) {
+  int pos = 0;
+  QRegularExpressionMatch m = magic.match(result, pos);
+  while (m.hasMatch()) {
+    pos = m.capturedStart();
     QString replacement;
     int length;
-    switch (magic.cap(1).at(0).toLatin1()) {
+    switch (m.captured(1).at(0).toLatin1()) {
       case '%':
         replacement = "%";
         length = 2;
@@ -170,9 +172,13 @@ QString AbstractAspect::Private::caption() const {
         replacement =
             d_comment.isEmpty() ? "" : result.mid(pos + 3, length - 4);
         break;
+      default:
+        length = 2;
+        break;
     }
     result.replace(pos, length, replacement);
     pos += replacement.size();
+    m = magic.match(result, pos);
   }
   return result;
 }

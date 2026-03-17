@@ -125,32 +125,35 @@ SyntaxHighlighter::SyntaxHighlighter(QTextDocument *parent)
 
 void SyntaxHighlighter::highlightBlock(const QString &text) {
   foreach (const HighlightingRule &rule, highlightingRules) {
-    QRegularExpression expression(rule.pattern);
-    int index = expression.indexIn(text);
-    while (index >= 0) {
-      int length = expression.matchedLength();
-      setFormat(index, length, rule.format);
-      index = expression.indexIn(text, index + length);
+    QRegularExpressionMatchIterator matchIterator =
+        rule.pattern.globalMatch(text);
+    while (matchIterator.hasNext()) {
+      QRegularExpressionMatch match = matchIterator.next();
+      setFormat(match.capturedStart(), match.capturedLength(), rule.format);
     }
   }
   setCurrentBlockState(0);
 
   int startIndex = 0;
-  if (previousBlockState() != 1)
-    startIndex = commentStartExpression.indexIn(text);
+  if (previousBlockState() != 1) {
+    QRegularExpressionMatch m = commentStartExpression.match(text);
+    startIndex = m.hasMatch() ? m.capturedStart() : -1;
+  }
 
   while (startIndex >= 0) {
-    int endIndex = commentEndExpression.indexIn(text, startIndex);
+    QRegularExpressionMatch endMatch =
+        commentEndExpression.match(text, startIndex);
     int commentLength;
-    if (endIndex == -1) {
+    if (!endMatch.hasMatch()) {
       setCurrentBlockState(1);
       commentLength = text.length() - startIndex;
     } else {
       commentLength =
-          endIndex - startIndex + commentEndExpression.matchedLength();
+          endMatch.capturedStart() - startIndex + endMatch.capturedLength();
     }
     setFormat(startIndex, commentLength, multiLineCommentFormat);
-    startIndex =
-        commentStartExpression.indexIn(text, startIndex + commentLength);
+    QRegularExpressionMatch nextStart =
+        commentStartExpression.match(text, startIndex + commentLength);
+    startIndex = nextStart.hasMatch() ? nextStart.capturedStart() : -1;
   }
 }

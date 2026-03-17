@@ -19,6 +19,7 @@
 #include <QDebug>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QActionGroup>
 
 #include "../core/IconLoader.h"
 #include "../widgets/aSettingsListView.h"
