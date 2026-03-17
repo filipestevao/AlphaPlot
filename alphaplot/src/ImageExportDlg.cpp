@@ -130,7 +130,7 @@ void ImageExportDlg::initAdvancedOptions() {
                            QVariant(QPageSize::Tabloid));
 
   vector_layout->addWidget(new QLabel(tr("Page size")), 4, 0);
-  setPageSize((QPageSize::PageSize)app->d_export_vector_size);
+  setPageSize((QPageSize::PageSizeId)app->d_export_vector_size);
   d_standard_page->setChecked(app->d_export_vector_size != QPageSize::Custom);
   d_box_page_size->setEnabled(app->d_export_vector_size != QPageSize::Custom);
   vector_layout->addWidget(d_box_page_size, 4, 1, 1, 2);
@@ -143,7 +143,7 @@ void ImageExportDlg::initAdvancedOptions() {
                                   QVariant(QPageLayout::Landscape));
   d_box_page_orientation->setCurrentIndex(app->d_export_orientation);
   d_box_page_orientation->setEnabled(app->d_export_vector_size !=
-                                     QPageLayout::Custom);
+                                     QPageSize::Custom);
   vector_layout->addWidget(d_box_page_orientation, 5, 1, 1, 2);
 
   connect(d_standard_page, SIGNAL(toggled(bool)), d_box_page_size,

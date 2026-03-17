@@ -107,7 +107,7 @@ bool PluginFit::load(const QString &pluginName) {
   typedef char *(*fitFunc)();
   fitFunc fitFunction = (fitFunc)lib.resolve("parameters");
   if (fitFunction) {
-    d_param_names = QString(fitFunction()).split(",", QString::SkipEmptyParts);
+    d_param_names = QString(fitFunction()).split(",", Qt::SkipEmptyParts);
     d_p = d_param_names.count();
     d_min_points = d_p;
     d_param_init = gsl_vector_alloc(static_cast<size_t>(d_p));
@@ -119,7 +119,7 @@ bool PluginFit::load(const QString &pluginName) {
 
   fitFunc fitExplain = (fitFunc)lib.resolve("explanations");
   if (fitExplain)
-    d_param_explain = QString(fitExplain()).split(",", QString::SkipEmptyParts);
+    d_param_explain = QString(fitExplain()).split(",", Qt::SkipEmptyParts);
   else
     for (int i = 0; i < d_p; i++) d_param_explain << "";
 

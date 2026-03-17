@@ -638,7 +638,7 @@ void FitDialog::showFitPage() {
 
   QString par = boxParam->text().simplified();
   QStringList paramList =
-      par.split(QRegularExpression("[,;]+[\\s]*"), QString::SkipEmptyParts);
+      par.split(QRegularExpression("[,;]+[\\s]*"), Qt::SkipEmptyParts);
   int parameters = paramList.count();
   boxParams->setRowCount(parameters);
   boxParams->hideColumn(2);
@@ -1269,7 +1269,7 @@ void FitDialog::setSrcTables(QList<QMdiSubWindow *> *tables) {
     tableNamesBox->addItem(i->objectName());
 
   tableNamesBox->setCurrentIndex(tableNamesBox->findText(
-      boxCurve->currentText().split("_", QString::SkipEmptyParts)[0]));
+      boxCurve->currentText().split("_", Qt::SkipEmptyParts)[0]));
   selectSrcTable(tableNamesBox->currentIndex());
 }
 

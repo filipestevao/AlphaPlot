@@ -172,8 +172,7 @@ QString PolynomialFit::legendInfo() {
     double cj = d_results[j];
     if (cj > 0 && !legend.isEmpty()) legend += "+";
 
-    QString s;
-    s.sprintf("%.5f", cj);
+    QString s = QString::asprintf("%.5f", cj);
     if (s != "1.00000") legend += QLocale().toString(cj, 'g', d_prec);
 
     legend += "X";

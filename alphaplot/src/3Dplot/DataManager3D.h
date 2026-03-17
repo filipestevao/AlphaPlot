@@ -27,6 +27,9 @@ class Column;
 #include <QtDataVisualization/qscatterdataproxy.h>
 #include <QtDataVisualization/qscatter3dseries.h>
 #include <QtDataVisualization/qabstract3dseries.h>
+#include <QtDataVisualization/qitemmodelsurfacedataproxy.h>
+#include <QtDataVisualization/qitemmodelbardataproxy.h>
+#include <QtDataVisualization/qitemmodelscatterdataproxy.h>
 // Manual forward declarations of QtDataVisualization classes are removed to avoid ambiguity with headers.
 
 class DataBlockAbstract3D {

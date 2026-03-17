@@ -29,7 +29,7 @@ QJSValue print(QJSEngine *engine, QJSValue thisObject, QJSValue arguments) {
     qDebug() << "Scripting console print() unable to access Console object";
     return false;
   }
-  return engine->undefinedValue();
+  return QJSValue(QJSValue::UndefinedValue);
 }
 
 // ScriptingConsole clear() function
@@ -42,7 +42,7 @@ QJSValue clear(QJSEngine *engine, QJSValue thisObject, QJSValue arguments) {
     qDebug() << "Scripting console clear() unable to access Console object";
     return false;
   }
-  return engine->undefinedValue();
+  return QJSValue(QJSValue::UndefinedValue);
 }
 
 // ScriptingConsole openAproj() function
@@ -65,14 +65,14 @@ QJSValue openProj(QJSEngine *engine, QJSValue thisObject, QJSValue arguments) {
     qDebug() << "Scripting console openProj() unable to access ApplicationWindow object";
     return false;
   }
-  return engine->undefinedValue();
+  return QJSValue(QJSValue::UndefinedValue);
 }
 
 QJSValue collectGarbage(QJSEngine *engine, QJSValue thisObject, QJSValue arguments) {
   Q_UNUSED(thisObject);
   Q_UNUSED(arguments);
   engine->collectGarbage();
-  return engine->undefinedValue();
+  return QJSValue(QJSValue::UndefinedValue);
 }
 
 QJSValue attachDebugger(QJSEngine *engine, QJSValue thisObject, QJSValue arguments) {
@@ -80,5 +80,5 @@ QJSValue attachDebugger(QJSEngine *engine, QJSValue thisObject, QJSValue argumen
   Q_UNUSED(thisObject);
   Q_UNUSED(arguments);
   qDebug() << "Scripting console attachDebugger(bool) is no longer available in Qt 6 (QJSEngine)";
-  return engine->undefinedValue();
+  return QJSValue(QJSValue::UndefinedValue);
 }
