@@ -1,4 +1,0 @@
-cd alphaplot/ && ( test -e Makefile || /usr/bin/qmake6 -o Makefile /var/home/filipe/AlphaPlot/alphaplot/alphaplot.pro ) && make -f Makefile 
-Project MESSAGE: Build configuration: Linux all dynamic
-Project ERROR: Unknown module(s) in QT: svg datavisualization core5compat
-make: *** [Makefile:52: sub-alphaplot-make_first-ordered] Error 3
