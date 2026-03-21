@@ -26,7 +26,9 @@
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
  
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 using namespace QtDataVisualization;
+#endif
 
 #include "plotcommon/widgets/ImageExportDialog.h"
 
@@ -78,7 +80,7 @@ Layout3D::Layout3D(const Graph3DCommon::Plot3DType &plottype,
   QWidget *widget = new QWidget(this);
   widget->setContentsMargins(0, 0, 0, 0);
   QHBoxLayout *hLayout = new QHBoxLayout(widget);
-  hLayout->setMargin(0);
+  hLayout->setContentsMargins(0, 0, 0, 0);
   hLayout->addWidget(main_widget_, 1);
   hLayout->setAlignment(Qt::AlignTop);
   widget->setLayout(hLayout);
@@ -1016,7 +1018,9 @@ void Layout3D::copy(Layout3D *layout, QList<Table *> tables,
   }
   std::unique_ptr<XmlStreamWriter> xmlwriter =
       std::unique_ptr<XmlStreamWriter>(new XmlStreamWriter(file.get()));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   xmlwriter->setCodec("UTF-8");
+#endif
   xmlwriter->setAutoFormatting(false);
   layout->save(xmlwriter.get());
   file->close();

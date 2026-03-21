@@ -9,7 +9,9 @@
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
  
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 using namespace QtDataVisualization;
+#endif
 
 
 Bar3D::Bar3D(Q3DBars *bar)

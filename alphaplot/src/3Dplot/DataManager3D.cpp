@@ -14,7 +14,9 @@
 #include "Table.h"
 #include "future/core/column/Column.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 using namespace QtDataVisualization;
+#endif
 
 void DataBlockAbstract3D::setgradient(QAbstract3DSeries *series,
                                       const Graph3DCommon::Gradient &gradient) {

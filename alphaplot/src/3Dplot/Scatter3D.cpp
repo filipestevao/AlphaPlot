@@ -7,7 +7,9 @@
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
  
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 using namespace QtDataVisualization;
+#endif
 
 
 Scatter3D::Scatter3D(Q3DScatter *scatter)

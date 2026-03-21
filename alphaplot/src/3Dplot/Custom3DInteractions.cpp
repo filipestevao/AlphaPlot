@@ -1,8 +1,9 @@
 #include "Custom3DInteractions.h"
 
 #include <QtDataVisualization/Q3DCamera>
- 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 using namespace QtDataVisualization;
+#endif
 
 
 const int Custom3DInteractions::deltazoom_ = 1;
