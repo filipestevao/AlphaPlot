@@ -130,7 +130,7 @@ Layout2D::Layout2D(const QString &label, QWidget *parent, const QString name,
   layout->addLayout(hbox);
   layout->addWidget(plot2dCanvas_, 1);
   setWidget(main_widget_);
-  layout->setMargin(0);
+  layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);
   setGeometry(QRect(0, 0, defaultlayout2dwidth_, defaultlayout2dheight_));
   setMinimumSize(QSize(minimumlayout2dwidth_, minimumlayout2dheight_));
@@ -1760,7 +1760,6 @@ void Layout2D::copy(Layout2D *layout, QList<Table *> tables,
   }
   std::unique_ptr<XmlStreamWriter> xmlwriter =
       std::unique_ptr<XmlStreamWriter>(new XmlStreamWriter(file.get()));
-  xmlwriter->setCodec("UTF-8");
   xmlwriter->setAutoFormatting(false);
   layout->save(xmlwriter.get());
   file->close();

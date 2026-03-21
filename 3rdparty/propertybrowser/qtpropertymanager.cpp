@@ -2179,6 +2179,18 @@ void QtDateTimePropertyManager::setValue(QtProperty *property, const QDateTime &
 }
 
 /*!
+    Sets the format for displaying the date-time values.
+*/
+void QtDateTimePropertyManager::setFormat(const QString &format)
+{
+    if (d_ptr->m_format == format)
+        return;
+    d_ptr->m_format = format;
+    for (auto it = d_ptr->m_values.constBegin(); it != d_ptr->m_values.constEnd(); ++it)
+        emit propertyChanged(const_cast<QtProperty *>(it.key()));
+}
+
+/*!
     \reimp
 */
 void QtDateTimePropertyManager::initializeProperty(QtProperty *property)

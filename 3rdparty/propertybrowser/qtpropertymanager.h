@@ -244,6 +244,7 @@ public:
 
 public Q_SLOTS:
     void setValue(QtProperty *property, const QDateTime &val);
+    void setFormat(const QString &format);
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QDateTime &val);
 protected:

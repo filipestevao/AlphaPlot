@@ -59,6 +59,8 @@ public:
     void setStatusTip(const QString &text);
     void setWhatsThis(const QString &text);
     void setPropertyName(const QString &text);
+    void setPropertyId(const QString &id);
+    bool compare(QtProperty *other) const;
     void setEnabled(bool enable);
     void setModified(bool modified);
 

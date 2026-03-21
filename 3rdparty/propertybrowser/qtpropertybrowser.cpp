@@ -32,6 +32,7 @@ public:
     QString m_statusTip;
     QString m_whatsThis;
     QString m_name;
+    QString m_id;
     bool m_enabled;
     bool m_modified;
 
@@ -332,6 +333,30 @@ void QtProperty::setPropertyName(const QString &text)
 
     d_ptr->m_name = text;
     propertyChanged();
+}
+
+/*!
+    Sets the property's id to the given \a id.
+
+    \sa propertyId()
+*/
+void QtProperty::setPropertyId(const QString &id)
+{
+    d_ptr->m_id = id;
+}
+
+/*!
+    Returns true if property is same as \a other property.
+*/
+bool QtProperty::compare(QtProperty *other) const
+{
+    if (this == other)
+        return true;
+    if (!other)
+        return false;
+    if (d_ptr->m_id.isEmpty() || other->d_ptr->m_id.isEmpty())
+        return false;
+    return d_ptr->m_id == other->d_ptr->m_id;
 }
 
 /*!
