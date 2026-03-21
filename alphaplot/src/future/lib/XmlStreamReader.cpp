@@ -183,7 +183,7 @@ QPair<QFont, QColor> XmlStreamReader::readFont(bool* ok) {
     // size
     int weight = readAttributeInt("weight", ok);
     if (ok)
-      pair.first.setWeight(weight);
+      pair.first.setWeight(static_cast<QFont::Weight>(weight));
     else
       raiseWarning("QFont weight property setting error");
     // bold

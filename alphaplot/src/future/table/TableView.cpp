@@ -1078,7 +1078,7 @@ void TableView::drawSpikinessData(QPainter *painter, QRect &rect,
   double yDeltaDiff = rect.height() / static_cast<double>(yMax - yMin);
 
   // set pen
-  QColor color = palette().color(QPalette::Foreground);
+  QColor color = palette().color(QPalette::WindowText);
   color.setAlpha(40);
   painter->setPen(QPen(color, 0, Qt::SolidLine));
   painter->setBrush(QBrush(color));

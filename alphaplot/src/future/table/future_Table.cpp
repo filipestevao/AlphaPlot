@@ -49,6 +49,7 @@
 #include <QModelIndex>
 #include <QModelIndexList>
 #include <QRandomGenerator>
+#include <QRegularExpression>
 #include <QShortcut>
 #include <QTime>
 #include <QToolBar>
@@ -577,15 +578,15 @@ void Table::fillSelectedCellsWithRandomNumbers() {
 
   WAIT_CURSOR;
   beginMacro(tr("%1: fill cells with random values").arg(name()));
-  qsrand(static_cast<uint>(QTime::currentTime().msec()));
+  // qsrand is removed in Qt6, QRandomGenerator::global() is auto-seeded.
   foreach (Column *col_ptr, d_view->selectedColumns()) {
     int col = columnIndex(col_ptr);
     switch (col_ptr->columnMode()) {
       case AlphaPlot::Numeric: {
         QVector<qreal> results(last - first + 1);
-        for (int row = first; row <= last; row++)
+          for (int row = first; row <= last; row++)
           if (d_view->isCellSelected(row, col))
-            results[row - first] = double(qrand()) / double(RAND_MAX);
+            results[row - first] = QRandomGenerator::global()->generateDouble();
           else
             results[row - first] = col_ptr->valueAt(row);
         col_ptr->replaceValues(first, results);
@@ -595,7 +596,7 @@ void Table::fillSelectedCellsWithRandomNumbers() {
         QStringList results;
         for (int row = first; row <= last; row++)
           if (d_view->isCellSelected(row, col))
-            results << QString::number(double(qrand()) / double(RAND_MAX));
+            results << QString::number(QRandomGenerator::global()->generateDouble());
           else
             results << col_ptr->textAt(row);
         col_ptr->replaceTexts(first, results);
@@ -611,12 +612,9 @@ void Table::fillSelectedCellsWithRandomNumbers() {
         for (int row = first; row <= last; row++)
           if (d_view->isCellSelected(row, col))
             results << QDateTime(
-                earliestDate.addDays(
-                    (static_cast<double>(qrand())) *
-                    (static_cast<double>(earliestDate.daysTo(latestDate))) /
-                    (static_cast<double>(RAND_MAX))),
-                midnight.addMSecs((static_cast<qint64>(qrand())) * 1000 * 60 *
-                                  60 * 24 / RAND_MAX));
+                earliestDate.addDays(QRandomGenerator::global()->bounded(
+                    static_cast<int>(earliestDate.daysTo(latestDate)))),
+                midnight.addMSecs(QRandomGenerator::global()->bounded(86400000)));
           else
             results << col_ptr->dateTimeAt(row);
         col_ptr->replaceDateTimes(first, results);
