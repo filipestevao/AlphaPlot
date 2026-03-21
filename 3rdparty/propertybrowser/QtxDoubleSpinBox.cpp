@@ -353,7 +353,7 @@ QValidator::State QtxDoubleSpinBox::validate(QString& str, int& pos) const {
       }
     } else if (myPrecision < 0) {
       // Consider too large negative exponent as Invalid
-      QChar e(locale().exponential());
+      QString e = locale().exponential();
       int epos = str.indexOf(e, 0, Qt::CaseInsensitive);
       if (epos != -1) {
         epos++;  // Skip exponential symbol itself

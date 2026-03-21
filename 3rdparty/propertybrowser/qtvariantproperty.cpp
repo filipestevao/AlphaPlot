@@ -1,50 +1,14 @@
-/****************************************************************************
-**
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
-** All rights reserved.
-**
-** Contact: Nokia Corporation (qt-info@nokia.com)
-**
-** This file is part of a Qt Solutions component.
-**
-** You may use this file under the terms of the BSD license as follows:
-**
-** "Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are
-** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
-**     the names of its contributors may be used to endorse or promote
-**     products derived from this software without specific prior written
-**     permission.
-**
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
-**
-****************************************************************************/
+// Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+// SPDX-License-Identifier: BSD-3-Clause
 
 
 #include "qtvariantproperty.h"
 #include "qtpropertymanager.h"
 #include "qteditorfactory.h"
-#include <QtCore/QVariant>
-#include <QtGui/QIcon>
-#include <QtCore/QDate>
-#include <QtCore/QLocale>
+#include <QVariant>
+#include <QIcon>
+#include <QDate>
+#include <QLocale>
 
 #if defined(Q_CC_MSVC)
 #    pragma warning(disable: 4786) /* MS VS 6: truncating debug info after 255 characters */
@@ -264,19 +228,6 @@ int QtVariantProperty::propertyType() const
     return d_ptr->manager->propertyType(this);
 }
 
-bool QtVariantProperty::compare(QtProperty* otherProperty)const
-{
-  bool baseEqual = QtProperty::compare(otherProperty);
-  if (!baseEqual)
-    {
-    return false;
-    }
-  const QtVariantProperty* otherVariantProperty
-      = dynamic_cast<const QtVariantProperty*>(otherProperty);
-  return (this->value() == otherVariantProperty->value()
-          && this->valueType() == otherVariantProperty->valueType());
-}
-
 /*!
     Sets the value of this property to \a value.
 
@@ -328,6 +279,7 @@ public:
     void slotValueChanged(QtProperty *property, bool val);
     void slotValueChanged(QtProperty *property, const QString &val);
     void slotRegExpChanged(QtProperty *property, const QRegularExpression &regExp);
+    void slotEchoModeChanged(QtProperty *property, int);
     void slotValueChanged(QtProperty *property, const QDate &val);
     void slotRangeChanged(QtProperty *property, const QDate &min, const QDate &max);
     void slotValueChanged(QtProperty *property, const QTime &val);
@@ -354,6 +306,8 @@ public:
     void slotValueChanged(QtProperty *property, const QCursor &val);
     void slotFlagChanged(QtProperty *property, int val);
     void slotFlagNamesChanged(QtProperty *property, const QStringList &flagNames);
+    void slotReadOnlyChanged(QtProperty *property, bool readOnly);
+    void slotTextVisibleChanged(QtProperty *property, bool textVisible);
     void slotPropertyInserted(QtProperty *property, QtProperty *parent, QtProperty *after);
     void slotPropertyRemoved(QtProperty *property, QtProperty *parent);
 
@@ -383,6 +337,9 @@ public:
     const QString m_maximumAttribute;
     const QString m_minimumAttribute;
     const QString m_regExpAttribute;
+    const QString m_echoModeAttribute;
+    const QString m_readOnlyAttribute;
+    const QString m_textVisibleAttribute;
 };
 
 QtVariantPropertyManagerPrivate::QtVariantPropertyManagerPrivate() :
@@ -394,7 +351,10 @@ QtVariantPropertyManagerPrivate::QtVariantPropertyManagerPrivate() :
     m_flagNamesAttribute(QLatin1String("flagNames")),
     m_maximumAttribute(QLatin1String("maximum")),
     m_minimumAttribute(QLatin1String("minimum")),
-    m_regExpAttribute(QLatin1String("regExp"))
+    m_regExpAttribute(QLatin1String("regExp")),
+    m_echoModeAttribute(QLatin1String("echoMode")),
+    m_readOnlyAttribute(QLatin1String("readOnly")),
+    m_textVisibleAttribute(QLatin1String("textVisible"))
 {
 }
 
@@ -432,10 +392,10 @@ QtVariantProperty *QtVariantPropertyManagerPrivate::createSubProperty(QtVariantP
     varChild->setStatusTip(internal->statusTip());
     varChild->setWhatsThis(internal->whatsThis());
 
-    parent->insertSubProperty(varChild, after);
-
     m_internalToProperty[internal] = varChild;
     propertyToWrappedProperty()->insert(varChild, internal);
+
+    parent->insertSubProperty(varChild, after);
     return varChild;
 }
 
@@ -550,6 +510,24 @@ void QtVariantPropertyManagerPrivate::slotRegExpChanged(QtProperty *property, co
         emit q_ptr->attributeChanged(varProp, m_regExpAttribute, QVariant(regExp));
 }
 
+void QtVariantPropertyManagerPrivate::slotEchoModeChanged(QtProperty *property, int mode)
+{
+    if (QtVariantProperty *varProp = m_internalToProperty.value(property, 0))
+        emit q_ptr->attributeChanged(varProp, m_echoModeAttribute, QVariant(mode));
+}
+
+void QtVariantPropertyManagerPrivate::slotReadOnlyChanged(QtProperty *property, bool readOnly)
+{
+    if (QtVariantProperty *varProp = m_internalToProperty.value(property, 0))
+        emit q_ptr->attributeChanged(varProp, m_readOnlyAttribute, QVariant(readOnly));
+}
+
+void QtVariantPropertyManagerPrivate::slotTextVisibleChanged(QtProperty *property, bool textVisible)
+{
+    if (QtVariantProperty *varProp = m_internalToProperty.value(property, 0))
+        emit q_ptr->attributeChanged(varProp, m_textVisibleAttribute, QVariant(textVisible));
+}
+
 void QtVariantPropertyManagerPrivate::slotValueChanged(QtProperty *property, const QDate &val)
 {
     valueChanged(property, QVariant(val));
@@ -576,7 +554,7 @@ void QtVariantPropertyManagerPrivate::slotValueChanged(QtProperty *property, con
 void QtVariantPropertyManagerPrivate::slotValueChanged(QtProperty *property, const QKeySequence &val)
 {
     QVariant v;
-    qVariantSetValue(v, val);
+    v.setValue(val);
     valueChanged(property, v);
 }
 
@@ -663,7 +641,7 @@ void QtVariantPropertyManagerPrivate::slotEnumIconsChanged(QtProperty *property,
 {
     if (QtVariantProperty *varProp = m_internalToProperty.value(property, 0)) {
         QVariant v;
-        qVariantSetValue(v, enumIcons);
+        v.setValue(enumIcons);
         emit q_ptr->attributeChanged(varProp, m_enumIconsAttribute, v);
     }
 }
@@ -834,9 +812,17 @@ void QtVariantPropertyManagerPrivate::slotFlagNamesChanged(QtProperty *property,
         \o decimals
         \o QVariant::Int
     \row
+        \o \c bool
+        \o textVisible
+        \o QVariant::Bool
+    \row
         \o QString
         \o regExp
         \o QVariant::RegExp
+    \row
+        \o
+        \o echoMode
+        \o QVariant::Int
     \row
         \o QDate
         \o minimum
@@ -950,6 +936,7 @@ QtVariantPropertyManager::QtVariantPropertyManager(QObject *parent)
     d_ptr->m_typeToAttributeToAttributeType[QVariant::Int][d_ptr->m_minimumAttribute] = QVariant::Int;
     d_ptr->m_typeToAttributeToAttributeType[QVariant::Int][d_ptr->m_maximumAttribute] = QVariant::Int;
     d_ptr->m_typeToAttributeToAttributeType[QVariant::Int][d_ptr->m_singleStepAttribute] = QVariant::Int;
+    d_ptr->m_typeToAttributeToAttributeType[QVariant::Int][d_ptr->m_readOnlyAttribute] = QVariant::Bool;
     d_ptr->m_typeToValueType[QVariant::Int] = QVariant::Int;
     connect(intPropertyManager, SIGNAL(valueChanged(QtProperty *, int)),
                 this, SLOT(slotValueChanged(QtProperty *, int)));
@@ -968,6 +955,8 @@ QtVariantPropertyManager::QtVariantPropertyManager(QObject *parent)
             QVariant::Double;
     d_ptr->m_typeToAttributeToAttributeType[QVariant::Double][d_ptr->m_decimalsAttribute] =
             QVariant::Int;
+    d_ptr->m_typeToAttributeToAttributeType[QVariant::Double][d_ptr->m_readOnlyAttribute] =
+        QVariant::Bool;
     d_ptr->m_typeToValueType[QVariant::Double] = QVariant::Double;
     connect(doublePropertyManager, SIGNAL(valueChanged(QtProperty *, double)),
                 this, SLOT(slotValueChanged(QtProperty *, double)));
@@ -980,19 +969,32 @@ QtVariantPropertyManager::QtVariantPropertyManager(QObject *parent)
     // BoolPropertyManager
     QtBoolPropertyManager *boolPropertyManager = new QtBoolPropertyManager(this);
     d_ptr->m_typeToPropertyManager[QVariant::Bool] = boolPropertyManager;
+    d_ptr->m_typeToAttributeToAttributeType[QVariant::Bool][d_ptr->m_textVisibleAttribute] = QVariant::Bool;
     d_ptr->m_typeToValueType[QVariant::Bool] = QVariant::Bool;
     connect(boolPropertyManager, SIGNAL(valueChanged(QtProperty *, bool)),
                 this, SLOT(slotValueChanged(QtProperty *, bool)));
+    connect(boolPropertyManager, SIGNAL(textVisibleChanged(QtProperty*, bool)),
+                this, SLOT(slotTextVisibleChanged(QtProperty*, bool)));
     // StringPropertyManager
     QtStringPropertyManager *stringPropertyManager = new QtStringPropertyManager(this);
     d_ptr->m_typeToPropertyManager[QVariant::String] = stringPropertyManager;
     d_ptr->m_typeToValueType[QVariant::String] = QVariant::String;
     d_ptr->m_typeToAttributeToAttributeType[QVariant::String][d_ptr->m_regExpAttribute] =
-            QVariant::RegExp;
+            QVariant::RegularExpression;
+    d_ptr->m_typeToAttributeToAttributeType[QVariant::String][d_ptr->m_echoModeAttribute] =
+            QVariant::Int;
+    d_ptr->m_typeToAttributeToAttributeType[QVariant::String][d_ptr->m_readOnlyAttribute] =
+        QVariant::Bool;
+
     connect(stringPropertyManager, SIGNAL(valueChanged(QtProperty *, const QString &)),
                 this, SLOT(slotValueChanged(QtProperty *, const QString &)));
     connect(stringPropertyManager, SIGNAL(regExpChanged(QtProperty *, const QRegularExpression &)),
                 this, SLOT(slotRegExpChanged(QtProperty *, const QRegularExpression &)));
+    connect(stringPropertyManager, SIGNAL(echoModeChanged(QtProperty*,int)),
+                this, SLOT(slotEchoModeChanged(QtProperty*, int)));
+    connect(stringPropertyManager, SIGNAL(readOnlyChanged(QtProperty*, bool)),
+                this, SLOT(slotReadOnlyChanged(QtProperty*, bool)));
+
     // DatePropertyManager
     QtDatePropertyManager *datePropertyManager = new QtDatePropertyManager(this);
     d_ptr->m_typeToPropertyManager[QVariant::Date] = datePropertyManager;
@@ -1320,58 +1322,6 @@ QtVariantProperty *QtVariantPropertyManager::addProperty(int propertyType, const
     return variantProperty(property);
 }
 
-namespace{
-void addPropertyRecusively(QtVariantPropertyManager * manager,
-                           QtVariantProperty * prop, QtVariantProperty * newProp = 0)
-  {
-  if (!newProp)
-    {
-    newProp = manager->addProperty(prop->propertyType(), prop->propertyName());
-    }
-  // Copy values
-  QStringList attributes = manager->attributes(prop->propertyType());
-  foreach(const QString& attribute, attributes)
-    {
-    newProp->setAttribute(attribute, prop->attributeValue(attribute));
-    }
-  newProp->setPropertyId(prop->propertyId());
-  newProp->setStatusTip(prop->statusTip());
-  newProp->setWhatsThis(prop->whatsThis());
-  newProp->setModified(prop->isModified());
-  newProp->setEnabled(prop->isEnabled());
-  newProp->setValue(prop->value());
-
-  foreach(QtProperty * subProp, prop->subProperties())
-    {
-    QtVariantProperty * variantSubProp = dynamic_cast<QtVariantProperty*>(subProp);
-    Q_ASSERT(variantSubProp);
-    QtVariantProperty * newVariantSubProp =
-        manager->addProperty(variantSubProp->propertyType(), variantSubProp->propertyName());
-    newProp->addSubProperty(newVariantSubProp);
-    addPropertyRecusively(manager, variantSubProp, newVariantSubProp);
-    }
-  }
-}
-
-/*!
-    Set properties used by this manager.
-
-    \sa properties(), addProperty()
-*/
-void QtVariantPropertyManager::setProperties(QSet<QtProperty *> properties)
-{
-  this->clear();
-  foreach(QtProperty * prop, properties)
-    {
-    QtVariantProperty * variantProp = dynamic_cast<QtVariantProperty*>(prop);
-    if (!variantProp){ continue; }
-    if (!variantProp->isSubProperty())
-      {
-      addPropertyRecusively(this, variantProp);
-      }
-    }
-}
-
 /*!
     Returns the given \a property's value.
 
@@ -1402,7 +1352,11 @@ QVariant QtVariantPropertyManager::value(const QtProperty *property) const
     } else if (QtDateTimePropertyManager *dateTimeManager = qobject_cast<QtDateTimePropertyManager *>(manager)) {
         return dateTimeManager->value(internProp);
     } else if (QtKeySequencePropertyManager *keySequenceManager = qobject_cast<QtKeySequencePropertyManager *>(manager)) {
+#if QT_VERSION < 0x050000
         return keySequenceManager->value(internProp);
+#else
+        return QVariant::fromValue(keySequenceManager->value(internProp));
+#endif
     } else if (QtCharPropertyManager *charManager = qobject_cast<QtCharPropertyManager *>(manager)) {
         return charManager->value(internProp);
     } else if (QtLocalePropertyManager *localeManager = qobject_cast<QtLocalePropertyManager *>(manager)) {
@@ -1512,6 +1466,8 @@ QVariant QtVariantPropertyManager::attributeValue(const QtProperty *property, co
             return intManager->minimum(internProp);
         if (attribute == d_ptr->m_singleStepAttribute)
             return intManager->singleStep(internProp);
+        if (attribute == d_ptr->m_readOnlyAttribute)
+            return intManager->isReadOnly(internProp);
         return QVariant();
     } else if (QtDoublePropertyManager *doubleManager = qobject_cast<QtDoublePropertyManager *>(manager)) {
         if (attribute == d_ptr->m_maximumAttribute)
@@ -1522,10 +1478,20 @@ QVariant QtVariantPropertyManager::attributeValue(const QtProperty *property, co
             return doubleManager->singleStep(internProp);
         if (attribute == d_ptr->m_decimalsAttribute)
             return doubleManager->decimals(internProp);
+        if (attribute == d_ptr->m_readOnlyAttribute)
+            return doubleManager->isReadOnly(internProp);
+        return QVariant();
+    } else if (QtBoolPropertyManager *boolManager = qobject_cast<QtBoolPropertyManager *>(manager)) {
+        if (attribute == d_ptr->m_textVisibleAttribute)
+            return boolManager->textVisible(internProp);
         return QVariant();
     } else if (QtStringPropertyManager *stringManager = qobject_cast<QtStringPropertyManager *>(manager)) {
         if (attribute == d_ptr->m_regExpAttribute)
             return stringManager->regExp(internProp);
+        if (attribute == d_ptr->m_echoModeAttribute)
+            return stringManager->echoMode(internProp);
+        if (attribute == d_ptr->m_readOnlyAttribute)
+            return stringManager->isReadOnly(internProp);
         return QVariant();
     } else if (QtDatePropertyManager *dateManager = qobject_cast<QtDatePropertyManager *>(manager)) {
         if (attribute == d_ptr->m_maximumAttribute)
@@ -1566,7 +1532,7 @@ QVariant QtVariantPropertyManager::attributeValue(const QtProperty *property, co
             return enumManager->enumNames(internProp);
         if (attribute == d_ptr->m_enumIconsAttribute) {
             QVariant v;
-            qVariantSetValue(v, enumManager->enumIcons(internProp));
+            v.setValue(enumManager->enumIcons(internProp));
             return v;
         }
         return QVariant();
@@ -1646,10 +1612,10 @@ void QtVariantPropertyManager::setValue(QtProperty *property, const QVariant &va
 
     QtAbstractPropertyManager *manager = internProp->propertyManager();
     if (QtIntPropertyManager *intManager = qobject_cast<QtIntPropertyManager *>(manager)) {
-        intManager->setValue(internProp, val.value<int>());
+        intManager->setValue(internProp,  val.value<int>());
         return;
     } else if (QtDoublePropertyManager *doubleManager = qobject_cast<QtDoublePropertyManager *>(manager)) {
-        doubleManager->setValue(internProp, val.value<double>());
+        doubleManager->setValue(internProp,  val.value<double>());
         return;
     } else if (QtBoolPropertyManager *boolManager = qobject_cast<QtBoolPropertyManager *>(manager)) {
         boolManager->setValue(internProp, val.value<bool>());
@@ -1755,6 +1721,8 @@ void QtVariantPropertyManager::setAttribute(QtProperty *property,
             intManager->setMinimum(internProp, value.value<int>());
         else if (attribute == d_ptr->m_singleStepAttribute)
             intManager->setSingleStep(internProp, value.value<int>());
+        else if (attribute == d_ptr->m_readOnlyAttribute)
+            intManager->setReadOnly(internProp, value.value<bool>());
         return;
     } else if (QtDoublePropertyManager *doubleManager = qobject_cast<QtDoublePropertyManager *>(manager)) {
         if (attribute == d_ptr->m_maximumAttribute)
@@ -1765,10 +1733,20 @@ void QtVariantPropertyManager::setAttribute(QtProperty *property,
             doubleManager->setSingleStep(internProp, value.value<double>());
         if (attribute == d_ptr->m_decimalsAttribute)
             doubleManager->setDecimals(internProp, value.value<int>());
+        if (attribute == d_ptr->m_readOnlyAttribute)
+            doubleManager->setReadOnly(internProp, value.value<bool>());
+        return;
+    } else if (QtBoolPropertyManager *boolManager = qobject_cast<QtBoolPropertyManager *>(manager)) {
+        if (attribute == d_ptr->m_textVisibleAttribute)
+            boolManager->setTextVisible(internProp, value.value<bool>());
         return;
     } else if (QtStringPropertyManager *stringManager = qobject_cast<QtStringPropertyManager *>(manager)) {
         if (attribute == d_ptr->m_regExpAttribute)
             stringManager->setRegExp(internProp, value.value<QRegularExpression>());
+        if (attribute == d_ptr->m_echoModeAttribute)
+            stringManager->setEchoMode(internProp, (EchoMode)value.value<int>());
+        if (attribute == d_ptr->m_readOnlyAttribute)
+            stringManager->setReadOnly(internProp, (EchoMode)value.value<bool>());
         return;
     } else if (QtDatePropertyManager *dateManager = qobject_cast<QtDatePropertyManager *>(manager)) {
         if (attribute == d_ptr->m_maximumAttribute)
@@ -1833,7 +1811,7 @@ bool QtVariantPropertyManager::hasValue(const QtProperty *property) const
 QString QtVariantPropertyManager::valueText(const QtProperty *property) const
 {
     const QtProperty *internProp = propertyToWrappedProperty()->value(property, 0);
-    return internProp ? internProp->valueText() : QString();
+    return internProp ? !internProp->displayText().isEmpty() ? internProp->displayText() : internProp->valueText() : QString();
 }
 
 /*!
@@ -2209,17 +2187,6 @@ QWidget *QtVariantEditorFactory::createEditor(QtVariantPropertyManager *manager,
     if (!factory)
         return 0;
     return factory->createEditor(wrappedProperty(property), parent);
-}
-
-/*!
-    \internal
-
-    Reimplemented from the QtAbstractEditorFactory class.
-*/
-QWidget *QtVariantEditorFactory::createEditor(QtProperty *property, QWidget *parent)
-{
-  // Overlaoded to avoid "-Woverloaded-virtual" warning
-  return this->QtAbstractEditorFactory<QtVariantPropertyManager>::createEditor(property, parent);
 }
 
 /*!
