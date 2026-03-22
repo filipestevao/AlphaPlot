@@ -514,7 +514,7 @@ ApplicationWindow::ApplicationWindow()
   connect(ui_->actionRestartScripting, SIGNAL(triggered()), this,
           SLOT(restartScriptingEnv()));
   // Plot menu
-  connect(d_plot_mapper, SIGNAL(mapped(int)), this, SLOT(selectPlotType(int)));
+  connect(d_plot_mapper, SIGNAL(mappedInt(int)), this, SLOT(selectPlotType(int)));
   connect(ui_->actionPlot2DLine, SIGNAL(triggered()), d_plot_mapper,
           SLOT(map()));
   d_plot_mapper->setMapping(ui_->actionPlot2DLine,
@@ -7686,7 +7686,7 @@ void ApplicationWindow::showFolderPopupMenu(QTreeWidgetItem *it,
   connect(&windowsInActiveFolder, SIGNAL(triggered()), &mapper, SLOT(map()));
   connect(&windowsInActiveFoldersAndSubs, SIGNAL(triggered()), &mapper,
           SLOT(map()));
-  connect(&mapper, SIGNAL(mapped(int)), this, SLOT(setShowWindowsPolicy(int)));
+  connect(&mapper, SIGNAL(mappedInt(int)), this, SLOT(setShowWindowsPolicy(int)));
 
   cm.addMenu(&viewWindowsMenu);
   cm.addSeparator();
