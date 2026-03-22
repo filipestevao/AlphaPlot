@@ -83,12 +83,12 @@ contains(PRESET, linux_all_dynamic) {
   INCLUDEPATH   = "$(HOME)/usr/include" $$INCLUDEPATH
   QMAKE_LIBDIR  = "$(HOME)/usr/lib" $$QMAKE_LIBDIR
 
-  LIBS         += -lGLU -lgsl -lgslcblas
+  LIBS         += -lgsl -lgslcblas
 }
 
 contains(PRESET, linux_static) {
   ### Link statically and dynamically against rest.
-  LIBS         += -lgsl -lgslcblas -lGLU
+  LIBS         += -lgsl -lgslcblas
 }
 
 contains(PRESET, linux_all_static) {
