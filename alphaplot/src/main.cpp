@@ -120,6 +120,12 @@ void logOutput(QtMsgType type, const QMessageLogContext& context,
 
 int main(int argc, char** argv) {
   qInstallMessageHandler(logOutput);
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+  // Request Wayland with a fallback to X11 (xcb)
+  qputenv("QT_QPA_PLATFORM", "wayland;xcb");
+#endif
+
 #ifdef Q_OS_WIN
   // solves high density dpi scaling in windows
   // https://vicrucann.github.io/tutorials/osg-qt-high-dpi/
