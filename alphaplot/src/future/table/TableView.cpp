@@ -752,6 +752,8 @@ void TableView::handleHeaderDataChanged(Qt::Orientation orientation, int first,
                                         int last) {
   if (orientation != Qt::Horizontal) return;
 
+  rereadSectionSizes();
+
   QItemSelectionModel *sel_model = d_view_widget->selectionModel();
 
   int col = sel_model->currentIndex().column();
@@ -997,10 +999,12 @@ void TableViewWidget::updateHeaderGeometry(Qt::Orientation o, int first,
   Q_UNUSED(first)
   Q_UNUSED(last)
   if (o != Qt::Horizontal) return;
+  bool signalsBlocked = horizontalHeader()->blockSignals(true);
   horizontalHeader()->setStretchLastSection(
       true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
   horizontalHeader()->updateGeometry();
   horizontalHeader()->setStretchLastSection(false);  // ugly hack part 2
+  horizontalHeader()->blockSignals(signalsBlocked);
 }
 
 void TableViewWidget::keyPressEvent(QKeyEvent *event) {

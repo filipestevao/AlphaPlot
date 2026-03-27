@@ -141,14 +141,20 @@ void TableDoubleHeaderView::showComments(bool on) {
 void TableDoubleHeaderView::refresh() {
   // adjust geometry and repaint header (still looking for a more elegant
   // solution)
+  bool slaveSignalsBlocked = d_slave->blockSignals(true);
   d_slave->setStretchLastSection(
       true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
   d_slave->updateGeometry();
   d_slave->setStretchLastSection(false);  // ugly hack part 2
+  d_slave->blockSignals(slaveSignalsBlocked);
+
+  bool masterSignalsBlocked = blockSignals(true);
   setStretchLastSection(
       true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
   updateGeometry();
   setStretchLastSection(false);  // ugly hack part 2
+  blockSignals(masterSignalsBlocked);
+
   update();
 }
 
