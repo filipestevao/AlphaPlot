@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="Application for Scientific Data Analysis and Visualization, fork of SciDavis / QtiPlot"
 url='http://alphaplot.sourceforge.net/'
 arch=('i686' 'x86_64')
-license=('GPL2')
+license=('GPL3')
 
 # make dependancies
 makedepends=('boost' 'cmake' 'qt5-tools')

@@ -234,7 +234,7 @@ If you want to discuss AlphaPlot with other users (or the developers) or if you 
 
 ### License:
 
-AlphaPlot is distributed under the terms of the [GNU General Public License](http://www.gnu.org/licenses/gpl.html) as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. A copy of this license is provided in the file `gpl.txt`.
+AlphaPlot is distributed under the terms of the [GNU General Public License](http://www.gnu.org/licenses/gpl.html) as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. A copy of this license is provided in the file `gpl-3.0.txt`.
 
 Thus it is ["free software"](http://www.fsf.org/licensing/essays/free-sw.html). "Free software" is a matter of liberty, not price. To understand the concept, you should think of "free" as in "free speech", not as in "free beer". "Free software" is also often called [Open Source, FOSS, or FLOSS](http://en.wikipedia.org/wiki/Alternative_terms_for_free_software). When we say that AlphaPlot is "free", we are talking about
 

@@ -128,7 +128,7 @@ documentation.files += ../data/manual \
                        ../data/alphaplot-logo.png \
                        ../data/README.md \
                        ../data/CHANGES \
-                       ../data/gpl.txt
+                       ../data/gpl-3.0.txt
 
 INSTALLS        += documentation
 

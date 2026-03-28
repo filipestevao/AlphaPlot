@@ -4,7 +4,7 @@
 [![Download AlphaPlot](https://img.shields.io/sourceforge/dt/alphaplot.svg)](https://sourceforge.net/projects/alphaplot/files/latest/download) [![Download AlphaPlot](https://img.shields.io/sourceforge/dm/alphaplot.svg)](https://sourceforge.net/projects/alphaplot/files/latest/download) [![Download AlphaPlot](https://img.shields.io/sourceforge/dw/alphaplot.svg)](https://sourceforge.net/projects/alphaplot/files/latest/download) [![Download AlphaPlot](https://img.shields.io/sourceforge/dd/alphaplot.svg)](https://sourceforge.net/projects/alphaplot/files/latest/download)
 
 [license-page]: COPYING
-[license-badge]: http://img.shields.io/badge/License-GPL2-blue.svg
+[license-badge]: http://img.shields.io/badge/License-GPL3-blue.svg
 
 Alpha Plot is a free application for <i>Sci</i>entific <i>D</i>ata <i>A</i>nalysis and <i>Vis</i>ualization for Windows, Linux and Mac OS X (probably BSD also).
 
