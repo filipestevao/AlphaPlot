@@ -9,6 +9,7 @@
   <url type="bugtracker">https://github.com/narunlifescience/AlphaPlot/issues</url>
   <url type="donation">https://www.patreon.com/alphaplot</url>
   <url type="help">https://alphaplot.sourceforge.io/wiki/index.php</url>
+  <launchable type="desktop-id">alphaplot.desktop</launchable>
   <summary>AlphaPlot is a free application for Scientific Data Analysis and Visualization</summary>
   <description>
     <p>
@@ -21,36 +22,60 @@
   <screenshots>
     <screenshot type="default">
       <image>https://github.com/narunlifescience/AlphaPlot/raw/master/data/screenshots/alphaplot3.png</image>
+      <caption>Main window</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/narunlifescience/AlphaPlot/raw/master/data/screenshots/example1.png</image>
+      <caption>Example 1</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/narunlifescience/AlphaPlot/raw/master/data/screenshots/example2.png</image>
+      <caption>Example 2</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/narunlifescience/AlphaPlot/raw/master/data/screenshots/example3.png</image>
+      <caption>Example 3</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/narunlifescience/AlphaPlot/raw/master/data/screenshots/example4.png</image>
+      <caption>Example 4</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/narunlifescience/AlphaPlot/raw/master/data/screenshots/example5.png</image>
+      <caption>Example 5</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/narunlifescience/AlphaPlot/raw/master/data/screenshots/example6.png</image>
+      <caption>Example 6</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/narunlifescience/AlphaPlot/raw/master/data/screenshots/example7.png</image>
+      <caption>Example 7</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/narunlifescience/AlphaPlot/raw/master/data/screenshots/example8.png</image>
+      <caption>Example 8</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/narunlifescience/AlphaPlot/raw/master/data/screenshots/example9.png</image>
+      <caption>Example 9</caption>
     </screenshot>
   </screenshots>
   <releases>
+  <release version="1.3.0" date="2026-03-28">
+      <description>
+        <p>Overview of changes in AlphaPlot 1.3.0</p>
+        <ul>
+          <li>full porting to Qt6</li>
+          <li>update 3rdparty/qcustomplot to v.2.1.1</li>
+          <li>update 3rdparty/muparser to v.2.3.5</li>
+          <li>update 3rdparty/propertybrowser to Qt6 (github.com/hpcdgrie/qt-solutions)</li>
+          <li>update license from GPL-2.0 to GPL-3.0 for Qt6 compatibility</li>
+          <li>fix last column auto-resize when "Set Column(s) As" is used</li>
+          <li>add compatibility with Flatpak</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.02" date="2022-01-18">
       <description>
         <p>Overview of changes in AlphaPlot 1.02</p>
@@ -101,7 +126,7 @@
         </ul>
       </description>
     </release>
-    <release version="1.011" date="2020-05-06">
+    <release version="1.01.1" date="2020-05-06">
       <description>
         <p>Overview of changes in AlphaPlot 1.011</p>
         <ul>
@@ -138,29 +163,6 @@
           <li>draggable legend, graph items (line, text), axis, zoom axis</li>
           <li>reimplement all the 2D plotting functionality in qcustomplot</li>
           <li>reimplement all the fitting functionality in qcustomplot</li>
-        </ul>
-      </description>
-    </release>
-    <release version="alpha-test2" date="2016-05-04">
-      <description>
-        <p>Overview of changes in AlphaPlot alpha-test2</p>
-        <ul>
-          <li>add basic error detection to Qt Script</li>
-          <li>add a basic Syntax highlighter for scripts and functions</li>
-          <li>add QtScript with debugging to Alphaplot basic data structures with cell to cell data manipulation ability(Table and Matrix)</li>
-          <li>add add/remove layer to graph2d window</li>
-          <li>use default cascade function</li>
-          <li>fix mxe compile errors</li>
-          <li>drop QT3 related stuff</li>
-          <li>use a float button instead of old block one in table and matrix to access control UI</li>
-          <li>remember normal window state when a user closes a window in maximized state</li>
-          <li>added c++ 11 Support</li>
-          <li>remove liborigin and python support for now</li>
-          <li>make scripting console interactive (rewrite the entire class)</li>
-          <li>modernize icons and an icon handling class</li>
-          <li>add a lock-unlock functionality for toolbars and dock widgets</li>
-          <li>compartmentalize various aspects like scripting, 3d plots, etc. to separate directories</li>
-          <li>fix old code warnings (replace old C style casting, remove hardcoded colors, use initializer list when possible, Clean up Application window class, give better meaningful names for variables, etc.)</li>
         </ul>
       </description>
     </release>

@@ -1,3 +1,12 @@
+=== 28-03-26 Sixth release of AlphaPlot (Stable) - major release ===
+* full porting to Qt6
+* update 3rdparty/qcustomplot to v.2.1.1
+* update 3rdparty/muparser to v.2.3.5
+* update 3rdparty/propertybrowser to Qt6 (github.com/hpcdgrie/qt-solutions)
+* update license from GPL-2.0 to GPL-3.0 for Qt6 compatibility
+* fix last column auto-resize when "Set Column(s) As" is used
+* add compatibility with Flatpak
+
 === 18-01-22 Fifth release of AlphaPlot (Stable) - major release ===
 * project explorer drag n drop
 * add 2D legend visiblity per plot, legend margins and legend direction property

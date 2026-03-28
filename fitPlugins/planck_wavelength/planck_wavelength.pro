@@ -10,7 +10,10 @@ CONFIG += release
 DESTDIR = ../
 
 INSTALLS += target
-unix:  target.path = /usr/lib$${libsuff}/AlphaPlot/plugins
+unix {
+    contains(CONFIG, flatpak): target.path = /app/lib$${libsuff}/AlphaPlot/plugins
+    else: target.path = /usr/lib$${libsuff}/AlphaPlot/plugins
+}
 win32: target.path = ../../output/plugins
 
 win32:INCLUDEPATH += ../../3rdparty/gsl/include
