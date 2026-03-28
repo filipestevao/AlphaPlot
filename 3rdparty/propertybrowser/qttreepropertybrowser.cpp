@@ -501,6 +501,8 @@ bool QtTreePropertyBrowserPrivate::lastColumn(int column) const
 
 void QtTreePropertyBrowserPrivate::disableItem(QTreeWidgetItem *item) const
 {
+    if (!item)
+        return;
     Qt::ItemFlags flags = item->flags();
     if (flags & Qt::ItemIsEnabled) {
         flags &= ~Qt::ItemIsEnabled;
@@ -516,6 +518,8 @@ void QtTreePropertyBrowserPrivate::disableItem(QTreeWidgetItem *item) const
 
 void QtTreePropertyBrowserPrivate::enableItem(QTreeWidgetItem *item) const
 {
+    if (!item)
+        return;
     Qt::ItemFlags flags = item->flags();
     flags |= Qt::ItemIsEnabled;
     item->setFlags(flags);
@@ -539,6 +543,25 @@ bool QtTreePropertyBrowserPrivate::hasValue(QTreeWidgetItem *item) const
 
 void QtTreePropertyBrowserPrivate::propertyInserted(QtBrowserItem *index, QtBrowserItem *afterIndex)
 {
+    QString propertyName = index->property()->propertyName();
+    if (index->parent()) {
+        const QString qcp = "QtColorPropertyManager";
+        const QString qfp = "QtFontPropertyManager";
+        if (propertyName == QCoreApplication::translate(qcp.toLatin1(), "Red") ||
+            propertyName == QCoreApplication::translate(qcp.toLatin1(), "Green") ||
+            propertyName == QCoreApplication::translate(qcp.toLatin1(), "Blue") ||
+            propertyName == QCoreApplication::translate(qcp.toLatin1(), "Alpha") ||
+            propertyName == QCoreApplication::translate(qfp.toLatin1(), "Family") ||
+            propertyName == QCoreApplication::translate(qfp.toLatin1(), "Point Size") ||
+            propertyName == QCoreApplication::translate(qfp.toLatin1(), "Bold") ||
+            propertyName == QCoreApplication::translate(qfp.toLatin1(), "Italic") ||
+            propertyName == QCoreApplication::translate(qfp.toLatin1(), "Underline") ||
+            propertyName == QCoreApplication::translate(qfp.toLatin1(), "Strikeout") ||
+            propertyName == QCoreApplication::translate(qfp.toLatin1(), "Kerning")) {
+            return;
+        }
+    }
+
     QTreeWidgetItem *afterItem = m_indexToItem.value(afterIndex);
     QTreeWidgetItem *parentItem = m_indexToItem.value(index->parent());
 
@@ -575,12 +598,16 @@ void QtTreePropertyBrowserPrivate::propertyRemoved(QtBrowserItem *index)
 void QtTreePropertyBrowserPrivate::propertyChanged(QtBrowserItem *index)
 {
     QTreeWidgetItem *item = m_indexToItem.value(index);
+    if (!item)
+        return;
 
     updateItem(item);
 }
 
 void QtTreePropertyBrowserPrivate::updateItem(QTreeWidgetItem *item)
 {
+    if (!item)
+        return;
     QtProperty *property = m_itemToIndex[item]->property();
     QIcon expandIcon;
     if (property->hasValue()) {
