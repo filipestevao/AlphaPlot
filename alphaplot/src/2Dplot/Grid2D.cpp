@@ -19,6 +19,7 @@
 #include "Axis2D.h"
 #include "AxisRect2D.h"
 #include "Plot2D.h"
+#include "core/IconLoader.h"
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
 

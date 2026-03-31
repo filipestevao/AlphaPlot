@@ -25,18 +25,14 @@
 #include "About.h"
 #include "AssociationsDialog.h"
 #include "ColorBox.h"
-#include "ConfigDialog.h"
-#include "CurveRangeDialog.h"
 #include "DataSetDialog.h"
 #include "FindDialog.h"
 #include "Folder.h"
 #include "ImageExportDlg.h"
 #include "ImportASCIIDialog.h"
-#include "LayerDialog.h"
 #include "Note.h"
 #include "OpenProjectDialog.h"
 #include "PlotWizard.h"
-#include "Spectrogram.h"
 #include "TableStatistics.h"
 #include "analysis/Convolution.h"
 #include "analysis/Correlation.h"
@@ -68,7 +64,6 @@
 #include "ui_ApplicationWindow.h"
 
 // TODO: move tool-specific code to an extension manager
-#include "TranslateCurveTool.h"
 #include "analysis/MultiPeakFitTool.h"
 #include "ui/SettingsDialog.h"
 
@@ -119,6 +114,7 @@
 #include <QUrl>
 #include <QVarLengthArray>
 #include <QtDebug>
+#include <QtGlobal>
 #include <iostream>
 
 #include "2Dplot/Graph2DCommon.h"
@@ -136,7 +132,7 @@
 #include "3Dplot/Layout3D.h"
 #include "3Dplot/Scatter3D.h"
 #include "3Dplot/Surface3D.h"
-#include "core/widgets/propertyeditor.h"
+#include "core/propertybrowser/propertybrowser.h"
 #include "future/lib/XmlStreamWriter.h"
 #include "scripting/ScriptingFunctions.h"
 #include "scripting/ScriptingLangDialog.h"
@@ -155,10 +151,8 @@ ApplicationWindow::ApplicationWindow()
 #ifdef SCRIPTING_CONSOLE
       consoleWindow(new ConsoleWidget(this)),
 #endif
-      propertyeditor(new PropertyEditor(this, this)),
+      propertybrowser(new PropertyBrowser(this, this)),
       d_workspace(new QMdiArea(this)),
-      hiddenWindows(new QList<QWidget *>()),
-      outWindows(new QList<QWidget *>()),
       lastModified(nullptr),
       fileToolbar(new QToolBar(tr("File"), this)),
       editToolbar(new QToolBar(tr("Edit"), this)),
@@ -236,7 +230,6 @@ ApplicationWindow::ApplicationWindow()
   actionMatrixDeterminant = new QAction(tr("&Determinant"), this);
   actionConvertMatrix = new QAction(tr("&Convert to Table"), this);
   actionConvertTable = new QAction(tr("Convert to &Matrix"), this);
-  actionEditCurveRange = new QAction(tr("Edit &Range..."), this);
   actionCopyStatusBarText = new QAction(tr("&Copy status bar text"), this);
   actionExportPDF->setShortcut(tr("Ctrl+Alt+P"));
   // Load Style & color scheme here
@@ -253,9 +246,9 @@ ApplicationWindow::ApplicationWindow()
   btn_new_aspect_->setPopupMode(QToolButton::InstantPopup);
   btn_new_aspect_->setToolTip(tr("New Aspect"));
   btn_layout_->setPopupMode(QToolButton::InstantPopup);
-  btn_layout_->setToolTip(tr("Manage layers"));
+  btn_layout_->setToolTip(tr("Manage Layouts"));
   btn_curves_->setPopupMode(QToolButton::InstantPopup);
-  btn_curves_->setToolTip(tr("Add curves / error bars"));
+  btn_curves_->setToolTip(tr("Add Plots/error bars"));
   btn_plot_enrichments_->setPopupMode(QToolButton::InstantPopup);
   btn_plot_enrichments_->setToolTip(tr("Enrichments"));
   btn_plot_scatters_->setPopupMode(QToolButton::InstantPopup);
@@ -273,7 +266,7 @@ ApplicationWindow::ApplicationWindow()
   QPixmapCache::setCacheLimit(20 * QPixmapCache::cacheLimit());
 
   // Show/hide toggle Project Explorer, Result Log & Scripting Console
-  actionShowPropertyEditor = propertyeditor->toggleViewAction();
+  actionShowPropertyEditor = propertybrowser->toggleViewAction();
   actionShowProjectExplorer = ui_->explorerWindow->toggleViewAction();
   actionShowResultsLog = ui_->logWindow->toggleViewAction();
 #ifdef SCRIPTING_CONSOLE
@@ -387,9 +380,9 @@ ApplicationWindow::ApplicationWindow()
   addDockWidget(Qt::TopDockWidgetArea, consoleWindow);
   consoleWindow->hide();
 #endif
-  propertyeditor->setObjectName("propertyeditorWindow");
-  addDockWidget(Qt::RightDockWidgetArea, propertyeditor);
-  propertyeditor->show();
+  propertybrowser->setObjectName("propertybrowserWindow");
+  addDockWidget(Qt::RightDockWidgetArea, propertybrowser);
+  propertybrowser->show();
 
   disableActions();
   // After initialization of QDockWidget, for toggleViewAction() to work
@@ -883,67 +876,60 @@ ApplicationWindow::ApplicationWindow()
   connect(ui_->actionCloseWindow, SIGNAL(triggered()), this,
           SLOT(closeActiveWindow()));
   // Help menu
-  connect(ui_->actionHelp, SIGNAL(triggered()), this, SLOT(showHelp()));
-#ifdef DYNAMIC_MANUAL_PATH
-  connect(ui_->actionChooseHelpFolder, SIGNAL(triggered()), this,
-          SLOT(chooseHelpFolder()));
-  ui_->actionChooseHelpFolder->setVisible(true);
-#else
-  ui_->actionChooseHelpFolder->setVisible(false);
-#endif
-  connect(ui_->actionHomepage, SIGNAL(triggered()), this, SLOT(showHomePage()));
+  auto wiki = []() { QDesktopServices::openUrl(QUrl(AlphaPlot::wiki_Uri)); };
+  connect(ui_->actionHelp, &QAction::triggered, this, wiki);
+  connect(ui_->actionHomepage, &QAction::triggered, this,
+          []() { QDesktopServices::openUrl(QUrl(AlphaPlot::homepage_Uri)); });
 #ifdef SEARCH_FOR_UPDATES
-  connect(ui_->actionCheckUpdates, SIGNAL(triggered()), this,
-          SLOT(searchForUpdates()));
+  connect(ui_->actionCheckUpdates, &QAction::triggered, this,
+          &ApplicationWindow::searchForUpdates);
   ui_->actionCheckUpdates->setVisible(true);
 #else
   ui_->actionCheckUpdates->setVisible(false);
 #endif  // defined SEARCH_FOR_UPDATES
-#ifdef DOWNLOAD_LINKS
-  connect(ui_->actionDownloadManual, SIGNAL(triggered()), this,
-          SLOT(downloadManual()));
-  ui_->actionDownloadManual->setVisible(true);
-#else
-  ui_->actionDownloadManual->setVisible(false);
-#endif
-  connect(ui_->actionVisitForum, SIGNAL(triggered()), this, SLOT(showForums()));
-  connect(ui_->actionReportBug, SIGNAL(triggered()), this,
-          SLOT(showBugTracker()));
+  connect(ui_->actionWiki, &QAction::triggered, this, wiki);
+  connect(ui_->actionVisitForum, &QAction::triggered, this,
+          []() { QDesktopServices::openUrl(QUrl(AlphaPlot::forum_Uri)); });
+  connect(ui_->actionReportBug, &QAction::triggered, this,
+          []() { QDesktopServices::openUrl(QUrl(AlphaPlot::bugreport_Uri)); });
   connect(ui_->actionAbout, &QAction::triggered, this,
           &ApplicationWindow::about);
 
   // non main menu QAction Connections
-  connect(actionSaveNote, SIGNAL(triggered()), this, SLOT(saveNoteAs()));
-  connect(actionExportPDF, SIGNAL(triggered()), this, SLOT(exportPDF()));
-  connect(actionHideActiveWindow, SIGNAL(triggered()), this,
-          SLOT(hideActiveWindow()));
-  connect(actionShowMoreWindows, SIGNAL(triggered()), this,
-          SLOT(showMoreWindows()));
-  connect(actionPixelLineProfile, SIGNAL(triggered()), this,
-          SLOT(pixelLineProfile()));
-  connect(actionIntensityTable, SIGNAL(triggered()), this,
-          SLOT(intensityTable()));
-  connect(actionActivateWindow, SIGNAL(triggered()), this,
-          SLOT(activateWindow()));
-  connect(actionMinimizeWindow, SIGNAL(triggered()), this,
-          SLOT(minimizeWindow()));
-  connect(actionMaximizeWindow, SIGNAL(triggered()), this,
-          SLOT(maximizeWindow()));
-  connect(actionPrintWindow, SIGNAL(triggered()), this, SLOT(printWindow()));
-  connect(actionEditSurfacePlot, SIGNAL(triggered()), this,
-          SLOT(editSurfacePlot()));
-  connect(actionAdd3DData, SIGNAL(triggered()), this, SLOT(add3DData()));
-  connect(actionInvertMatrix, SIGNAL(triggered()), this, SLOT(invertMatrix()));
-  connect(actionMatrixDeterminant, SIGNAL(triggered()), this,
-          SLOT(matrixDeterminant()));
-  connect(actionConvertMatrix, SIGNAL(triggered()), this,
-          SLOT(convertMatrixToTable()));
-  connect(actionConvertTable, SIGNAL(triggered()), this,
-          SLOT(convertTableToMatrix()));
-  connect(actionEditCurveRange, SIGNAL(triggered()), this,
-          SLOT(showCurveRangeDialog()));
-  connect(actionCopyStatusBarText, SIGNAL(triggered()), this,
-          SLOT(copyStatusBarText()));
+  connect(actionSaveNote, &QAction::triggered, this,
+          &ApplicationWindow::saveNoteAs);
+  connect(actionExportPDF, &QAction::triggered, this,
+          &ApplicationWindow::exportPDF);
+  connect(actionHideActiveWindow, &QAction::triggered, this,
+          &ApplicationWindow::hideActiveWindow);
+  connect(actionShowMoreWindows, &QAction::triggered, this,
+          &ApplicationWindow::showMoreWindows);
+  connect(actionPixelLineProfile, &QAction::triggered, this,
+          &ApplicationWindow::pixelLineProfile);
+  connect(actionIntensityTable, &QAction::triggered, this,
+          &ApplicationWindow::intensityTable);
+  connect(actionActivateWindow, &QAction::triggered, this,
+          qOverload<>(&ApplicationWindow::activateWindow));
+  connect(actionMinimizeWindow, &QAction::triggered, this,
+          &ApplicationWindow::minimizeWindow);
+  connect(actionMaximizeWindow, &QAction::triggered, this,
+          qOverload<>(&ApplicationWindow::maximizeWindow));
+  connect(actionPrintWindow, &QAction::triggered, this,
+          &ApplicationWindow::printWindow);
+  connect(actionEditSurfacePlot, &QAction::triggered, this,
+          &ApplicationWindow::editSurfacePlot);
+  connect(actionAdd3DData, &QAction::triggered, this,
+          &ApplicationWindow::add3DData);
+  connect(actionInvertMatrix, &QAction::triggered, this,
+          &ApplicationWindow::invertMatrix);
+  connect(actionMatrixDeterminant, &QAction::triggered, this,
+          &ApplicationWindow::matrixDeterminant);
+  connect(actionConvertMatrix, &QAction::triggered, this,
+          &ApplicationWindow::convertMatrixToTable);
+  connect(actionConvertTable, &QAction::triggered, this,
+          &ApplicationWindow::convertTableToMatrix);
+  connect(actionCopyStatusBarText, &QAction::triggered, this,
+          &ApplicationWindow::copyStatusBarText);
 
   // Make toolbars
   makeToolBars();
@@ -951,8 +937,8 @@ ApplicationWindow::ApplicationWindow()
   // Initiate statusbar
   statusBarInfo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   statusBarInfo->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(statusBarInfo, SIGNAL(customContextMenuRequested(const QPoint &)),
-          this, SLOT(showStatusBarContextMenu(const QPoint &)));
+  connect(statusBarInfo, &QLabel::customContextMenuRequested, this,
+          &ApplicationWindow::showStatusBarContextMenu);
   statusBar()->addWidget(statusBarInfo, 1);
 
   // Create central MdiArea
@@ -967,35 +953,25 @@ ApplicationWindow::ApplicationWindow()
   setAppColors();
   createLanguagesList();
 
-  connect(scriptEnv, SIGNAL(error(const QString &, const QString &, int)), this,
-          SLOT(scriptError(const QString &, const QString &, int)));
-  connect(scriptEnv, SIGNAL(print(const QString &)), this,
-          SLOT(scriptPrint(const QString &)));
+  connect(scriptEnv, &ScriptingEnv::error, this,
+          &ApplicationWindow::scriptError);
+  connect(scriptEnv, &ScriptingEnv::print, this,
+          &ApplicationWindow::scriptPrint);
   // this has to be done after connecting scriptEnv
   scriptEnv->initialize();
 
 #ifdef SEARCH_FOR_UPDATES
-  connect(&http, SIGNAL(finished(QNetworkReply *)), this,
-          SLOT(receivedVersionFile(QNetworkReply *)));
+  connect(&http, &QNetworkAccessManager::finished, this,
+          &ApplicationWindow::receivedVersionFile);
 #endif
-  connect(this, SIGNAL(modified()), this, SLOT(modifiedProject()));
+  connect(this, qOverload<>(&ApplicationWindow::modified), this,
+          qOverload<>(&ApplicationWindow::modifiedProject));
 }
 
 // Distructor
 ApplicationWindow::~ApplicationWindow() {
-  foreach (QMdiSubWindow *window, subWindowsList()) {
-    if (qobject_cast<Layout2D *>(window)) {
-      qobject_cast<Layout2D *>(window)->setCloseWithoutColumnModeLockChange(
-          true);
-    } else if (qobject_cast<Layout3D *>(window)) {
-      qobject_cast<Layout3D *>(window)->setCloseWithoutColumnModeLockChange(
-          true);
-    }
-  }
   delete ui_;
-  delete hiddenWindows;
-  delete outWindows;
-  delete d_project;
+  // delete d_project;
   QApplication::clipboard()->clear(QClipboard::Clipboard);
 }
 
@@ -1080,6 +1056,8 @@ void ApplicationWindow::makeToolBars() {
   menu_curves->addAction(ui_->actionAddRemoveCurve);
   menu_curves->addAction(ui_->actionAddErrorBars);
   menu_curves->addAction(ui_->actionAddFunctionCurve);
+  menu_curves->addMenu(ui_->menuAddRemoveOtherPlots);
+  menu_curves->addMenu(ui_->menuAddAxis);
   menu_curves->addAction(ui_->actionLegendReorder);
   QMenu *menu_plot_enrichments = new QMenu(this);
   btn_plot_enrichments_->setMenu(menu_plot_enrichments);
@@ -1312,10 +1290,12 @@ void ApplicationWindow::customMenu(QMdiSubWindow *subwindow) {
               SLOT(evaluate()));
     } else
       disableActions();  // None of the above
-
+    propertybrowser->populateObjectBrowser(qobject_cast<MyWidget *>(subwindow));
     menuBar()->addMenu(ui_->menuWindow);
-  } else
+  } else {
     disableActions();  // No active Window
+    propertybrowser->populateObjectBrowser(nullptr);
+  }
 
   menuBar()->addMenu(ui_->menuHelp);
 }
@@ -1939,12 +1919,8 @@ Layout2D *ApplicationWindow::newGraph2D(const QString &caption) {
           &ApplicationWindow::updateWindowStatus);
   connect(layout2d, &Layout2D::showTitleBarMenu, this,
           &ApplicationWindow::showWindowTitleBarMenu);
-  connect(layout2d, &Layout2D::AxisRectRemoved, propertyeditor,
-          &PropertyEditor::populateObjectBrowser);
-  connect(layout2d, &Layout2D::AxisRectSwap, [=]() {
-    propertyeditor->populateObjectBrowser(static_cast<MyWidget *>(layout2d));
-  });
   connect(layout2d, &Layout2D::mousepressevent, [=](MyWidget *widget) {
+    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
@@ -1953,15 +1929,10 @@ Layout2D *ApplicationWindow::newGraph2D(const QString &caption) {
     pickGraphTool(ui_->actionDisableGraphTools);
     ui_->actionDisableGraphTools->setChecked(true);
   });
-  connect(layout2d, &Layout2D::layout2DResized, propertyeditor,
-          &PropertyEditor::refreshCanvasRect);
   connect(layout2d, &Layout2D::datapoint, this,
           &ApplicationWindow::multipeakfitappendpoints);
   connect(layout2d, &Layout2D::showContextMenu, this,
           &ApplicationWindow::showWindowContextMenu);
-  // axis connection resize property update
-  connect(layout2d, &Layout2D::rescaleAxis2D, propertyeditor,
-          &PropertyEditor::rescaleAxis2D);
 
   return layout2d;
 }
@@ -1996,13 +1967,12 @@ Layout3D *ApplicationWindow::newGraph3D(const Graph3DCommon::Plot3DType &type,
           &ApplicationWindow::updateWindowStatus);
   connect(layout3d, &MyWidget::showTitleBarMenu, this,
           &ApplicationWindow::showWindowTitleBarMenu);
-  connect(layout3d, &Layout3D::dataAdded, propertyeditor,
-          &PropertyEditor::populateObjectBrowser);
   connect(layout3d, &Layout3D::showContextMenu, this,
           &ApplicationWindow::showWindowContextMenu);
   // QWindow doesnt pass mousepressevent to the container widget
   // so do it here manually
   connect(layout3d, &Layout3D::mousepressevent, this, [=]() {
+    propertybrowser->populateObjectBrowser(layout3d);
     if (d_workspace->activeSubWindow() == layout3d) return;
     d_workspace->setActiveSubWindow(layout3d);
   });
@@ -2261,6 +2231,7 @@ void ApplicationWindow::initNote(Note *note, const QString &caption) {
   connect(note, SIGNAL(showTitleBarMenu()), this,
           SLOT(showWindowTitleBarMenu()));
   connect(note, &Note::mousepressevent, [=](MyWidget *widget) {
+    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
@@ -2300,10 +2271,9 @@ void ApplicationWindow::matrixDeterminant() {
   if (!matrix) return;
 
   QDateTime dt = QDateTime::currentDateTime();
-  QString info = QLocale().toString(dt, QLocale::ShortFormat);
-  info += "\n" + tr("Determinant of ") + QString(matrix->name()) + ":\t";
-  info += "det = " + QString::number(matrix->determinant()) + "\n";
-  info += "-------------------------------------------------------------\n";
+  QString info = "<b>[" + QLocale().toString(dt, QLocale::ShortFormat);
+  info += tr("Determinant of ''") + QString(matrix->name()) + "'']</b><hr>";
+  info += "<p>det = " + QString::number(matrix->determinant()) + "</p><br>";
 
   logInfo += info;
 
@@ -2369,6 +2339,7 @@ void ApplicationWindow::initMatrix(Matrix *matrix) {
   connect(matrix, SIGNAL(showContextMenu()), this,
           SLOT(showWindowContextMenu()));
   connect(matrix, &Matrix::mousepressevent, [=](MyWidget *widget) {
+    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
@@ -2450,7 +2421,7 @@ Matrix *ApplicationWindow::matrix(const QString &name) {
 
 void ApplicationWindow::windowActivated(QMdiSubWindow *subwindow) {
   if (!subwindow || !qobject_cast<MyWidget *>(subwindow)) {
-    propertyeditor->populateObjectBrowser(nullptr);
+    propertybrowser->populateObjectBrowser(nullptr);
     return;
   }
 
@@ -2486,7 +2457,7 @@ void ApplicationWindow::windowActivated(QMdiSubWindow *subwindow) {
 
   Folder *f = mywidget->folder();
   if (f) f->setActiveWindow(mywidget);
-  propertyeditor->populateObjectBrowser(mywidget);
+  propertybrowser->populateObjectBrowser(mywidget);
   emit modified();
 }
 
@@ -5119,7 +5090,7 @@ void ApplicationWindow::differentiate() {
 
 void ApplicationWindow::showResults(bool ok) {
   if (ok) {
-    if (!logInfo.isEmpty()) ui_->resultLog->setText(logInfo);
+    if (!logInfo.isEmpty()) ui_->resultLog->setHtml(logInfo);
 
     ui_->logWindow->show();
     QTextCursor cursor = ui_->resultLog->textCursor();
@@ -5131,7 +5102,7 @@ void ApplicationWindow::showResults(bool ok) {
 
 void ApplicationWindow::showResults(const QString &text, bool ok) {
   logInfo += text;
-  if (!logInfo.isEmpty()) ui_->resultLog->setText(logInfo);
+  if (!logInfo.isEmpty()) ui_->resultLog->setHtml(logInfo);
   showResults(ok);
 }
 
@@ -5449,9 +5420,9 @@ void ApplicationWindow::cutSelection() {
   QMdiSubWindow *subwindow = d_workspace->activeSubWindow();
   if (!subwindow) return;
 
-  if (isActiveSubWindow(subwindow, SubWindowType::TableSubWindow))
+  if (isActiveSubWindow(subwindow, SubWindowType::TableSubWindow)) {
     qobject_cast<Table *>(subwindow)->cutSelection();
-  else if (isActiveSubWindow(subwindow, SubWindowType::MatrixSubWindow))
+  } else if (isActiveSubWindow(subwindow, SubWindowType::MatrixSubWindow))
     qobject_cast<Matrix *>(subwindow)->cutSelection();
   else if (isActiveSubWindow(subwindow, SubWindowType::Plot2DSubWindow)) {
     // QMessageBox::warning(this, tr("Error"), tr("Cannot use this on
@@ -5470,9 +5441,9 @@ void ApplicationWindow::pasteSelection() {
   MyWidget *widget = qobject_cast<MyWidget *>(d_workspace->activeSubWindow());
   if (!widget) return;
 
-  if (isActiveSubWindow(widget, SubWindowType::TableSubWindow))
+  if (isActiveSubWindow(widget, SubWindowType::TableSubWindow)) {
     qobject_cast<Table *>(widget)->pasteSelection();
-  else if (isActiveSubWindow(widget, SubWindowType::MatrixSubWindow))
+  } else if (isActiveSubWindow(widget, SubWindowType::MatrixSubWindow))
     qobject_cast<Matrix *>(widget)->pasteSelection();
   else if (isActiveSubWindow(widget, SubWindowType::NoteSubWindow))
     qobject_cast<Note *>(widget)->textWidget()->paste();
@@ -5563,8 +5534,8 @@ void ApplicationWindow::redo() {
   QApplication::restoreOverrideCursor();
 }
 
-bool ApplicationWindow::hidden(QWidget *window) {
-  if (hiddenWindows->contains(window) || outWindows->contains(window))
+bool ApplicationWindow::hidden(MyWidget *window) {
+  if (hiddenWindows.contains(window) || outWindows.contains(window))
     return true;
 
   return false;
@@ -5590,8 +5561,10 @@ void ApplicationWindow::hideActiveWindow() {
 }
 
 void ApplicationWindow::hideWindow(MyWidget *w) {
-  hiddenWindows->append(w);
+  hiddenWindows.append(w);
   w->setHidden();
+  customMenu(nullptr);
+  customToolBars(nullptr);
   emit modified();
 }
 
@@ -5608,7 +5581,7 @@ void ApplicationWindow::activateWindow() {
   raise();
   show();
   WindowTableWidgetItem *it =
-      static_cast<WindowTableWidgetItem *>(ui_->listView->currentItem());
+      dynamic_cast<WindowTableWidgetItem *>(ui_->listView->currentItem());
   if (it) activateWindow(it->window());
 }
 
@@ -5616,6 +5589,7 @@ void ApplicationWindow::activateWindow(MyWidget *w) {
   if (!w) return;
   w->setNormal();
   d_workspace->setActiveSubWindow(w);
+  propertybrowser->populateObjectBrowser(w);
 
   updateWindowLists(w);
   emit modified();
@@ -5653,10 +5627,10 @@ void ApplicationWindow::minimizeWindow() {
 void ApplicationWindow::updateWindowLists(MyWidget *w) {
   if (!w) return;
 
-  if (hiddenWindows->contains(w))
-    hiddenWindows->takeAt(hiddenWindows->indexOf(w));
-  else if (outWindows->contains(w)) {
-    outWindows->takeAt(outWindows->indexOf(w));
+  if (hiddenWindows.contains(w))
+    hiddenWindows.takeAt(hiddenWindows.indexOf(w));
+  else if (outWindows.contains(w)) {
+    outWindows.takeAt(outWindows.indexOf(w));
     d_workspace->addSubWindow(w);
     w->setAttribute(Qt::WA_DeleteOnClose);
   }
@@ -5673,6 +5647,7 @@ void ApplicationWindow::removeWindowFromLists(MyWidget *widgrt) {
   QString caption = widgrt->name();
   if (isActiveSubwindow(SubWindowType::TableSubWindow)) {
     Table *table = qobject_cast<Table *>(widgrt);
+    if(!table) return;
     for (int i = 0; i < table->numCols(); i++) {
       QString name = table->colName(i);
       removeCurves(table, name);
@@ -5683,10 +5658,10 @@ void ApplicationWindow::removeWindowFromLists(MyWidget *widgrt) {
     }
   }
 
-  if (hiddenWindows->contains(widgrt))
-    hiddenWindows->takeAt(hiddenWindows->indexOf(widgrt));
-  else if (outWindows->contains(widgrt))
-    outWindows->takeAt(outWindows->indexOf(widgrt));
+  if (hiddenWindows.contains(widgrt))
+    hiddenWindows.takeAt(hiddenWindows.indexOf(widgrt));
+  else if (outWindows.contains(widgrt))
+    outWindows.takeAt(outWindows.indexOf(widgrt));
 }
 
 void ApplicationWindow::closeWindow(MyWidget *window) {
@@ -5716,8 +5691,8 @@ void ApplicationWindow::closeWindow(MyWidget *window) {
   if (subwindowlist.isEmpty()) {
     customMenu(nullptr);
     customToolBars(nullptr);
-    propertyeditor->populateObjectBrowser(nullptr);
-  }
+  } else
+    propertybrowser->populateObjectBrowser(nullptr);
 
   emit modified();
 }
@@ -5745,7 +5720,7 @@ void ApplicationWindow::windowsMenuActivated(int id) {
     w->showNormal();
     w->setFocus();
     if (hidden(w)) {
-      hiddenWindows->takeAt(hiddenWindows->indexOf(w));
+      hiddenWindows.takeAt(hiddenWindows.indexOf(w));
       setListViewView(w->name(), tr("Normal"));
     }
   }
@@ -6131,43 +6106,6 @@ void ApplicationWindow::showWindowTitleBarMenu() {
   showWindowMenu(qobject_cast<MyWidget *>(d_workspace->activeSubWindow()));
 }
 
-void ApplicationWindow::chooseHelpFolder() {
-// TODO: move all paths & location handling to anothor class
-#if defined(Q_OS_WIN)
-  const QString locateDefaultHelp =
-      qApp->applicationDirPath() +
-      QDir::toNativeSeparators("/manual/index.html");
-#else
-  const QString locateDefaultHelp =
-      QDir::toNativeSeparators("/usr/share/doc/AlphaPlot/manual/index.html");
-#endif
-  if (QFile(locateDefaultHelp).exists()) {
-    helpFilePath = locateDefaultHelp;
-  } else {
-    const QString dir = QFileDialog::getExistingDirectory(
-        this, tr("Choose the location of the AlphaPlot help folder!"),
-        qApp->applicationDirPath());
-
-    if (!dir.isEmpty()) {
-      const QFile helpFile(dir + QDir::toNativeSeparators("/index.html"));
-      // TODO: Probably some kind of validity check to make sure that the
-      // index.html file belongs to AlphaPlot
-      if (!helpFile.exists()) {
-        QMessageBox::information(
-            this, tr("index.html File Not Found!"),
-            tr("There is no file called <b>index.html</b> in this folder."
-               "<br>Please choose another folder!"));
-      } else {
-        helpFilePath = dir + QDir::toNativeSeparators("/index.html");
-      }
-    }
-  }
-}
-
-void ApplicationWindow::showHelp() {
-  QDesktopServices::openUrl(QUrl(AlphaPlot::manual_Uri));
-}
-
 void ApplicationWindow::showPlotWizard() {
   if (tableWindows().count() < 1) {
     QMessageBox::warning(
@@ -6186,28 +6124,6 @@ void ApplicationWindow::showPlotWizard() {
   plotwizard->setColumnsList(columnsList());
   plotwizard->changeColumnsList(tableWindows()[0]);
   plotwizard->exec();
-}
-
-void ApplicationWindow::showCurveRangeDialog() {
-  /* if (!isActiveSubwindow(SubWindowType::MultiLayerSubWindow)) return;
-
-   Graph *graph =
-       qobject_cast<MultiLayer
-   *>(d_workspace->activeSubWindow())->activeGraph(); if (!graph) return;
-
-   int curveKey = actionEditCurveRange->data().toInt();
-   showCurveRangeDialog(graph, graph->curveIndex(curveKey));*/
-}
-
-CurveRangeDialog *ApplicationWindow::showCurveRangeDialog(AxisRect2D *axisrect,
-                                                          int curve) {
-  if (!axisrect) return nullptr;
-
-  CurveRangeDialog *crd = new CurveRangeDialog(this);
-  crd->setAttribute(Qt::WA_DeleteOnClose);
-  // crd->setCurveToModify(g, curve);
-  crd->show();
-  return crd;
 }
 
 Function2DDialog *ApplicationWindow::functionDialog() {
@@ -6601,8 +6517,8 @@ QList<QPair<QPair<double, double>, double>>
 
 void ApplicationWindow::clearLogInfo() {
   if (!logInfo.isEmpty()) {
-    logInfo = "";
-    ui_->resultLog->setText(logInfo);
+    logInfo = QString();
+    ui_->resultLog->setHtml(logInfo);
     emit modified();
   }
 }
@@ -6723,7 +6639,7 @@ void ApplicationWindow::addLayout(
 void ApplicationWindow::deleteLayout() {
   if (!isActiveSubwindow(SubWindowType::Plot2DSubWindow)) return;
   Layout2D *layout = qobject_cast<Layout2D *>(d_workspace->activeSubWindow());
-  layout->removeAxisRectItem();
+  layout->removeCurrentAxisRectItem();
 }
 
 void ApplicationWindow::copyActiveLayer() {
@@ -6869,9 +6785,11 @@ void ApplicationWindow::connectTable(Table *table) {
   connect(table->d_future_table, SIGNAL(requestColumnStatistics()), this,
           SLOT(showColumnStatistics()));
   connect(table, &Table::mousepressevent, [=](MyWidget *widget) {
+    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
+
   });
   table->askOnCloseEvent(confirmCloseTable);
 }
@@ -7270,24 +7188,6 @@ void ApplicationWindow::multipeakfitappendpoints(Curve2D *curve, double x,
     pickGraphTool(ui_->actionDisableGraphTools);
     ui_->statusBar->clearMessage();
   }
-}
-
-#ifdef DOWNLOAD_LINKS
-void ApplicationWindow::downloadManual() {
-  QDesktopServices::openUrl(QUrl(AlphaPlot::manual_Uri));
-}
-#endif  // defined DOWNLOAD_LINKS
-
-void ApplicationWindow::showHomePage() {
-  QDesktopServices::openUrl(QUrl(AlphaPlot::homepage_Uri));
-}
-
-void ApplicationWindow::showForums() {
-  QDesktopServices::openUrl(QUrl(AlphaPlot::forum_Uri));
-}
-
-void ApplicationWindow::showBugTracker() {
-  QDesktopServices::openUrl(QUrl(AlphaPlot::bugreport_Uri));
 }
 
 void ApplicationWindow::parseCommandLineArguments(const QStringList &args) {
@@ -7704,7 +7604,7 @@ void ApplicationWindow::setShowWindowsPolicy(int policy) {
     foreach (QMdiSubWindow *subwindow, subwindowlist) {
       MyWidget *widget = qobject_cast<MyWidget *>(subwindow);
       if (!widget) continue;
-      hiddenWindows->append(widget);
+      hiddenWindows.append(widget);
       widget->hide();
       setListViewView(widget->name(), tr("Hidden"));
     }
@@ -7907,10 +7807,13 @@ void ApplicationWindow::folderItemDoubleClicked(QTreeWidgetItem *it) {
     if (d_workspace->activeSubWindow() != widget)
       activateWindow(widget);
     else {
-      if (!widget->isMaximized())
+      if (!widget->isMaximized()) {
         widget->setMaximized();
-      else
+        propertybrowser->populateObjectBrowser(widget);
+      } else {
         widget->setNormal();
+        propertybrowser->populateObjectBrowser(widget);
+      }
     }
   }
 }
@@ -7972,7 +7875,7 @@ bool ApplicationWindow::changeFolder(Folder *newFolder, bool force) {
 
   QList<MyWidget *> lst = newFolder->windowsList();
   foreach (MyWidget *w, lst) {
-    if (!hiddenWindows->contains(w) && !outWindows->contains(w) &&
+    if (!hiddenWindows.contains(w) && !outWindows.contains(w) &&
         show_windows_policy != HideAll) {
       // show only windows in the current folder not hidden by the user
       if (w->status() == MyWidget::Normal)
@@ -8026,7 +7929,7 @@ void ApplicationWindow::refreshFolderTreeWidgetItemsRecursive(
       QList<MyWidget *> list =
           static_cast<Folder *>(tempItem->folder())->windowsList();
       foreach (MyWidget *widget, list) {
-        if (!hiddenWindows->contains(widget) && !outWindows->contains(widget)) {
+        if (!hiddenWindows.contains(widget) && !outWindows.contains(widget)) {
           if (show_windows_policy == SubFolders) {
             if (widget->status() == MyWidget::Normal ||
                 widget->status() == MyWidget::Maximized)
@@ -9703,11 +9606,10 @@ void ApplicationWindow::loadIcons() {
   // Help menu
   ui_->actionHelp->setIcon(
       IconLoader::load("edit-help", IconLoader::LightDark));
-  ui_->actionChooseHelpFolder->setIcon(QIcon());
   ui_->actionHomepage->setIcon(
       IconLoader::load("go-home", IconLoader::LightDark));
   ui_->actionCheckUpdates->setIcon(QIcon());
-  ui_->actionDownloadManual->setIcon(QIcon());
+  ui_->actionWiki->setIcon(QIcon());
   ui_->actionVisitForum->setIcon(
       IconLoader::load("edit-help-forum", IconLoader::LightDark));
   ui_->actionReportBug->setIcon(

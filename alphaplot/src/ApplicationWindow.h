@@ -72,7 +72,6 @@ class FolderTreeWidgetItem;
 class Plot3DDialog;
 class MyWidget;
 class TableStatistics;
-class CurveRangeDialog;
 class Project;
 class AbstractAspect;
 
@@ -81,7 +80,7 @@ class IconLoader;
 class AprojHandler;
 class SettingsDialog;
 class PropertiesDialog;
-class PropertyEditor;
+class PropertyBrowser;
 class AxisRect2D;
 class Curve2D;
 class Function2DDialog;
@@ -183,11 +182,11 @@ class ApplicationWindow : public QMainWindow,
 #ifdef SCRIPTING_CONSOLE
   ConsoleWidget* consoleWindow;
 #endif
-  PropertyEditor* propertyeditor;
+  PropertyBrowser* propertybrowser;
   QMdiArea* d_workspace;
   QToolButton* btnResults;
-  QWidgetList* hiddenWindows;
-  QWidgetList* outWindows;
+  QList<MyWidget*> hiddenWindows;
+  QList<MyWidget*> outWindows;
   MyWidget* lastModified;
 
   // Toolbars
@@ -459,7 +458,7 @@ class ApplicationWindow : public QMainWindow,
 
   void updateWindowStatus(MyWidget*);
 
-  bool hidden(QWidget* window);
+  bool hidden(MyWidget* window);
   void closeActiveWindow();
   void closeWindow(MyWidget* window);
 
@@ -602,8 +601,6 @@ class ApplicationWindow : public QMainWindow,
   void showResults(const QString& text, bool ok = false);
   void showExportASCIIDialog();
   void showCurvesDialog();
-  void showCurveRangeDialog();
-  CurveRangeDialog* showCurveRangeDialog(AxisRect2D* axisrect, int curve);
   void showPlotAssociations(int curve);
 
   void showWindowContextMenu();
@@ -678,17 +675,6 @@ class ApplicationWindow : public QMainWindow,
   void receivedVersionFile(QNetworkReply* reply);
   //!  called when the user presses the actionCheckUpdates
   void searchForUpdates();
-#endif
-
-  //! Open AlphaPlot homepage in external browser
-  void showHomePage();
-  //! Open forums page at SF.net in external browser
-  void showForums();
-  //! Open bug tracking system at SF.net in external browser
-  void showBugTracker();
-#ifdef DOWNLOAD_LINKS
-  //! Show download page in external browser
-  void downloadManual();
 #endif
 
   void parseCommandLineArguments(const QStringList& args);
@@ -848,9 +834,7 @@ class ApplicationWindow : public QMainWindow,
   void modified();
 
  private slots:
-  void showHelp();          // Open help file index.html
-  void chooseHelpFolder();  // Choose help folder
-  void about();             // Show about dialog
+  void about();  // Show about dialog
 
   // TODO: a lot of this stuff should be private
  public:
@@ -1080,8 +1064,6 @@ class ApplicationWindow : public QMainWindow,
 #endif
 
   QAction* actionCopyStatusBarText;
-  QAction* actionEditCurveRange;
-
   QAction* actionShowExportASCIIDialog;
   QAction* actionExportPDF;
   QAction* actionCloseAllWindows;
@@ -1121,7 +1103,7 @@ class ApplicationWindow : public QMainWindow,
 
   QLabel* statusBarInfo;
 
-  Project* d_project;
+  Project *d_project;
   // SettingsDialog* settings_;
 
   bool was_maximized_;

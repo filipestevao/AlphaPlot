@@ -29,11 +29,12 @@
  *                                                                         *
  ***************************************************************************/
 #include "PartMdiView.h"
-#include "AbstractPart.h"
 
 #include <QCloseEvent>
-#include <QMenu>
 #include <QMdiArea>
+#include <QMenu>
+
+#include "AbstractPart.h"
 
 PartMdiView::PartMdiView(AbstractPart *part, QWidget *embedded_view)
     : QMdiSubWindow(0), d_part(part), d_closing(false), d_status(Closed) {

@@ -30,6 +30,7 @@
 #define NOTE_H
 
 #include <qtextedit.h>
+
 #include "MyWidget.h"
 #include "scripting/ScriptEdit.h"
 
@@ -50,6 +51,10 @@ class Note : public MyWidget {
        const char *name = 0, Qt::WindowFlags f = Qt::SubWindow);
   ~Note();
 
+  virtual QString getItemName() override;
+  virtual QIcon getItemIcon() override;
+  virtual QString getItemTooltip() override;
+
   void init(ScriptingEnv *env);
   QString getText();
 
@@ -64,8 +69,10 @@ class Note : public MyWidget {
   void setText(const QString &s) { textedit_->setText(s); }
   void save(QXmlStreamWriter *xmlwriter);
   bool load(XmlStreamReader *xmlreader);
-  void print() { textedit_->print(); }
-  void exportPDF(const QString &fileName) { textedit_->exportPDF(fileName); }
+  void print() override { textedit_->print(); }
+  void exportPDF(const QString &fileName) override {
+    textedit_->exportPDF(fileName);
+  }
   QString exportASCII(const QString &file = QString()) {
     return textedit_->exportASCII(file);
   }
@@ -81,4 +88,5 @@ class Note : public MyWidget {
   bool autoExec;
 };
 
+Q_DECLARE_METATYPE(Note *);
 #endif  // NOTE_H

@@ -4,6 +4,7 @@
 #include "Curve2D.h"
 #include "LineSpecial2D.h"
 #include "Plot2D.h"
+#include "core/IconLoader.h"
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
 
@@ -19,6 +20,14 @@ Legend2D::Legend2D(AxisRect2D *axisrect)
 
 Legend2D::~Legend2D() {}
 
+QString Legend2D::getItemName() { return tr("Legend"); }
+
+QIcon Legend2D::getItemIcon() {
+  return IconLoader::load("edit-legend", IconLoader::LightDark);
+}
+
+QString Legend2D::getItemTooltip() { return getItemName(); }
+
 bool Legend2D::gethidden_legend() const { return visible(); }
 
 int Legend2D::getdirection_legend() const {
@@ -28,6 +37,7 @@ int Legend2D::getdirection_legend() const {
     case foColumnsFirst:
       return 1;
   }
+  return 0;
 }
 
 QColor Legend2D::getborderstrokecolor_legend() const {
@@ -99,6 +109,7 @@ void Legend2D::addtitle_legend() {
   if (this->hasElement(0, 0)) this->insertRow(0);
   this->addElement(0, 0, title_element_);
   this->simplify();
+  emit legendTitleStatusChange(true);
 }
 
 void Legend2D::removetitle_legend() {
@@ -111,6 +122,7 @@ void Legend2D::removetitle_legend() {
   status = this->removeAt(0);
   if (status) title_element_ = nullptr;
   this->simplify();
+  emit legendTitleStatusChange(false);
 }
 
 bool Legend2D::istitle_legend() const {

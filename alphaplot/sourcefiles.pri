@@ -8,8 +8,15 @@ HEADERS  += src/ApplicationWindow.h \
             src/core/AppearanceManager.h \
             src/core/IconLoader.h \
             src/core/Utilities.h \
-            src/core/widgets/MyTreeWidget.h \
-            src/core/widgets/propertyeditor.h \
+            src/core/propertybrowser/PropertyItem.h \
+            src/core/propertybrowser/PropertyItemModel.h \
+            src/core/propertybrowser/ObjectBrowserTreeItem.h \
+            src/core/propertybrowser/ObjectBrowserTreeItemModel.h \
+            src/core/propertybrowser/PropertyItemDelegate.h \
+            src/core/propertybrowser/PropertyView.h \
+            src/core/propertybrowser/propertybrowser.h \
+            src/core/propertybrowser/CustomWidgets.h \
+            src/core/propertybrowser/ScientificDoubleSpinBox.h \
             src/widgets/ColorLabel.h \
             src/globals.h\
             src/scripting/MuParserScript.h \
@@ -18,8 +25,6 @@ HEADERS  += src/ApplicationWindow.h \
             src/scripting/MyParser.h \
             src/Table.h \
             src/PlotWizard.h \
-            src/LayerDialog.h \
-            src/ConfigDialog.h \
             src/Matrix.h \
             src/DataSetDialog.h \
             src/ColorBox.h \
@@ -41,7 +46,6 @@ HEADERS  += src/ApplicationWindow.h \
             src/scripting/ScriptingLangDialog.h\
             src/TextFormatButtons.h\
             src/TableStatistics.h\
-            src/Spectrogram.h\
             src/analysis/Filter.h\
             src/analysis/FFTFilter.h\
             src/analysis/FFT.h\
@@ -66,11 +70,8 @@ HEADERS  += src/ApplicationWindow.h \
             src/analysis/MultiPeakFitTool.h\
             src/analysis/NonLinearFit.h\
             src/analysis/FitDialog.h\
-            src/TranslateCurveTool.h\
-            src/CurveRangeDialog.h\
             src/OpenProjectDialog.h\
             src/TeXTableSettings.h \
-            src/SymbolDialog.h \
             src/TeXTableSettingsWidget.h \
             src/TeXTableExportDialog.h \
             src/scripting/widgets/Console.h \
@@ -105,17 +106,22 @@ SOURCES  += src/ApplicationWindow.cpp \
             src/core/AppearanceManager.cpp \
             src/core/IconLoader.cpp \
             src/core/Utilities.cpp \
-            src/core/widgets/MyTreeWidget.cpp \
-            src/core/widgets/propertyeditor.cpp \
+            src/core/propertybrowser/PropertyItem.cpp \
+            src/core/propertybrowser/PropertyItemModel.cpp \
+            src/core/propertybrowser/ObjectBrowserTreeItem.cpp \
+            src/core/propertybrowser/ObjectBrowserTreeItemModel.cpp \
+            src/core/propertybrowser/PropertyItemDelegate.cpp \
+            src/core/propertybrowser/PropertyView.cpp \
+            src/core/propertybrowser/propertybrowser.cpp \
+            src/core/propertybrowser/CustomWidgets.cpp \
+            src/core/propertybrowser/ScientificDoubleSpinBox.cpp \
             src/widgets/ColorLabel.cpp \
             src/scripting/MuParserScript.cpp \
             src/scripting/MuParserScripting.cpp \
             src/scripting/MyParser.cpp\
             src/Table.cpp \
             src/PlotWizard.cpp \
-            src/LayerDialog.cpp \
             src/DataSetDialog.cpp \
-            src/ConfigDialog.cpp \
             src/Matrix.cpp \
             src/ColorBox.cpp \
             src/PatternBox.cpp \
@@ -136,7 +142,6 @@ SOURCES  += src/ApplicationWindow.cpp \
             src/scripting/Script.cpp\
             src/scripting/ScriptingLangDialog.cpp\
             src/TableStatistics.cpp\
-            src/Spectrogram.cpp\
             src/analysis/Filter.cpp\
             src/analysis/FFTFilter.cpp\
             src/analysis/FFT.cpp\
@@ -161,12 +166,9 @@ SOURCES  += src/ApplicationWindow.cpp \
             src/analysis/MultiPeakFitTool.cpp\
             src/analysis/NonLinearFit.cpp\
             src/analysis/FitDialog.cpp\
-            src/TranslateCurveTool.cpp\
-            src/CurveRangeDialog.cpp\
             src/OpenProjectDialog.cpp\
             src/globals.cpp \
             src/TeXTableSettings.cpp \
-            src/SymbolDialog.cpp \
             src/TeXTableSettingsWidget.cpp \
             src/TeXTableExportDialog.cpp \
             src/scripting/widgets/Console.cpp \
@@ -197,7 +199,7 @@ SOURCES  += src/ApplicationWindow.cpp \
 
 ###################### FORMS ##############################################
 FORMS        += src/ApplicationWindow.ui \
-                src/core/widgets/propertyeditor.ui \
+                src/core/propertybrowser/propertybrowser.ui \
                 src/scripting/widgets/ConsoleWidget.ui \
                 src/widgets/CustomCharacterDialog.ui \
                 src/ui/GeneralApplicationSettings.ui \
@@ -315,26 +317,6 @@ HEADERS     += ../3rdparty/qcustomplot/qcustomplot.h
 SOURCES     += ../3rdparty/qcustomplot/qcustomplot.cpp
 
 ##############################################################
-####################### PropertyBrowser ######################
-##############################################################
-
-    SOURCES += ../3rdparty/propertybrowser/qtpropertybrowser.cpp \
-               ../3rdparty/propertybrowser/qtpropertymanager.cpp \
-               ../3rdparty/propertybrowser/qteditorfactory.cpp \
-               ../3rdparty/propertybrowser/qttreepropertybrowser.cpp \
-               ../3rdparty/propertybrowser/qtpropertybrowserutils.cpp \
-               ../3rdparty/propertybrowser/QtxDoubleSpinBox.cpp
-
-    HEADERS += ../3rdparty/propertybrowser/qtpropertybrowser.h \
-               ../3rdparty/propertybrowser/qtpropertymanager.h \
-               ../3rdparty/propertybrowser/qteditorfactory.h \
-               ../3rdparty/propertybrowser/qttreepropertybrowser.h \
-               ../3rdparty/propertybrowser/qtpropertybrowserutils_p.h \
-               ../3rdparty/propertybrowser/QtxDoubleSpinBox.h
-
-    RESOURCES += ../3rdparty/propertybrowser/qtpropertybrowser.qrc
-
-##############################################################
 ####################### PlotCommon ###########################
 ##############################################################
 
@@ -375,6 +357,8 @@ HEADERS     += src/2Dplot/widgets/LayoutButton2D.h \
                src/2Dplot/TextItem2D.h \
                src/2Dplot/ImageItem2D.h \
                src/2Dplot/Plotcolumns.h \
+               src/2Dplot/Channel2D.h \
+               src/2Dplot/GridPair2D.h \
 
 SOURCES     += src/2Dplot/widgets/LayoutButton2D.cpp \
                src/2Dplot/widgets/Function2DDialog.cpp \
@@ -403,6 +387,8 @@ SOURCES     += src/2Dplot/widgets/LayoutButton2D.cpp \
                src/2Dplot/ErrorBar2D.cpp \
                src/2Dplot/TextItem2D.cpp \
                src/2Dplot/ImageItem2D.cpp \
+               src/2Dplot/Channel2D.cpp \
+               src/2Dplot/GridPair2D.cpp \
 
 FORMS       += src/2Dplot/widgets/Function2DDialog.ui \
                src/2Dplot/widgets/SwapLayout2DDialog.ui \

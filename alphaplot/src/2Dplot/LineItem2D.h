@@ -9,9 +9,14 @@ class XmlStreamReader;
 class XmlStreamWriter;
 
 class LineItem2D : public QCPItemLine {
+  Q_OBJECT
  public:
   LineItem2D(AxisRect2D *axisrect, Plot2D *plot);
   ~LineItem2D();
+
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
 
   enum class LineEndLocation : int {
     Start = 0,
@@ -44,10 +49,10 @@ class LineItem2D : public QCPItemLine {
   bool load(XmlStreamReader *xmlreader);
 
  protected:
-  void draw(QCPPainter *painter);
-  void mousePressEvent(QMouseEvent *event, const QVariant &details);
-  void mouseMoveEvent(QMouseEvent *event, const QPointF &startPos);
-  void mouseReleaseEvent(QMouseEvent *event, const QPointF &startPos);
+  void draw(QCPPainter *painter) override;
+  void mousePressEvent(QMouseEvent *event, const QVariant &details) override;
+  void mouseMoveEvent(QMouseEvent *event, const QPointF &startPos) override;
+  void mouseReleaseEvent(QMouseEvent *event, const QPointF &startPos) override;
 
  private:
   static const int selectionpixelsize_;
@@ -64,4 +69,5 @@ class LineItem2D : public QCPItemLine {
   QCursor cursorshape_;
 };
 
+Q_DECLARE_METATYPE(LineItem2D *);
 #endif  // LINEITEM2D_H

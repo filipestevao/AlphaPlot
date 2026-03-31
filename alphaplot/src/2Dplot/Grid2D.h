@@ -28,6 +28,7 @@ class Grid2D : public QCPGrid {
  public:
   explicit Grid2D(Axis2D *parent);
   ~Grid2D();
+
   // Grid & Zeroline
   void setMajorGridColor(const QColor &color);
   void setMajorGridStyle(const Qt::PenStyle &penstyle);
@@ -67,7 +68,6 @@ class Grid2D : public QCPGrid {
   QColor zerolinecolor_;
   Qt::PenStyle zerolinestyle_;
   double zerolinethickness_;
-
 };
 
 #endif  // GRID2D_H

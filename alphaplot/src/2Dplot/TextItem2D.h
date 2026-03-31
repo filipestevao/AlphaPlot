@@ -9,9 +9,14 @@ class XmlStreamReader;
 class XmlStreamWriter;
 
 class TextItem2D : public QCPItemText {
+  Q_OBJECT
  public:
   TextItem2D(AxisRect2D *axisrect, Plot2D *plot);
   ~TextItem2D();
+
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
 
   enum class TextAlignment : int {
     TopLeft = 0,
@@ -40,10 +45,13 @@ class TextItem2D : public QCPItemText {
   void save(XmlStreamWriter *xmlwriter);
   bool load(XmlStreamReader *xmlreader);
 
+ signals:
+  void positionChanged();
+
  protected:
-  void mousePressEvent(QMouseEvent *event, const QVariant &details);
-  void mouseMoveEvent(QMouseEvent *event, const QPointF &startPos);
-  void mouseReleaseEvent(QMouseEvent *event, const QPointF &startPos);
+  void mousePressEvent(QMouseEvent *event, const QVariant &details) override;
+  void mouseMoveEvent(QMouseEvent *event, const QPointF &startPos) override;
+  void mouseReleaseEvent(QMouseEvent *event, const QPointF &startPos) override;
 
  private:
   AxisRect2D *axisrect_;
@@ -54,4 +62,5 @@ class TextItem2D : public QCPItemText {
   QCursor cursorshape_;
 };
 
+Q_DECLARE_METATYPE(TextItem2D *);
 #endif  // TEXTITEM2D_H

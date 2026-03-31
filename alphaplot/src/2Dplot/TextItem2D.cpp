@@ -1,12 +1,13 @@
 #include "TextItem2D.h"
 
+#include <QPen>
+
 #include "AxisRect2D.h"
 #include "Plot2D.h"
+#include "core/IconLoader.h"
 #include "core/Utilities.h"
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
-
-#include <QPen>
 
 TextItem2D::TextItem2D(AxisRect2D *axisrect, Plot2D *plot)
     : QCPItemText(plot),
@@ -34,6 +35,14 @@ TextItem2D::TextItem2D(AxisRect2D *axisrect, Plot2D *plot)
 }
 
 TextItem2D::~TextItem2D() { parentPlot()->removeLayer(layer()); }
+
+QString TextItem2D::getItemName() { return tr("Text Item"); }
+
+QIcon TextItem2D::getItemIcon() {
+  return IconLoader::load("draw-text", IconLoader::LightDark);
+}
+
+QString TextItem2D::getItemTooltip() { return getItemName(); }
 
 AxisRect2D *TextItem2D::getaxisrect() const { return axisrect_; }
 
@@ -104,6 +113,7 @@ void TextItem2D::settextalignment_textitem(const TextAlignment &value) {
 
 void TextItem2D::setpixelposition_textitem(const QPointF &point) {
   position->setPixelPosition(point);
+  emit positionChanged();
 }
 
 void TextItem2D::save(XmlStreamWriter *xmlwriter) {
@@ -214,8 +224,7 @@ bool TextItem2D::load(XmlStreamReader *xmlreader) {
       setText(itemtext);
     else {
       setText("Text");
-      xmlreader->raiseWarning(
-          tr("TextItem2D text property setting error"));
+      xmlreader->raiseWarning(tr("TextItem2D text property setting error"));
     }
 
     // rotation

@@ -48,6 +48,7 @@
 #include <QTextStream>
 #include <cmath>
 
+#include "core/IconLoader.h"
 #include "core/column/Column.h"
 #include "core/datatypes/DateTime2StringFilter.h"
 #include "core/datatypes/Double2StringFilter.h"
@@ -89,6 +90,16 @@ Table::Table(ScriptingEnv *env, int r, int c, const QString &label,
   d_future_table = new future::Table(0, r, c, label);
   init();
 }
+
+Table::~Table() {}
+
+QString Table::getItemName() { return name(); }
+
+QIcon Table::getItemIcon() {
+  return IconLoader::load("table", IconLoader::LightDark);
+}
+
+QString Table::getItemTooltip() { return name(); }
 
 void Table::init() {
   if (!d_future_table) return;
@@ -164,6 +175,15 @@ void Table::init() {
   connect(d_future_table,
           SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect *)), this,
           SLOT(handleAspectDescriptionAboutToChange(const AbstractAspect *)));
+
+  connect(d_future_table, &future::Table::columnsInserted, this,
+          &Table::columncountchange);
+  connect(d_future_table, &future::Table::columnsRemoved, this,
+          &Table::columncountchange);
+  connect(d_future_table, &future::Table::rowsInserted, this,
+          &Table::rowcountchange);
+  connect(d_future_table, &future::Table::rowsRemoved, this,
+          &Table::rowcountchange);
 }
 
 void Table::handleChange() { emit modifiedWindow(this); }

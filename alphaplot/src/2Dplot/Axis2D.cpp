@@ -19,6 +19,7 @@
 #include <QVector>
 
 #include "AxisRect2D.h"
+#include "GridPair2D.h"
 #include "Plot2D.h"
 #include "core/IconLoader.h"
 #include "core/Utilities.h"
@@ -61,11 +62,19 @@ Axis2D::Axis2D(AxisRect2D *parent, const AxisType type,
   reloadIcon();
   layer()->setMode(QCPLayer::LayerMode::lmBuffered);
 
-  connect(this, QOverload<const QCPRange &>::of(&Axis2D::rangeChanged), this,
+  connect(this, qOverload<const QCPRange &>(&Axis2D::rangeChanged), this,
           [=]() { emit rescaleAxis2D(this); });
 }
 
 Axis2D::~Axis2D() {}
+
+QString Axis2D::getItemName() {
+  return getname_axis() + QString::number(getnumber_axis());
+}
+
+QIcon Axis2D::getItemIcon() { return icon_; }
+
+QString Axis2D::getItemTooltip() { return label(); }
 
 AxisRect2D *Axis2D::getaxisrect_axis() const { return axisrect_; }
 
@@ -625,8 +634,8 @@ void Axis2D::save(XmlStreamWriter *xmlwriter) {
       xmlwriter->writeAttribute("tickertype", "text");
       break;
   }
-  (axisrect_->getGridPair().first.second == this ||
-   axisrect_->getGridPair().second.second == this)
+  (axisrect_->getGridPair()->getXgridAxis() == this ||
+   axisrect_->getGridPair()->getYgridAxis() == this)
       ? xmlwriter->writeAttribute("grid", "true")
       : xmlwriter->writeAttribute("grid", "false");
   xmlwriter->writeAttribute("offset", QString::number(getoffset_axis()));

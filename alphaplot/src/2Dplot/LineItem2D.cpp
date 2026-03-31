@@ -2,6 +2,7 @@
 
 #include "AxisRect2D.h"
 #include "Plot2D.h"
+#include "core/IconLoader.h"
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
 
@@ -37,6 +38,14 @@ LineItem2D::~LineItem2D() {
   delete ending_;
   parentPlot()->removeLayer(layer());
 }
+
+QString LineItem2D::getItemName() { return tr("Line Item"); }
+
+QIcon LineItem2D::getItemIcon() {
+  return IconLoader::load("draw-line", IconLoader::LightDark);
+}
+
+QString LineItem2D::getItemTooltip() { return getItemName(); }
 
 AxisRect2D *LineItem2D::getaxisrect() const { return axisrect_; }
 

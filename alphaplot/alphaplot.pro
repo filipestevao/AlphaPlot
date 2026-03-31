@@ -14,7 +14,7 @@ greaterThan(QT_MAJOR_VERSION, 5) {
     QT += script scripttools
 }
 
-# enable C++11/C++17 runtime support
+# enable C++17 runtime support
 CONFIG += c++17
 CONFIG += qt warn_on exceptions opengl thread
 

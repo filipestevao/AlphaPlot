@@ -26,10 +26,11 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "AbstractAspect.h"
 #include "AspectPrivate.h"
 #include <QRegularExpression>
 #include <QStringList>
+
+#include "AbstractAspect.h"
 
 QSettings *AbstractAspect::Private::g_settings = new QSettings();
 QHash<QString, QVariant> AbstractAspect::Private::g_defaults;
@@ -208,8 +209,7 @@ QString AbstractAspect::Private::uniqueNameFor(
 
   int new_nr = current_name.right(current_name.size() - base.size()).toInt();
   QString new_name;
-  do
-    new_name = base + QString::number(++new_nr);
+  do new_name = base + QString::number(++new_nr);
   while (child_names.contains(new_name));
 
   return new_name;

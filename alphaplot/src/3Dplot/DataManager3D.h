@@ -12,7 +12,10 @@
 //#include <QtDataVisualization/QBarDataProxy>
 //#include <QtDataVisualization/QScatterDataProxy>
 #include <QList>
-#include <QVector>
+#include <QObject>
+#include <QtDataVisualization/QBarDataArray>
+#include <QtDataVisualization/QScatterDataArray>
+#include <QtDataVisualization/QSurfaceDataArray>
 
 #include "Graph3DCommon.h"
 
@@ -32,7 +35,7 @@ class Column;
 #include <QtDataVisualization/qitemmodelscatterdataproxy.h>
 // Manual forward declarations of QtDataVisualization classes are removed to avoid ambiguity with headers.
 
-class DataBlockAbstract3D {
+class DataBlockAbstract3D : public QObject {
  public:
   // getters
   Matrix *getmatrix() const { return matrix_; }
@@ -67,6 +70,7 @@ class DataBlockAbstract3D {
 };
 
 class DataBlockSurface3D : public DataBlockAbstract3D {
+  Q_OBJECT
  public:
   DataBlockSurface3D(Matrix *matrix);
   DataBlockSurface3D(Table *table, Column *xcolumn, Column *ycolumn,
@@ -74,6 +78,10 @@ class DataBlockSurface3D : public DataBlockAbstract3D {
   DataBlockSurface3D(QList<QPair<QPair<double, double>, double>> *data,
                      const Graph3DCommon::Function3DData &funcdata);
   ~DataBlockSurface3D();
+
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
 
   void regenerateDataBlockModel();
   void regenerateDataBlockValue();
@@ -112,11 +120,16 @@ class DataBlockSurface3D : public DataBlockAbstract3D {
 };
 
 class DataBlockBar3D : public DataBlockAbstract3D {
+  Q_OBJECT
  public:
   DataBlockBar3D(Matrix *matrix);
   DataBlockBar3D(Table *table, Column *xcolumn, Column *ycolumn,
                  Column *zcolumn);
   ~DataBlockBar3D();
+
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
 
   void regenerateDataBlockModel();
   void regenerateDataBlockXYZValue();
@@ -142,11 +155,16 @@ class DataBlockBar3D : public DataBlockAbstract3D {
 };
 
 class DataBlockScatter3D : public DataBlockAbstract3D {
+  Q_OBJECT
  public:
   DataBlockScatter3D(Matrix *matrix);
   DataBlockScatter3D(Table *table, Column *xcolumn, Column *ycolumn,
                      Column *zcolumn);
   ~DataBlockScatter3D();
+
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
 
   void regenerateDataBlockModel();
   void regenerateDataBlockXYZValue();
@@ -167,4 +185,7 @@ class DataBlockScatter3D : public DataBlockAbstract3D {
   QScatter3DSeries *dataSeries_;
 };
 
+Q_DECLARE_METATYPE(DataBlockBar3D *);
+Q_DECLARE_METATYPE(DataBlockScatter3D *);
+Q_DECLARE_METATYPE(DataBlockSurface3D *);
 #endif  // DATAMANAGER3D_H

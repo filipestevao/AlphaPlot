@@ -25,6 +25,10 @@ class Plot2D : public QCustomPlot {
   explicit Plot2D(QWidget *parent = nullptr);
   ~Plot2D();
 
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
+
   void setBackgroundColor(const QColor &color, const bool backpixmap = true);
   QColor getBackgroundColor() const;
   bool saveSvg(const QString &fileName, int width = 0, int height = 0,
@@ -53,4 +57,5 @@ class Plot2D : public QCustomPlot {
   QString layernamelegend2d_;
 };
 
+Q_DECLARE_METATYPE(Plot2D *);
 #endif  // PLOT2D_H

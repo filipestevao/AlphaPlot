@@ -16,6 +16,10 @@ class Legend2D : public QCPLegend {
   Legend2D(AxisRect2D *axisrect);
   ~Legend2D();
 
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
+
   bool gethidden_legend() const;
   int getdirection_legend() const;
   QColor getborderstrokecolor_legend() const;
@@ -49,6 +53,7 @@ class Legend2D : public QCPLegend {
  signals:
   void legendClicked();
   void legendMoved();
+  void legendTitleStatusChange(const bool status);
 
  protected:
   void mousePressEvent(QMouseEvent *event, const QVariant &details);
@@ -57,6 +62,7 @@ class Legend2D : public QCPLegend {
 
  private:
   AxisRect2D *axisrect_;
+  QIcon icon_;
   bool draggingLegend_;
   QPointF dragLegendOrigin_;
   QCursor cursorshape_;
@@ -132,4 +138,5 @@ class PieLegendItem2D : public QCPAbstractLegendItem {
   QFont getFont() const;
 };
 
+Q_DECLARE_METATYPE(Legend2D *);
 #endif  // LEGEND2D_H

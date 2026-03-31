@@ -23,6 +23,10 @@ class Surface3D : public QObject {
   Surface3D(Q3DSurface *surface);
   ~Surface3D();
 
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
+
   void setSurfaceMeshType(const QSurface3DSeries::DrawFlag &type);
   void setSurfaceMeshType(const QSurface3DSeries::DrawFlag &type,
                           QSurface3DSeries *series);
@@ -54,4 +58,5 @@ class Surface3D : public QObject {
   int counter_;
 };
 
+Q_DECLARE_METATYPE(Surface3D *);
 #endif  // SURFACE3D_H

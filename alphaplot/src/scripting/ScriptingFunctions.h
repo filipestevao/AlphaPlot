@@ -11,9 +11,6 @@ class QJSEngine;
 class Table;
 
 // Register types
-Q_DECLARE_METATYPE(Table *)
-Q_DECLARE_METATYPE(Note *)
-Q_DECLARE_METATYPE(Matrix *)
 Q_DECLARE_METATYPE(Column *)
 Q_DECLARE_METATYPE(QVector<int>)
 Q_DECLARE_METATYPE(QVector<float>)

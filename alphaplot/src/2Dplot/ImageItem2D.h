@@ -9,9 +9,14 @@ class XmlStreamWriter;
 class XmlStreamReader;
 
 class ImageItem2D : public QCPItemPixmap {
+  Q_OBJECT
  public:
   ImageItem2D(AxisRect2D *axisrect, Plot2D *plot, const QString &filename);
   ~ImageItem2D();
+
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
 
   AxisRect2D *getaxisrect() const;
   QString getsource_imageitem() const;
@@ -32,18 +37,21 @@ class ImageItem2D : public QCPItemPixmap {
   void save(XmlStreamWriter *xmlwriter);
   bool load(XmlStreamReader *xmlreader);
 
+ signals:
+  void positionChanged();
+
  protected:
-  void draw(QCPPainter *painter);
-  void mousePressEvent(QMouseEvent *event, const QVariant &details);
-  void mouseMoveEvent(QMouseEvent *event, const QPointF &startPos);
-  void mouseReleaseEvent(QMouseEvent *event, const QPointF &startPos);
+  void draw(QCPPainter *painter) override;
+  void mousePressEvent(QMouseEvent *event, const QVariant &details) override;
+  void mouseMoveEvent(QMouseEvent *event, const QPointF &startPos) override;
+  void mouseReleaseEvent(QMouseEvent *event, const QPointF &startPos) override;
 
  private:
   const static int selectionpixelsize_;
   AxisRect2D *axisrect_;
   QString layername_;
-  bool imageitemclicked_ ;
-  QCPItemAnchor *dragginganchorimageitem_ ;
+  bool imageitemclicked_;
+  QCPItemAnchor *dragginganchorimageitem_;
   bool draggingimageitem_;
   QPointF dragimageitemorigintopleft_;
   QPointF dragimageitemoriginbottomright_;
@@ -53,4 +61,5 @@ class ImageItem2D : public QCPItemPixmap {
   QCursor cursorshape_;
 };
 
+Q_DECLARE_METATYPE(ImageItem2D *);
 #endif  // IMAGEITEM2D_H

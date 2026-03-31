@@ -38,22 +38,23 @@ class LayoutGrid2D;
 class Pie2D;
 class Plot2D;
 class Grid2D;
+class GridPair2D;
 class Curve2D;
 class LineSpecial2D;
 class ErrorBar2D;
 class StatBox2D;
 class LayoutInset2D;
 class PickerTool2D;
+class Channel2D;
 
 class AxisRect2D : public QCPAxisRect {
   Q_OBJECT
  private:
-  typedef QPair<QPair<Grid2D *, Axis2D *>, QPair<Grid2D *, Axis2D *>> GridPair;
   typedef QVector<TextItem2D *> TextItemVec;
   typedef QVector<LineItem2D *> LineItemVec;
   typedef QVector<ImageItem2D *> ImageItemVec;
   typedef QVector<LineSpecial2D *> LsVec;
-  typedef QVector<QPair<LineSpecial2D *, LineSpecial2D *>> ChannelVec;
+  typedef QVector<Channel2D *> ChannelVec;
   typedef QVector<Curve2D *> CurveVec;
   typedef QVector<Vector2D *> VectorVec;
   typedef QVector<Bar2D *> BarVec;
@@ -67,12 +68,15 @@ class AxisRect2D : public QCPAxisRect {
                       bool setupDefaultAxis = false);
   ~AxisRect2D();
 
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
+
   StatBox2D::BoxWhiskerData generateBoxWhiskerData(Table *table,
                                                    Column *colData,
                                                    const int from, const int to,
                                                    const int key);
 
-  void setAxisRectBackground(const QBrush &brush);
   Axis2D *addAxis2D(const Axis2D::AxisOreantation &orientation,
                     const Axis2D::TickerType &tickertype);
   Axis2D *addAxis2DifNeeded(Column *col);
@@ -84,7 +88,7 @@ class AxisRect2D : public QCPAxisRect {
   QList<Axis2D *> getAxes2D(const Axis2D::AxisOreantation &orientation) const;
   QList<Axis2D *> getXAxes2D() const;
   QList<Axis2D *> getYAxes2D() const;
-  GridPair getGridPair() const { return gridpair_; }
+  GridPair2D *getGridPair() const { return gridpair_; }
   TextItemVec getTextItemVec() const { return textvec_; }
   LineItemVec getLineItemVec() const { return linevec_; }
   ImageItemVec getImageItemVec() const { return imagevec_; }
@@ -105,6 +109,10 @@ class AxisRect2D : public QCPAxisRect {
   int getYAxisNo(Axis2D *axis);
   Plot2D *getParentPlot2D() const { return plot2d_; }
   PickerTool2D *getPickerTool() { return picker_; }
+  bool getAutoMarginsBool() const;
+
+  void setAxisRectBackground(const QBrush &brush);
+  void setAutoMarginsBool(const bool status);
 
   enum class LineScatterType {
     Line2D,
@@ -131,9 +139,10 @@ class AxisRect2D : public QCPAxisRect {
                                       Column *yData, const int from,
                                       const int to, Axis2D *xAxis,
                                       Axis2D *yAxis);
-  QPair<LineSpecial2D *, LineSpecial2D *> addLineSpecialChannel2DPlot(
-      Table *table, Column *xData, Column *yData1, Column *yData2,
-      const int from, const int to, Axis2D *xAxis, Axis2D *yAxis);
+  Channel2D *addLineSpecialChannel2DPlot(Table *table, Column *xData,
+                                         Column *yData1, Column *yData2,
+                                         const int from, const int to,
+                                         Axis2D *xAxis, Axis2D *yAxis);
   Curve2D *addCurve2DPlot(const AxisRect2D::LineScatterType &type, Table *table,
                           Column *xcol, Column *ycol, const int from,
                           const int to, Axis2D *xAxis, Axis2D *yAxis);
@@ -190,7 +199,7 @@ class AxisRect2D : public QCPAxisRect {
   bool removeLineItem2D(LineItem2D *lineitem);
   bool removeImageItem2D(ImageItem2D *imageitem);
   bool removeLineSpecial2D(LineSpecial2D *ls);
-  bool removeChannel2D(QPair<LineSpecial2D *, LineSpecial2D *> channel);
+  bool removeChannel2D(Channel2D *channel);
   bool removeCurve2D(Curve2D *curve);
   bool removeStatBox2D(StatBox2D *statbox);
   bool removeVector2D(Vector2D *vector);
@@ -231,10 +240,10 @@ class AxisRect2D : public QCPAxisRect {
             QList<Matrix *> mats);
 
  protected:
-  void mousePressEvent(QMouseEvent *, const QVariant &variant);
-  void mouseMoveEvent(QMouseEvent *event, const QPointF &startPos);
-  void mouseReleaseEvent(QMouseEvent *event, const QPointF &);
-  void draw(QCPPainter *painter);
+  void mousePressEvent(QMouseEvent *, const QVariant &variant) override;
+  void mouseMoveEvent(QMouseEvent *event, const QPointF &startPos) override;
+  void mouseReleaseEvent(QMouseEvent *event, const QPointF &) override;
+  void draw(QCPPainter *painter) override;
 
  signals:
   void AxisRectClicked(AxisRect2D *);
@@ -245,7 +254,7 @@ class AxisRect2D : public QCPAxisRect {
   void LineItem2DCreated(LineItem2D *);
   void ImageItem2DCreated(ImageItem2D *);
   void LineSpecial2DCreated(LineSpecial2D *);
-  void LineSpecialChannel2DCreated(QPair<LineSpecial2D *, LineSpecial2D *>);
+  void LineSpecialChannel2DCreated(Channel2D *);
   void Curve2DCreated(Curve2D *);
   void StatBox2DCreated(StatBox2D *);
   void Vector2DCreated(Vector2D *);
@@ -282,8 +291,11 @@ class AxisRect2D : public QCPAxisRect {
   void NoMinimumDataPointsPlotRemoved(const QString &plotname);
   // rescale
   void rescaleAxis2D(Axis2D *axis);
+  // Add or removed
+  void addedOrRemoved();
 
  private slots:
+  void refresh();
   void legendClick();
 
  private:
@@ -296,7 +308,7 @@ class AxisRect2D : public QCPAxisRect {
   Legend2D *axisRectLegend_;
   bool isAxisRectSelected_;
   bool printorexportjob_;
-  GridPair gridpair_;
+  GridPair2D *gridpair_;
   TextItemVec textvec_;
   LineItemVec linevec_;
   ImageItemVec imagevec_;
@@ -314,4 +326,5 @@ class AxisRect2D : public QCPAxisRect {
   PickerTool2D *picker_;
 };
 
+Q_DECLARE_METATYPE(AxisRect2D *);
 #endif  // AXISRECT2D_H

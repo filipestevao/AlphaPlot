@@ -24,6 +24,10 @@
 #include <QStringList>
 #include <QSysInfo>
 #include <cmath>
+#include <QPalette>
+#include <QSettings>
+#include <QApplication>
+#include <QStyle>
 
 #ifdef Q_OS_WIN
 #include <assert.h>
@@ -251,6 +255,81 @@ QColor Utilities::getRandColorGoldenRatio(const ColorPal& colpal) {
   return rgb;
 }
 
+QPalette Utilities::getApplicationPalette()
+{
+  QPalette pal;
+  QSettings settings;
+  settings.beginGroup("General");
+  QString appstyle =
+      settings.value("Style", qApp->style()->objectName()).toString();
+  int colorscheme = settings.value("ColorScheme", 0).toInt();
+  settings.beginGroup("Colors");
+  bool ncustomcolors_ = settings.value("Custom", false).toBool();
+  QColor nworkspacecolor_ =
+      settings.value("Workspace", "darkGray").value<QColor>();
+  QColor npanelcolor_ =
+      settings.value("Panels", qApp->palette().window().color()).value<QColor>();
+  QColor npaneltextcolor_ =
+      settings.value("PanelsText", qApp->palette().windowText().color())
+          .value<QColor>();
+  settings.endGroup();
+  settings.endGroup();
+  switch (colorscheme) {
+    case 0: {
+        pal = qApp->palette();
+        pal.setBrush(QPalette::NoRole, pal.color(QPalette::Active, QPalette::Base));
+    } break;
+    case 1: {
+      // QFile schemefile(":style/alpha/dark.qss");
+      pal.setBrush(QPalette::Window, qApp->palette().base());
+      pal.setBrush(QPalette::WindowText, qApp->palette().windowText());
+      pal.setBrush(QPalette::NoRole, QBrush(QColor(32, 31, 31)));
+    } break;
+    case 2: {
+      //QFile schemefile(":style/smooth/dark-blue.qss");
+      pal.setBrush(QPalette::Window, qApp->palette().base());
+      pal.setBrush(QPalette::WindowText, qApp->palette().windowText());
+      pal.setBrush(QPalette::NoRole, QBrush(QColor(200, 200, 200)));
+    } break;
+    case 3: {
+      //QFile schemefile(":style/smooth/dark-green.qss");
+      pal.setBrush(QPalette::Window, qApp->palette().base());
+      pal.setBrush(QPalette::WindowText, qApp->palette().windowText());
+      pal.setBrush(QPalette::NoRole, QBrush(QColor(200, 200, 200)));
+    } break;
+    case 4: {
+      //QFile schemefile(":style/smooth/dark-orange.qss");
+      pal.setBrush(QPalette::Window, qApp->palette().base());
+      pal.setBrush(QPalette::WindowText, qApp->palette().windowText());
+      pal.setBrush(QPalette::NoRole, QBrush(QColor(200, 200, 200)));
+    } break;
+    case 5: {
+      //QFile schemefile(":style/smooth/light-blue.qss");
+      pal.setBrush(QPalette::Window, qApp->palette().base());
+      pal.setBrush(QPalette::WindowText, qApp->palette().windowText());
+      pal.setBrush(QPalette::NoRole, QBrush(QColor(230, 230, 230)));
+    } break;
+    case 6: {
+      //QFile schemefile(":style/smooth/light-green.qss");
+      pal.setBrush(QPalette::Window, qApp->palette().base());
+      pal.setBrush(QPalette::WindowText, qApp->palette().windowText());
+      pal.setBrush(QPalette::NoRole, QBrush(QColor(230, 230, 230)));
+    } break;
+    case 7: {
+      //QFile schemefile(":style/smooth/light-orange.qss");
+      pal.setBrush(QPalette::Window, qApp->palette().base());
+      pal.setBrush(QPalette::WindowText, qApp->palette().windowText());
+      pal.setBrush(QPalette::NoRole, QBrush(QColor(230, 230, 230)));
+    } break;
+    default:
+      // should not reach
+      qDebug() << "color scheme index out of range";
+      break;
+  }
+
+  return pal;
+}
+
 QString Utilities::splitstring(const QString& string) {
   if (string.isEmpty()) return string;
 
@@ -276,66 +355,9 @@ QString Utilities::joinstring(const QString& string) {
 }
 
 QDateTime Utilities::stripDateTimeToFormat(const QDateTime& datetime,
-                                   const QString& format) {
+                                           const QString& format) {
   return QDateTime::fromString(datetime.toString(format), format);
 }
-
-/*QString Utilities::timeFormatConvertor(const QString& string) {
-  QString tmpstr = string;
-  tmpstr = tmpstr.replace("%h", "hh");
-  tmpstr = tmpstr.replace("%m", "mm");
-  tmpstr = tmpstr.replace("%s", "ss");
-  tmpstr = tmpstr.replace("%z", "zz");
-  qDebug() << tmpstr;
-  return tmpstr;
-}
-
-bool Utilities::isTimeFormat(const QString& format) {
-  return false;
-  bool status = false;
-  if (!format.contains("d", Qt::CaseSensitive) ||
-      !format.contains("M", Qt::CaseSensitive) ||
-      !format.contains("yy", Qt::CaseSensitive)) {
-    if (format.contains("h", Qt::CaseSensitive) ||
-        format.contains("m", Qt::CaseSensitive) ||
-        format.contains("s", Qt::CaseSensitive) ||
-        format.contains("z", Qt::CaseSensitive))
-      status = true;
-  }
-  return status;
-}
-
-QTime Utilities::intToTime(const int value, const QString& format) {
-  if (value >= 86400000 || value <= -86400000) return QTime(0, 0, 0, 0);
-  // this is a different way of doing the same
-  // double intpart;
-  // double temp = modf(double(value) / 1000, &intpart);
-  // double msec = temp * 1000;
-  // qDebug() << temp << intpart;
-  // temp = modf(intpart / 60, &intpart);
-  // double sec = temp * 60;
-  // temp = modf(intpart / 60, &intpart);
-  // double minutes = temp * 60;
-  // temp = modf(intpart / 24, &intpart);
-  // double hours = temp * 24;
-  // return QTime(hours, minutes, sec, msec);
-
-  int msec = value % 1000;
-  int temp = value / 1000;
-  int sec = temp % 60;
-  temp = temp / 60;
-  int minutes = temp % 60;
-  temp = temp / 60;
-  int hours = temp % 24;
-  return QTime(hours, minutes, sec, msec);
-}
-
-int Utilities::timeToInt(const QTime& time) {
-  // this is a different way of doing the same
-  return time.msecsSinceStartOfDay();
-  // return (time.hour() * 60 * 60 * 1000) + (time.minute() * 60 * 1000) +
-  //        (time.second() * 1000) + (time.msec());
-}*/
 
 QImage Utilities::convertToGrayScale(const QImage& srcImage) {
   // Convert to 32bit pixel format
@@ -367,4 +389,152 @@ QImage Utilities::convertToGrayScaleFast(const QImage& srcImage) {
     }
   }
   return image;
+}
+
+QString Utilities::makeHtmlTable(const int row, const int column,
+                                 const bool hasheader,
+                                 const TableColorProfile& profile) {
+  QString strokecolor;
+  QString fillcolor;
+  QString headerfillcolor;
+  switch (profile) {
+    case TableColorProfile::Success:
+      strokecolor = "rgba(0,180,0,0.8)";
+      headerfillcolor = "#00de6c";
+      fillcolor = "#00ffa9";
+      break;
+    case TableColorProfile::Failure:
+      strokecolor = "rgba(255,0,0,0.8)";
+      headerfillcolor = "#ff5b5b";
+      fillcolor = "#ffa9a9";
+      break;
+    case TableColorProfile::Generic:
+      strokecolor = "trnsparent";
+      headerfillcolor = "transparent";
+      fillcolor = "transparent";
+      break;
+  }
+
+  QString string =
+      "<p><table style = \"border-collapse:collapse;width:100%;\"> ";
+  QString thstyle = "style = \"border:1px solid " + strokecolor +
+                    ";background-color:" + headerfillcolor +
+                    ";text-align:left;padding:5px;color:black;\"";
+  QString tdstyle = "style = \"border:1px solid " + strokecolor +
+                    ";background-color:" + fillcolor +
+                    ";text-align:left;padding:5px;color:black;\"";
+  QString rowcolumnstring;
+  int count = 1;
+  // title
+  if (hasheader) {
+    rowcolumnstring += "<tr>";
+    for (int j = 0; j < column; j++) {
+      rowcolumnstring +=
+          "<th " + thstyle + ">%" + QString::number(count++) + "</th>";
+    }
+    rowcolumnstring += "</tr>";
+  }
+  // rows
+  for (int i = 0; i < row; i++) {
+    rowcolumnstring += "<tr>";
+    for (int j = 0; j < column; j++) {
+      rowcolumnstring +=
+          "<td " + tdstyle + ">%" + QString::number(count++) + "</td>";
+    }
+    rowcolumnstring += "</tr>";
+  }
+  rowcolumnstring += "</table></p>";
+  return string + rowcolumnstring;
+}
+
+bool Utilities::isSameDouble(const double value1, const double value2) {
+  if (std::fabs(value1 - value2) > std::numeric_limits<double>::epsilon())
+    return false;
+  else
+    return true;
+}
+
+QString Utilities::getTooltipText(const TooltipType& type) {
+  switch (type) {
+    case Utilities::TooltipType::x:
+      return QString(
+          "<tr> <td align=\"right\">Table :</td><td>%1</td></tr>"
+          "<tr> <td align=\"right\">Column :</td><td>%2</td></tr>"
+          "<tr> <td align=\"right\">From :</td><td>%4</td></tr>"
+          "<tr> <td align=\"right\">To :</td><td>%5</td></tr>");
+      break;
+    case Utilities::TooltipType::xy:
+      return QString(
+          "<tr> <td align=\"right\">Table :</td><td>%1</td></tr>"
+          "<tr> <td align=\"right\">Column X :</td><td>%2</td></tr>"
+          "<tr> <td align=\"right\">Column Y :</td><td>%3</td></tr>"
+          "<tr> <td align=\"right\">From :</td><td>%4</td></tr>"
+          "<tr> <td align=\"right\">To :</td><td>%5</td></tr>");
+      break;
+    case Utilities::TooltipType::xyy:
+      return QString(
+          "<tr> <td align=\"right\">Table :</td><td>%1</td></tr>"
+          "<tr> <td align=\"right\">Column X :</td><td>%2</td></tr>"
+          "<tr> <td align=\"right\">Column Y1 :</td><td>%3</td></tr>"
+          "<tr> <td align=\"right\">Column Y2 :</td><td>%4</td></tr>"
+          "<tr> <td align=\"right\">From :</td><td>%6</td></tr>"
+          "<tr> <td align=\"right\">To :</td><td>%7</td></tr>");
+      break;
+    case Utilities::TooltipType::xyyy:
+      return QString(
+          "<tr> <td align=\"right\">Table :</td><td>%1</td></tr>"
+          "<tr> <td align=\"right\">Column :</td><td>%2</td></tr>"
+          "<tr> <td align=\"right\">Column :</td><td>%3</td></tr>"
+          "<tr> <td align=\"right\">Column :</td><td>%4</td></tr>"
+          "<tr> <td align=\"right\">Column :</td><td>%5</td></tr>"
+          "<tr> <td align=\"right\">From :</td><td>%6</td></tr>"
+          "<tr> <td align=\"right\">To :</td><td>%7</td></tr>");
+      break;
+    case Utilities::TooltipType::matrix:
+      return QString(
+          "<tr> <td align=\"right\">Matrix :</td><td>%1</td></tr>"
+          "<tr> <td align=\"right\">Rows :</td><td>%2</td></tr>"
+          "<tr> <td align=\"right\">Columns :</td><td>%4</td></tr>");
+      break;
+    case Utilities::TooltipType::funcxy:
+      return QString(
+          "<tr> <td align=\"right\">Type :</td><td>%1</td></tr>"
+          "<tr> <td align=\"right\">Function :</td><td>%2</td></tr>"
+          "<tr> <td align=\"right\">From :</td><td>%3</td></tr>"
+          "<tr> <td align=\"right\">To :</td><td>%4</td></tr>"
+          "<tr> <td align=\"right\">Points :</td><td>%5</td></tr>");
+      break;
+    case Utilities::TooltipType::funcparam:
+      return QString(
+          "<tr> <td align=\"right\">Type :</td><td>%1</td></tr>"
+          "<tr> <td align=\"right\">Function X :</td><td>%2</td></tr>"
+          "<tr> <td align=\"right\">Function Y :</td><td>%3</td></tr>"
+          "<tr> <td align=\"right\">Parameter :</td><td>%4</td></tr>"
+          "<tr> <td align=\"right\">From :</td><td>%5</td></tr>"
+          "<tr> <td align=\"right\">To :</td><td>%6</td></tr>"
+          "<tr> <td align=\"right\">Points :</td><td>%7</td></tr>");
+      break;
+    case Utilities::TooltipType::funcpolar:
+      return QString(
+          "<tr> <td align=\"right\">Type :</td><td>%1</td></tr>"
+          "<tr> <td align=\"right\">Function R :</td><td>%2</td></tr>"
+          "<tr> <td align=\"right\">Function Theta :</td><td>%3</td></tr>"
+          "<tr> <td align=\"right\">Parameter :</td><td>%4</td></tr>"
+          "<tr> <td align=\"right\">From :</td><td>%5</td></tr>"
+          "<tr> <td align=\"right\">To :</td><td>%6</td></tr>"
+          "<tr> <td align=\"right\">Points :</td><td>%7</td></tr>");
+      break;
+    case Utilities::TooltipType::funcsurface:
+      return QString(
+          "<tr> <td align=\"right\">Function :</td><td>%1</td></tr>"
+          "<tr> <td align=\"right\">xl :</td><td>%2</td></tr>"
+          "<tr> <td align=\"right\">xu :</td><td>%3</td></tr>"
+          "<tr> <td align=\"right\">yl :</td><td>%4</td></tr>"
+          "<tr> <td align=\"right\">yu :</td><td>%5</td></tr>"
+          "<tr> <td align=\"right\">zl :</td><td>%6</td></tr>"
+          "<tr> <td align=\"right\">zu :</td><td>%7</td></tr>"
+          "<tr> <td align=\"right\">Points :</td><td>%8</td></tr>");
+      break;
+  }
+  return QString();
 }

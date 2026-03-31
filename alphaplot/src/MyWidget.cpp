@@ -38,6 +38,7 @@
 #include <QtDebug>
 
 #include "Folder.h"
+#include "core/IconLoader.h"
 
 MyWidget::MyWidget(const QString &label, QWidget *parent, const QString name,
                    Qt::WindowFlags f)
@@ -48,6 +49,16 @@ MyWidget::MyWidget(const QString &label, QWidget *parent, const QString name,
   w_status = Normal;
   setObjectName(QString(name));
 }
+
+MyWidget::~MyWidget() {}
+
+QString MyWidget::getItemName() { return tr("Window"); }
+
+QIcon MyWidget::getItemIcon() {
+  return IconLoader::load("view-console", IconLoader::LightDark);
+}
+
+QString MyWidget::getItemTooltip() { return getItemName(); }
 
 void MyWidget::updateCaption() {
   switch (caption_policy) {
@@ -149,8 +160,7 @@ void MyWidget::moveEvent(QMoveEvent *moveEvent) {
   QMdiSubWindow::moveEvent(moveEvent);
 }
 
-void MyWidget::mousePressEvent(QMouseEvent *event)
-{
+void MyWidget::mousePressEvent(QMouseEvent *event) {
   emit mousepressevent(this);
   QMdiSubWindow::mousePressEvent(event);
 }

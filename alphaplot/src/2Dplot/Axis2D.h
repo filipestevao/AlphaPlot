@@ -40,10 +40,14 @@ class Axis2D : public QCPAxis {
          const Axis2D::TickerType tickertype);
   ~Axis2D();
 
-  enum class AxisOreantation { Left = 0, Bottom = 1, Right = 2, Top = 3 };
-  enum class AxisScaleType { Linear = 0, Logarithmic = 1 };
-  enum class AxisLabelSide { Inside = 0, Outside = 1 };
-  enum class AxisLabelFormat {
+  QString getItemName();
+  QIcon getItemIcon();
+  QString getItemTooltip();
+
+  enum class AxisOreantation : int { Left = 0, Bottom = 1, Right = 2, Top = 3 };
+  enum class AxisScaleType : int { Linear = 0, Logarithmic = 1 };
+  enum class AxisLabelSide : int { Inside = 0, Outside = 1 };
+  enum class AxisLabelFormat : int {
     e = 0,
     eb = 1,
     ebc = 2,
@@ -101,7 +105,6 @@ class Axis2D : public QCPAxis {
   AxisLabelFormat getticklabelformat_axis() const;
   int getticklabelprecision_axis() const;
 
-  QIcon geticon_axis() const { return icon_; }
   QString getname_axis() const;
   uint getnumber_axis() const;
   QSharedPointer<QCPAxisTicker> getticker_axis();
@@ -176,4 +179,5 @@ class Axis2D : public QCPAxis {
   int tickertextcolto_;
 };
 
+Q_DECLARE_METATYPE(Axis2D *);
 #endif  // AXIS2D_H

@@ -69,10 +69,11 @@
           <li>full porting to Qt6</li>
           <li>update 3rdparty/qcustomplot to v.2.1.1</li>
           <li>update 3rdparty/muparser to v.2.3.5</li>
-          <li>update 3rdparty/propertybrowser to Qt6 (github.com/hpcdgrie/qt-solutions)</li>
           <li>update license from GPL-2.0 to GPL-3.0 for Qt6 compatibility</li>
           <li>fix last column auto-resize when "Set Column(s) As" is used</li>
           <li>add compatibility with Flatpak</li>
+          <li>use QRandomGenerator class for random number generation</li>
+          <li>beautify result logs with html styling</li>
         </ul>
       </description>
     </release>

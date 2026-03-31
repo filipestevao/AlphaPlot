@@ -22,6 +22,7 @@
 #include "MyWidget.h"
 #include "Scatter3D.h"
 #include "Surface3D.h"
+#include "core/IconLoader.h"
 #include "future/core/column/Column.h"
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
@@ -142,7 +143,7 @@ Layout3D::Layout3D(const Graph3DCommon::Plot3DType &plottype,
 }
 
 Layout3D::~Layout3D() {
-  if (!closewithoutcolumnmodelockchange_) switch (plottype_) {
+   switch (plottype_) {
       case Graph3DCommon::Plot3DType::Surface:
         break;
       case Graph3DCommon::Plot3DType::Bar: {
@@ -169,6 +170,14 @@ Layout3D::~Layout3D() {
       } break;
     }
 }
+
+QString Layout3D::getItemName() { return name(); }
+
+QIcon Layout3D::getItemIcon() {
+  return IconLoader::load("edit-graph3d", IconLoader::LightDark);
+}
+
+QString Layout3D::getItemTooltip() { return name(); }
 
 Surface3D *Layout3D::getSurface3DModifier() const {
   if (plottype_ == Graph3DCommon::Plot3DType::Surface)
@@ -624,73 +633,74 @@ void Layout3D::loadValueAxis(XmlStreamReader *xmlreader) {
             axis = scattermodifier_->getGraph()->axisZ();
           break;
       }
-      if (!axis)
+      if (axis) {
+        // Axis autorange
+        bool autorange = xmlreader->readAttributeBool("autorange", &ok);
+        (ok) ? axis->setAutoAdjustRange(autorange)
+             : xmlreader->raiseWarning(
+                   "Plot3D value axis autorange setting error!");
+
+        // Axis from
+        double from = xmlreader->readAttributeDouble("from", &ok);
+        (ok) ? axis->setMin(from)
+             : xmlreader->raiseWarning("Plot3D value axis from setting error!");
+
+        // Axis to
+        double to = xmlreader->readAttributeDouble("to", &ok);
+        (ok) ? axis->setMax(to)
+             : xmlreader->raiseWarning("Plot3D value axis to setting error!");
+
+        // Axis range reverse
+        bool reverse = xmlreader->readAttributeBool("reverse", &ok);
+        (ok) ? axis->setReversed(reverse)
+             : xmlreader->raiseWarning(
+                   "Plot3D value axis reverse setting error!");
+
+        // Axis tick count
+        int tickcount = xmlreader->readAttributeInt("tickcount", &ok);
+        (ok) ? axis->setSegmentCount(tickcount)
+             : xmlreader->raiseWarning(
+                   "Plot3D value axis tick count setting error!");
+
+        // Axis subtick count
+        int subtickcount = xmlreader->readAttributeInt("subtickcount", &ok);
+        (ok) ? axis->setSubSegmentCount(subtickcount)
+             : xmlreader->raiseWarning(
+                   "Plot3D value axis subtick count setting error!");
+
+        // Axis ticklabel format
+        QString lblformat =
+            xmlreader->readAttributeString("ticklabelformat", &ok);
+        (ok) ? axis->setLabelFormat(lblformat)
+             : xmlreader->raiseWarning(
+                   "Plot3D value axis tick label format setting error!");
+
+        // Axis tick label rotation
+        double tklblrotation =
+            xmlreader->readAttributeDouble("ticklabelrotation", &ok);
+        (ok) ? axis->setLabelAutoRotation(tklblrotation)
+             : xmlreader->raiseWarning(
+                   "Plot3D value axis tick label rotation setting error!");
+
+        // Axis label visible
+        bool lblvisible = xmlreader->readAttributeBool("labelvisible", &ok);
+        (ok) ? axis->setTitleVisible(lblvisible)
+             : xmlreader->raiseWarning(
+                   "Plot3D value axis title visible setting error!");
+
+        // Axis label fixed
+        bool lblfixed = xmlreader->readAttributeBool("labelfixed", &ok);
+        (ok) ? axis->setTitleFixed(lblfixed)
+             : xmlreader->raiseWarning(
+                   "Plot3D value axis title fixed setting error!");
+
+        // Axis label text
+        QString label = xmlreader->readAttributeString("label", &ok);
+        (ok)
+            ? axis->setTitle(label)
+            : xmlreader->raiseWarning("Plot3D value axis label setting error!");
+      } else
         xmlreader->raiseError("Plot3D value axis unable to initialize error!");
-
-      // Axis autorange
-      bool autorange = xmlreader->readAttributeBool("autorange", &ok);
-      (ok) ? axis->setAutoAdjustRange(autorange)
-           : xmlreader->raiseWarning(
-                 "Plot3D value axis autorange setting error!");
-
-      // Axis from
-      double from = xmlreader->readAttributeDouble("from", &ok);
-      (ok) ? axis->setMin(from)
-           : xmlreader->raiseWarning("Plot3D value axis from setting error!");
-
-      // Axis to
-      double to = xmlreader->readAttributeDouble("to", &ok);
-      (ok) ? axis->setMax(to)
-           : xmlreader->raiseWarning("Plot3D value axis to setting error!");
-
-      // Axis range reverse
-      bool reverse = xmlreader->readAttributeBool("reverse", &ok);
-      (ok)
-          ? axis->setReversed(reverse)
-          : xmlreader->raiseWarning("Plot3D value axis reverse setting error!");
-
-      // Axis tick count
-      int tickcount = xmlreader->readAttributeInt("tickcount", &ok);
-      (ok) ? axis->setSegmentCount(tickcount)
-           : xmlreader->raiseWarning(
-                 "Plot3D value axis tick count setting error!");
-
-      // Axis subtick count
-      int subtickcount = xmlreader->readAttributeInt("subtickcount", &ok);
-      (ok) ? axis->setSubSegmentCount(subtickcount)
-           : xmlreader->raiseWarning(
-                 "Plot3D value axis subtick count setting error!");
-
-      // Axis ticklabel format
-      QString lblformat =
-          xmlreader->readAttributeString("ticklabelformat", &ok);
-      (ok) ? axis->setLabelFormat(lblformat)
-           : xmlreader->raiseWarning(
-                 "Plot3D value axis tick label format setting error!");
-
-      // Axis tick label rotation
-      double tklblrotation =
-          xmlreader->readAttributeDouble("ticklabelrotation", &ok);
-      (ok) ? axis->setLabelAutoRotation(tklblrotation)
-           : xmlreader->raiseWarning(
-                 "Plot3D value axis tick label rotation setting error!");
-
-      // Axis label visible
-      bool lblvisible = xmlreader->readAttributeBool("labelvisible", &ok);
-      (ok) ? axis->setTitleVisible(lblvisible)
-           : xmlreader->raiseWarning(
-                 "Plot3D value axis title visible setting error!");
-
-      // Axis label fixed
-      bool lblfixed = xmlreader->readAttributeBool("labelfixed", &ok);
-      (ok) ? axis->setTitleFixed(lblfixed)
-           : xmlreader->raiseWarning(
-                 "Plot3D value axis title fixed setting error!");
-
-      // Axis label text
-      QString label = xmlreader->readAttributeString("label", &ok);
-      (ok) ? axis->setTitle(label)
-           : xmlreader->raiseWarning("Plot3D value axis label setting error!");
     }
   }
 }
@@ -724,51 +734,52 @@ void Layout3D::loadCategoryAxis(XmlStreamReader *xmlreader) {
         case Graph3DCommon::Plot3DType::Scatter:
           break;
       }
-      if (!axis)
+      if (axis) {
+        // Axis autorange
+        bool autorange = xmlreader->readAttributeBool("autorange", &ok);
+        (ok) ? axis->setAutoAdjustRange(autorange)
+             : xmlreader->raiseWarning(
+                   "Plot3D category axis autorange setting error!");
+
+        // Axis from
+        double from = xmlreader->readAttributeDouble("from", &ok);
+        (ok) ? axis->setMin(from)
+             : xmlreader->raiseWarning(
+                   "Plot3D category axis from setting error!");
+
+        // Axis to
+        double to = xmlreader->readAttributeDouble("to", &ok);
+        (ok)
+            ? axis->setMax(to)
+            : xmlreader->raiseWarning("Plot3D category axis to setting error!");
+
+        // Axis tick label rotation
+        double tklblrotation =
+            xmlreader->readAttributeDouble("ticklabelrotation", &ok);
+        (ok) ? axis->setLabelAutoRotation(tklblrotation)
+             : xmlreader->raiseWarning(
+                   "Plot3D category axis tick label rotation setting error!");
+
+        // Axis label visible
+        bool lblvisible = xmlreader->readAttributeBool("labelvisible", &ok);
+        (ok) ? axis->setTitleVisible(lblvisible)
+             : xmlreader->raiseWarning(
+                   "Plot3D category axis title visible setting error!");
+
+        // Axis label fixed
+        bool lblfixed = xmlreader->readAttributeBool("labelfixed", &ok);
+        (ok) ? axis->setTitleFixed(lblfixed)
+             : xmlreader->raiseWarning(
+                   "Plot3D category axis title fixed setting error!");
+
+        // Axis label text
+        QString label = xmlreader->readAttributeString("label", &ok);
+        (ok) ? axis->setTitle(label)
+             : xmlreader->raiseWarning(
+                   "Plot3D category axis label setting error!");
+      } else
         xmlreader->raiseError(
             "Plot3D category axis unable to initialize error!");
-
-      // Axis autorange
-      bool autorange = xmlreader->readAttributeBool("autorange", &ok);
-      (ok) ? axis->setAutoAdjustRange(autorange)
-           : xmlreader->raiseWarning(
-                 "Plot3D category axis autorange setting error!");
-
-      // Axis from
-      double from = xmlreader->readAttributeDouble("from", &ok);
-      (ok)
-          ? axis->setMin(from)
-          : xmlreader->raiseWarning("Plot3D category axis from setting error!");
-
-      // Axis to
-      double to = xmlreader->readAttributeDouble("to", &ok);
-      (ok) ? axis->setMax(to)
-           : xmlreader->raiseWarning("Plot3D category axis to setting error!");
-
-      // Axis tick label rotation
-      double tklblrotation =
-          xmlreader->readAttributeDouble("ticklabelrotation", &ok);
-      (ok) ? axis->setLabelAutoRotation(tklblrotation)
-           : xmlreader->raiseWarning(
-                 "Plot3D category axis tick label rotation setting error!");
-
-      // Axis label visible
-      bool lblvisible = xmlreader->readAttributeBool("labelvisible", &ok);
-      (ok) ? axis->setTitleVisible(lblvisible)
-           : xmlreader->raiseWarning(
-                 "Plot3D category axis title visible setting error!");
-
-      // Axis label fixed
-      bool lblfixed = xmlreader->readAttributeBool("labelfixed", &ok);
-      (ok) ? axis->setTitleFixed(lblfixed)
-           : xmlreader->raiseWarning(
-                 "Plot3D category axis title fixed setting error!");
-
-      // Axis label text
-      QString label = xmlreader->readAttributeString("label", &ok);
-      (ok) ? axis->setTitle(label)
-           : xmlreader->raiseWarning(
-                 "Plot3D category axis label setting error!");
     }
   }
 }
@@ -970,10 +981,6 @@ void Layout3D::saveCategoryAxis(XmlStreamWriter *xmlwriter,
   xmlwriter->writeEndElement();
 }
 
-void Layout3D::setCloseWithoutColumnModeLockChange(const bool value) {
-  closewithoutcolumnmodelockchange_ = value;
-}
-
 QList<MyWidget *> Layout3D::dependentTableMatrix() {
   QList<MyWidget *> dependeon;
   switch (plottype_) {
@@ -1072,7 +1079,7 @@ void Layout3D::print() {
   std::unique_ptr<QPrintPreviewDialog> previewDialog =
       std::unique_ptr<QPrintPreviewDialog>(
           new QPrintPreviewDialog(printer.get(), this));
-  connect(previewDialog.get(), &QPrintPreviewDialog::paintRequested,
+  connect(previewDialog.get(), &QPrintPreviewDialog::paintRequested, this,
           [=](QPrinter *printer) {
             printer->setColorMode(QPrinter::Color);
             std::unique_ptr<QPainter> painter =

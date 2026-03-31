@@ -2,6 +2,7 @@
 
 #include "2Dplot/AxisRect2D.h"
 #include "2Dplot/Plot2D.h"
+#include "core/IconLoader.h"
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
 
@@ -46,6 +47,14 @@ ImageItem2D::~ImageItem2D() {
   delete pixmap_;
 }
 
+QString ImageItem2D::getItemName() { return tr("Image Item"); }
+
+QIcon ImageItem2D::getItemIcon() {
+  return IconLoader::load("view-image", IconLoader::LightDark);
+}
+
+QString ImageItem2D::getItemTooltip() { return getItemName(); }
+
 AxisRect2D *ImageItem2D::getaxisrect() const { return axisrect_; }
 
 QString ImageItem2D::getsource_imageitem() const { return imagefilename_; }
@@ -89,6 +98,7 @@ void ImageItem2D::setposition_imageitem(const QPointF origin) {
       bottomRight->pixelPosition() + (origin - topLeft->pixelPosition());
   bottomRight->setPixelPosition(posbottomRight);
   topLeft->setPixelPosition(origin);
+  // emit positionChanged();
 }
 
 void ImageItem2D::setpixmap_imageitem() {
@@ -418,5 +428,6 @@ void ImageItem2D::mouseReleaseEvent(QMouseEvent *event,
     draggingimageitem_ = false;
     axisrect_->getParentPlot2D()->setCursor(cursorshape_);
     emit axisrect_->ImageItem2DMoved();
+    emit positionChanged();
   }
 }

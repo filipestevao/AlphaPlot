@@ -27,9 +27,10 @@
  *                                                                         *
  ***************************************************************************/
 #include "ScriptingEnv.h"
-#include "Script.h"
 
 #include <string.h>
+
+#include "Script.h"
 
 #ifdef SCRIPTING_MUPARSER
 #include "MuParserScript.h"
@@ -48,7 +49,7 @@ const QString ScriptingEnv::fileFilter() const {
   if (extensions.isEmpty())
     return "";
   else
-    return tr("%1 Source (*.%2);;").arg(objectName()).arg(extensions.join(" *."));
+    return tr("%1 Source (*.%2);;").arg(objectName(), extensions.join(" *."));
 }
 
 void ScriptingEnv::incref() { d_refcount++; }

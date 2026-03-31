@@ -24,22 +24,39 @@
 class Utilities {
  public:
   enum class ColorPal { Light, Dark };
+  enum class TableColorProfile { Success, Failure, Generic };
+  enum class TooltipType {
+    x,
+    xy,
+    xyy,
+    xyyy,
+    matrix,
+    funcxy,
+    funcparam,
+    funcpolar,
+    funcsurface
+  };
   static int getWordSizeApp();
   static QString getOperatingSystem();
   static int getWordSizeOfOS();
   static QColor getRandColorGoldenRatio(const ColorPal &colpal);
+  static QPalette getApplicationPalette();
   static QString splitstring(const QString &string);
   static QString joinstring(const QString &string);
 
   static QDateTime stripDateTimeToFormat(const QDateTime &datetime,
-                                 const QString &format);
-  //static QString timeFormatConvertor(const QString &string);
-  //static bool isTimeFormat(const QString &format);
-  //static QTime intToTime(const int value, const QString &format);
-  //static int timeToInt(const QTime &time);
+                                         const QString &format);
 
   static QImage convertToGrayScale(const QImage &srcImage);
   static QImage convertToGrayScaleFast(const QImage &srcImage);
+
+  // html Formatting
+  static QString makeHtmlTable(const int row, const int column,
+                               const bool hasheader,
+                               const TableColorProfile &profile);
+  static bool isSameDouble(const double value1, const double value2);
+
+  static QString getTooltipText(const Utilities::TooltipType &type);
 
  private:
   Utilities() {}

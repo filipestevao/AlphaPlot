@@ -47,7 +47,9 @@
 #include "scripting/ScriptingEnv.h"
 /*!\brief MDI window providing a spreadsheet table with column logic.
  */
-class Table : public TableView, public scripted {
+
+class Table : public TableView,
+              public scripted {
   Q_OBJECT
 
  public:
@@ -79,23 +81,30 @@ class Table : public TableView, public scripted {
   Table(ScriptingEnv* env, int r, int c, const QString& label,
         QWidget* parent = nullptr, const char* name = 0,
         Qt::WindowFlags f = Qt::SubWindow);
+  ~Table();
+
+  virtual QString getItemName() override;
+  virtual QIcon getItemIcon() override;
+  virtual QString getItemTooltip() override;
 
   //! Sets the number of significant digits
   void setNumericPrecision(int prec);
 
   //! Return the window name
-  virtual QString name() { return d_future_table->name(); }
+  virtual QString name() override { return d_future_table->name(); }
   //! Set the window name
-  virtual void setName(const QString& s) { d_future_table->setName(s); }
+  virtual void setName(const QString& s) override {
+    d_future_table->setName(s);
+  }
   //! Return the window label
-  virtual QString windowLabel() { return d_future_table->comment(); }
+  virtual QString windowLabel() override { return d_future_table->comment(); }
   //! Set the window label
-  virtual void setWindowLabel(const QString& s) {
+  virtual void setWindowLabel(const QString& s) override {
     d_future_table->setComment(s);
     updateCaption();
   }
   //! Set the caption policy
-  void setCaptionPolicy(CaptionPolicy policy) {
+  void setCaptionPolicy(CaptionPolicy policy) override {
     caption_policy = policy;
     updateCaption();
     switch (policy) {
@@ -111,12 +120,13 @@ class Table : public TableView, public scripted {
     }
   }
   //! Set the creation date
-  virtual void setBirthDate(const QString& s) {
+  virtual void setBirthDate(const QString& s) override {
     birthdate = s;
     d_future_table->importV0x0001XXCreationTime(s);
   }
 
-  void closeEvent(QCloseEvent*);
+  void closeEvent(QCloseEvent*) override;
+
  public slots:
   void copy(Table* m);
   int numRows();
@@ -168,10 +178,10 @@ class Table : public TableView, public scripted {
 
   void clearCell(int row, int col);
 
-  void print();
+  void print() override;
   void print(const QString& fileName);
-  void exportPDF(const QString& fileName);
-  void customEvent(QEvent* e);
+  void exportPDF(const QString& fileName) override;
+  void customEvent(QEvent* e) override;
 
   //! \name Column Operations
   //@{
@@ -269,6 +279,8 @@ class Table : public TableView, public scripted {
   void modifiedData(Table*, const QString&);
   void resizedTable(QWidget*);
   void showContextMenu(bool selection);
+  void rowcountchange();
+  void columncountchange();
 
  protected slots:
   void applyFormula();
@@ -292,4 +304,5 @@ class Table : public TableView, public scripted {
   void applyFunction(int col, const QString &formula);
 };
 
+Q_DECLARE_METATYPE(Table*);
 #endif  // TABLE_H

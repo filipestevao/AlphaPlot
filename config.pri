@@ -64,12 +64,7 @@ DEFINES         += SCRIPTING_DIALOG
 DEFINES         += SEARCH_FOR_UPDATES
 
 !contains(PRESET, linux_all_dynamic) {
-  ### Enables choosing of help folder at runtime.
-  DEFINES       += DYNAMIC_MANUAL_PATH
-  ### Similar to DYNAMIC_MANUAL_PATH, but for the plugin folder
   DEFINES       += DYNAMIC_PLUGIN_PATH
-  ### Provide links to manual/translations download in help menu
-  DEFINES       += DOWNLOAD_LINKS
 }
 
 ################################################################################
@@ -102,6 +97,10 @@ contains(PRESET, osx_dist) {
   # Uses HomeBrew supplied versions of the dependencies
   message(Build configuration: OSX Distro)
 
+  #INCLUDEPATH  += /opt/homebrew/include
+  #QMAKE_LIBDIR += /opt/homebrew/lib
+  #INCLUDEPATH  += /usr/local/homebrew/include
+  #QMAKE_LIBDIR += /usr/local/homebrew/lib
   INCLUDEPATH  += /usr/local/include
   QMAKE_LIBDIR += /usr/local/lib
   LIBS         += -lgsl -lgslcblas

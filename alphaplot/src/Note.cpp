@@ -41,6 +41,7 @@
 #include <QVBoxLayout>
 #include <QXmlStreamWriter>
 
+#include "core/IconLoader.h"
 #include "future/lib/XmlStreamReader.h"
 #include "scripting/ScriptEdit.h"
 
@@ -52,6 +53,14 @@ Note::Note(ScriptingEnv* env, const QString& label, QWidget* parent,
 
 Note::~Note() {}
 
+QString Note::getItemName() { return name(); }
+
+QIcon Note::getItemIcon() {
+  return IconLoader::load("edit-note", IconLoader::LightDark);
+}
+
+QString Note::getItemTooltip() { return name(); }
+
 void Note::init(ScriptingEnv* env) {
   autoExec = false;
   QDateTime dt = QDateTime::currentDateTime();
@@ -62,7 +71,7 @@ void Note::init(ScriptingEnv* env) {
   setWidget(textedit_);
 
   setGeometry(0, 0, 500, 200);
-  connect(textedit_, SIGNAL(textChanged()), this, SLOT(modifiedNote()));
+  connect(textedit_, &ScriptEdit::textChanged, this, &Note::modifiedNote);
 }
 
 QString Note::getText() { return textedit_->toPlainText().trimmed(); }

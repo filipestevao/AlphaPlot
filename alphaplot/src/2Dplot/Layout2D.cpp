@@ -11,11 +11,13 @@
 #include <QVBoxLayout>
 
 #include "Bar2D.h"
+#include "Channel2D.h"
 #include "ColorMap2D.h"
 #include "Curve2D.h"
 #include "DataManager2D.h"
 #include "ErrorBar2D.h"
 #include "Grid2D.h"
+#include "GridPair2D.h"
 #include "LayoutGrid2D.h"
 #include "Legend2D.h"
 #include "LineSpecial2D.h"
@@ -45,13 +47,13 @@ Layout2D::Layout2D(const QString &label, QWidget *parent, const QString name,
     : MyWidget(label, parent, name, f),
       picker_(new PickerTool2D(this)),
       main_widget_(new QWidget(this)),
-      plot2dCanvas_(new Plot2D(main_widget_)),
       layout_(new LayoutGrid2D()),
       buttionlist_(QList<QPair<LayoutButton2D *, AxisRect2D *>>()),
       currentAxisRect_(nullptr),
-      backgroundimagefilename_(QString()),
-      closewithoutcolumnmodelockchange_(false) {
+      backgroundimagefilename_(QString()) {
   main_widget_->setContentsMargins(0, 0, 0, 0);
+  plot2dCanvas_ = new Plot2D(this);
+
   if (name.isEmpty()) setObjectName("layout2d");
   QDateTime birthday = QDateTime::currentDateTime();
   setBirthDate(QLocale().toString(birthday, QLocale::ShortFormat));
@@ -143,7 +145,7 @@ Layout2D::Layout2D(const QString &label, QWidget *parent, const QString name,
   connect(refreshPlotButton_, &QPushButton::clicked, this,
           [&]() { plot2dCanvas_->replot(); });
   connect(removeLayoutButton_, &QPushButton::clicked, this,
-          &Layout2D::removeAxisRectItem);
+          &Layout2D::removeCurrentAxisRectItem);
   connect(plot2dCanvas_, &Plot2D::mouseMove, this, &Layout2D::mouseMoveSignal);
   connect(plot2dCanvas_, &Plot2D::mousePress, this,
           &Layout2D::mousePressSignal);
@@ -153,13 +155,29 @@ Layout2D::Layout2D(const QString &label, QWidget *parent, const QString name,
   connect(plot2dCanvas_, &Plot2D::beforeReplot, this, &Layout2D::beforeReplot);
   connect(plot2dCanvas_, &Plot2D::backgroundColorChange, this,
           &Layout2D::setBackground);
+  connect(this, &Layout2D::AxisRectCreated, this, &Layout2D::addedOrRemoved);
+  connect(this, &Layout2D::AxisRectRemoved, this, &Layout2D::addedOrRemoved);
+  connect(this, &Layout2D::AxisRectSwap, this, &Layout2D::addedOrRemoved);
 }
 
 Layout2D::~Layout2D() {
-  if (!closewithoutcolumnmodelockchange_)
-    foreach (Column *col, getPlotColumns()) { col->setColumnModeLock(false); }
-  delete layout_;
+  // destroy in order to be in line with ObjectBrowserTreeItem destruction
+  // dont change the order unless you know what you are doing (may crash the
+  // application)
+  /*foreach (AxisRect2D *axisrect, getAxisRectList()) {
+    removeAxisRectItem(axisrect);
+  }*/
+  //delete layout_;
+  //delete plot2dCanvas_;
 }
+
+QString Layout2D::getItemName() { return name(); }
+
+QIcon Layout2D::getItemIcon() {
+  return IconLoader::load("edit-graph", IconLoader::LightDark);
+}
+
+QString Layout2D::getItemTooltip() { return name(); }
 
 void Layout2D::generateFunction2DPlot(QVector<double> *xdata,
                                       QVector<double> *ydata,
@@ -455,10 +473,7 @@ QList<AxisRect2D *> Layout2D::getAxisRectList() {
   QList<AxisRect2D *> elementslist;
   for (int i = 0; i < layout_->elementCount(); i++) {
     AxisRect2D *axisrect = dynamic_cast<AxisRect2D *>(layout_->elementAt(i));
-    if (axisrect)
-      elementslist.append(axisrect);
-    else
-      qDebug() << "unable to cast AxisRect2D";
+    if (axisrect) elementslist.append(axisrect);
   }
   return elementslist;
 }
@@ -640,6 +655,15 @@ AxisRect2D *Layout2D::addAxisRectItemAtRowCol(const Axis2D::TickerType &xtype,
   xAxis->setLabel("X Axis Title");
   yAxis->setLabel("Y Axis Title");
   layout_->addElement(rowcol.first, rowcol.second, axisRect2d);
+  // Object Item code
+  /*QList<AxisRect2D *> axrectlist = getAxisRectList();
+  int index = axrectlist.indexOf(axisRect2d);
+  if (index == 0 && axrectlist.count() > 1) {
+    rootitem_->moveChild(axisRect2d->getObjectBrowserTreeItem(), windowitem_);
+  } else {
+    rootitem_->moveChild(axisRect2d->getObjectBrowserTreeItem(),
+                         axrectlist.at(index - 1)->getObjectBrowserTreeItem());
+  }*/
 
   plot2dCanvas_->replot(QCustomPlot::RefreshPriority::rpQueuedReplot);
   addLayoutButton(rowcol, axisRect2d);
@@ -648,13 +672,15 @@ AxisRect2D *Layout2D::addAxisRectItemAtRowCol(const Axis2D::TickerType &xtype,
           &Layout2D::axisRectSetFocus);
   connect(axisRect2d, &AxisRect2D::rescaleAxis2D, this,
           &Layout2D::rescaleAxis2D);
+  connect(axisRect2d, &AxisRect2D::addedOrRemoved, this,
+          &Layout2D::addedOrRemoved);
 
   emit AxisRectCreated(axisRect2d, this);
   if (!currentAxisRect_) axisRectSetFocus(axisRect2d);
   return axisRect2d;
 }
 
-void Layout2D::removeAxisRectItem() {
+void Layout2D::removeCurrentAxisRectItem() {
   if (!currentAxisRect_) {
     qDebug() << "no axisrect to remove";
     return;
@@ -672,47 +698,7 @@ void Layout2D::removeAxisRectItem() {
       QMessageBox::Cancel | QMessageBox::Escape);
   if (result != QMessageBox::Yes) return;
 
-  foreach (TextItem2D *item, currentAxisRect_->getTextItemVec()) {
-    currentAxisRect_->removeTextItem2D(item);
-  }
-  foreach (LineItem2D *item, currentAxisRect_->getLineItemVec()) {
-    currentAxisRect_->removeLineItem2D(item);
-  }
-  foreach (ImageItem2D *item, currentAxisRect_->getImageItemVec()) {
-    currentAxisRect_->removeImageItem2D(item);
-  }
-  foreach (LineSpecial2D *ls, currentAxisRect_->getLsVec()) {
-    currentAxisRect_->removeLineSpecial2D(ls);
-  }
-  for (int i = 0; i < currentAxisRect_->getChannelVec().count(); i++) {
-    currentAxisRect_->removeChannel2D(currentAxisRect_->getChannelVec().at(i));
-  }
-  foreach (Curve2D *curve, currentAxisRect_->getCurveVec()) {
-    currentAxisRect_->removeCurve2D(curve);
-  }
-  foreach (Bar2D *bar, currentAxisRect_->getBarVec()) {
-    currentAxisRect_->removeBar2D(bar);
-  }
-  foreach (StatBox2D *statbox, currentAxisRect_->getStatBoxVec()) {
-    currentAxisRect_->removeStatBox2D(statbox);
-  }
-  foreach (Vector2D *vector, currentAxisRect_->getVectorVec()) {
-    currentAxisRect_->removeVector2D(vector);
-  }
-  foreach (Pie2D *pie, currentAxisRect_->getPieVec()) {
-    currentAxisRect_->removePie2D(pie);
-  }
-  auto gridpair = currentAxisRect_->getGridPair();
-  delete gridpair.first.first;
-  delete gridpair.second.first;
-  gridpair.first.first = nullptr;
-  gridpair.second.first = nullptr;
-  foreach (Axis2D *axis, currentAxisRect_->getAxes2D()) {
-    currentAxisRect_->removeAxis2D(axis, true);
-  }
-
-  removeAxisRect(rowcol);
-  emit AxisRectRemoved(this);
+  removeAxisRectItem(currentAxisRect_);
 }
 
 void Layout2D::axisRectSetFocus(AxisRect2D *rect) {
@@ -850,6 +836,47 @@ void Layout2D::addTextToAxisTicker(Column *col, Axis2D *axis, const int from,
             static_cast<DateTime2StringFilter *>(col->outputFilter())
                 ->format()));
   }
+}
+
+void Layout2D::removeAxisRectItem(AxisRect2D *axisrect) {
+  QPair<int, int> rowcol = getAxisRectRowCol(axisrect);
+  foreach (TextItem2D *item, axisrect->getTextItemVec()) {
+    axisrect->removeTextItem2D(item);
+  }
+  foreach (LineItem2D *item, axisrect->getLineItemVec()) {
+    axisrect->removeLineItem2D(item);
+  }
+  foreach (ImageItem2D *item, axisrect->getImageItemVec()) {
+    axisrect->removeImageItem2D(item);
+  }
+  foreach (LineSpecial2D *ls, axisrect->getLsVec()) {
+    axisrect->removeLineSpecial2D(ls);
+  }
+  for (int i = 0; i < axisrect->getChannelVec().count(); i++) {
+    axisrect->removeChannel2D(axisrect->getChannelVec().at(i));
+  }
+  foreach (Curve2D *curve, axisrect->getCurveVec()) {
+    axisrect->removeCurve2D(curve);
+  }
+  foreach (Bar2D *bar, axisrect->getBarVec()) { axisrect->removeBar2D(bar); }
+  foreach (StatBox2D *statbox, axisrect->getStatBoxVec()) {
+    axisrect->removeStatBox2D(statbox);
+  }
+  foreach (Vector2D *vector, axisrect->getVectorVec()) {
+    axisrect->removeVector2D(vector);
+  }
+  foreach (Pie2D *pie, axisrect->getPieVec()) { axisrect->removePie2D(pie); }
+  auto gridpair = axisrect->getGridPair();
+  delete gridpair->getXgrid();
+  delete gridpair->getYgrid();
+  gridpair->setXgrid(nullptr);
+  gridpair->setYgrid(nullptr);
+  foreach (Axis2D *axis, axisrect->getAxes2D()) {
+    axisrect->removeAxis2D(axis, true);
+  }
+
+  removeAxisRect(rowcol);
+  emit AxisRectRemoved(this);
 }
 
 void Layout2D::resizeEvent(QResizeEvent *event) {
@@ -1028,8 +1055,7 @@ void Layout2D::removeColumn(Table *table, const QString &name) {
   bool removed = false;
   foreach (AxisRect2D *axisrect, getAxisRectList()) {
     QVector<LineSpecial2D *> lslist = axisrect->getLsVec();
-    QVector<QPair<LineSpecial2D *, LineSpecial2D *>> channellist =
-        axisrect->getChannelVec();
+    QVector<Channel2D *> channellist = axisrect->getChannelVec();
     QVector<Curve2D *> curvelist = axisrect->getCurveVec();
     QVector<Bar2D *> barlist = axisrect->getBarVec();
     QVector<StatBox2D *> statboxlist = axisrect->getStatBoxVec();
@@ -1066,7 +1092,8 @@ void Layout2D::removeColumn(Table *table, const QString &name) {
       }
     }
     for (int i = 0; i < channellist.count(); i++) {
-      QPair<LineSpecial2D *, LineSpecial2D *> channel = channellist.at(i);
+      QPair<LineSpecial2D *, LineSpecial2D *> channel =
+          channellist.at(i)->getChannelPair();
       PlotData::AssociatedData *data1 =
           channel.first->getdatablock_lsplot()->getassociateddata();
       PlotData::AssociatedData *data2 =
@@ -1076,7 +1103,7 @@ void Layout2D::removeColumn(Table *table, const QString &name) {
             data2->ycol == col) {
           channel.first->setGraphData(data1->table, data1->xcol, data1->ycol,
                                       data1->from, data1->to);
-          axisrect->removeChannel2D(channel);
+          axisrect->removeChannel2D(channellist.at(i));
           removed = true;
         }
       }
@@ -1188,8 +1215,7 @@ QList<MyWidget *> Layout2D::dependentTableMatrix() {
   QList<MyWidget *> dependeon;
   foreach (AxisRect2D *axisrect, getAxisRectList()) {
     QVector<LineSpecial2D *> lslist = axisrect->getLsVec();
-    QVector<QPair<LineSpecial2D *, LineSpecial2D *>> channellist =
-        axisrect->getChannelVec();
+    QVector<Channel2D *> channellist = axisrect->getChannelVec();
     QVector<Curve2D *> curvelist = axisrect->getCurveVec();
     QVector<Bar2D *> barlist = axisrect->getBarVec();
     QVector<StatBox2D *> statboxlist = axisrect->getStatBoxVec();
@@ -1214,7 +1240,8 @@ QList<MyWidget *> Layout2D::dependentTableMatrix() {
       }
     }
     for (int i = 0; i < channellist.count(); i++) {
-      QPair<LineSpecial2D *, LineSpecial2D *> channel = channellist.at(i);
+      QPair<LineSpecial2D *, LineSpecial2D *> channel =
+          channellist.at(i)->getChannelPair();
       PlotData::AssociatedData *data1 =
           channel.first->getdatablock_lsplot()->getassociateddata();
       PlotData::AssociatedData *data2 =
@@ -1354,7 +1381,7 @@ void Layout2D::removeAxisRect(const QPair<int, int> rowcol) {
         axrect = axisrectlist.at(i - 1);
         break;
       } else {
-        qDebug() << "unable to set focus after axisrect2D removal";
+        // qDebug() << "unable to set focus after axisrect2D removal";
         break;
       }
     }
@@ -1386,8 +1413,8 @@ void Layout2D::removeAxisRect(const QPair<int, int> rowcol) {
 }
 
 int Layout2D::getLayoutRectGridIndex(const QPair<int, int> coord) {
-  int index = ((colorCount()) * coord.second) + coord.first;
-  return index;
+  // starts with 0 (add 1 if you want to start the index with 1)
+  return (layout_->columnCount() * coord.first) + coord.second;
 }
 
 QPair<int, int> Layout2D::getLayoutRectGridCoordinate(const int index) {
@@ -1790,10 +1817,6 @@ QList<Column *> Layout2D::getPlotColumns() {
     }
   }
   return collist;
-}
-
-void Layout2D::setCloseWithoutColumnModeLockChange(const bool value) {
-  closewithoutcolumnmodelockchange_ = value;
 }
 
 AxisRect2D *Layout2D::addAxisRectWithAxis() {

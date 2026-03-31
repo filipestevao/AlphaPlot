@@ -90,7 +90,11 @@ IntDialog::IntDialog(QWidget *parent, Qt::WindowFlags fl)
   connect(buttonOk, SIGNAL(clicked()), this, SLOT(accept()));
   connect(buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
   connect(buttonHelp, SIGNAL(clicked()), this, SLOT(help()));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+  connect(boxName, SIGNAL(textActivated(const QString &)), this,
+#else
   connect(boxName, SIGNAL(activated(const QString &)), this,
+#endif
           SLOT(activateCurve(const QString &)));
 }
 

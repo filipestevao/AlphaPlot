@@ -56,7 +56,11 @@ ExpDecayDialog::ExpDecayDialog(int type, QWidget *parent, Qt::WindowFlags fl)
   gl1->addWidget(new QLabel(tr("Exponential Fit of")), 0, 0);
 
   boxName = new QComboBox();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+  connect(boxName, SIGNAL(textActivated(const QString &)), this,
+#else
   connect(boxName, SIGNAL(activated(const QString &)), this,
+#endif
           SLOT(activateCurve(const QString &)));
   gl1->addWidget(boxName, 0, 1);
 

@@ -18,6 +18,8 @@
 
 #include <QSvgGenerator>
 
+#include "core/IconLoader.h"
+
 Plot2D::Plot2D(QWidget *parent)
     : QCustomPlot(parent),
       canvasBackground_(Qt::white),
@@ -51,6 +53,14 @@ Plot2D::Plot2D(QWidget *parent)
 }
 
 Plot2D::~Plot2D() {}
+
+QString Plot2D::getItemName() { return tr("Canvas"); }
+
+QIcon Plot2D::getItemIcon() {
+  return IconLoader::load("view-image", IconLoader::LightDark);
+}
+
+QString Plot2D::getItemTooltip() { return getItemName(); }
 
 void Plot2D::setBackgroundColor(const QColor &color, const bool backpixmap) {
   canvasBackground_ = color;

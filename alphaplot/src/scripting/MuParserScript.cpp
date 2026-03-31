@@ -193,6 +193,29 @@ MuParserScript::MuParserScript(ScriptingEnv *environment, const QString &code,
     : Script(environment, code, context, name) {
   m_parser.SetVarFactory(variableFactory, this);
 
+  // Set locale accordingly
+  QSettings settings;
+  settings.beginGroup("General");
+  QString localestring = settings.value("Locale", QLocale::system().name()).toString();
+  settings.endGroup();
+  QLocale locale;
+  (localestring == QLocale::system().name()) ? locale = QLocale::system()
+  : (localestring == QLocale::c().name())    ? locale = QLocale::c()
+  : (localestring == QLocale(QLocale::German).name())
+      ? locale = QLocale(QLocale::German)
+  : (localestring == QLocale(QLocale::French).name())
+      ? locale = QLocale(QLocale::French)
+      : locale = QLocale::system();
+  QChar decimalseperator = locale.decimalPoint().at(0);
+  QChar groupseperator = locale.groupSeparator().at(0);
+  QChar argseperator = QChar(',');
+  if(decimalseperator != QChar(',') && groupseperator != QChar(','))
+    argseperator = QChar(',');
+  else if(decimalseperator != QChar(';') && groupseperator != QChar(';'))
+    argseperator = QChar(';');
+  m_parser.SetDecSep(locale.decimalPoint().at(0).toLatin1());
+  m_parser.SetThousandsSep(locale.groupSeparator().at(0).toLatin1());
+
   // redefine characters for operators to include ";"
   static const char opChars[] =
       // standard operator chars as defined in mu::Parser::InitCharSets()

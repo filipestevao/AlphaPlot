@@ -25,6 +25,10 @@ class Layout2D : public MyWidget {
            const QString name = QString(), Qt::WindowFlags f = Qt::SubWindow);
   ~Layout2D();
 
+  virtual QString getItemName() override;
+  virtual QIcon getItemIcon() override;
+  virtual QString getItemTooltip() override;
+
   LayoutGrid2D *getLayoutGrid() const { return layout_; }
 
   void generateFunction2DPlot(QVector<double> *xdata, QVector<double> *ydata,
@@ -96,7 +100,7 @@ class Layout2D : public MyWidget {
   void setBackgroundImage(const QString &filename);
   void setGraphTool(const Graph2DCommon::Picker &picker);
   void streachLabelSetText(const QString &text);
-  void print();
+  void print() override;
   void save(XmlStreamWriter *xmlwriter, const bool saveastemplate = false);
   bool load(XmlStreamReader *xmlreader, QList<Table *> tabs,
             QList<Matrix *> mats, bool setname = true);
@@ -104,7 +108,6 @@ class Layout2D : public MyWidget {
   void setLayoutButtonBoxVisible(const bool value);
   void copy(Layout2D *layout, QList<Table *> tables, QList<Matrix *> matrixs);
   QList<Column *> getPlotColumns();
-  void setCloseWithoutColumnModeLockChange(const bool value);
 
  public slots:
   bool exportGraph();
@@ -122,7 +125,7 @@ class Layout2D : public MyWidget {
       const Graph2DCommon::AddLayoutElement &position);
   AxisRect2D *addAxisRectWithAxis(const QPair<int, int> rowcol);
   void swapAxisRect(AxisRect2D *axisrect1, AxisRect2D *axisrect2);
-  void removeAxisRectItem();
+  void removeCurrentAxisRectItem();
   void refresh() const;
   void copyToClipbord();
   void hideCurrentAxisRectIndicator(const bool status);
@@ -145,10 +148,11 @@ class Layout2D : public MyWidget {
                                  const int from, const int to);
   void addTextToAxisTicker(Column *col, Axis2D *axis, const int from,
                            const int to);
+  void removeAxisRectItem(AxisRect2D *axisrect);
   void arrangeLayoutButtons();
 
  protected:
-  void resizeEvent(QResizeEvent *event);
+  void resizeEvent(QResizeEvent *event) override;
 
  private:
   PickerTool2D *picker_;
@@ -178,7 +182,6 @@ class Layout2D : public MyWidget {
   static const int minimumlayout2dwidth_;
   static const int minimumlayout2dheight_;
   QString backgroundimagefilename_;
-  bool closewithoutcolumnmodelockchange_;
 
  private slots:
   void mouseMoveSignal(QMouseEvent *event);
@@ -186,9 +189,10 @@ class Layout2D : public MyWidget {
   void mouseReleaseSignal(QMouseEvent *event);
   void mouseWheel();
   void beforeReplot();
-  void exportPDF(const QString &filename);
+  void exportPDF(const QString &filename) override;
 
  signals:
+  void addedOrRemoved();
   void AxisRectCreated(AxisRect2D *, MyWidget *);
   void AxisRectRemoved(MyWidget *);
   void AxisRectSwap(AxisRect2D *, AxisRect2D *);
@@ -199,4 +203,5 @@ class Layout2D : public MyWidget {
   void rescaleAxis2D(Axis2D *axis);
 };
 
+Q_DECLARE_METATYPE(Layout2D *);
 #endif  // LAYOUT2D_H

@@ -76,8 +76,9 @@ bool AbstractFilter::input(int port, const AbstractColumn *source) {
                      SLOT(inputDataAboutToChange(const AbstractColumn *)));
     QObject::connect(source, SIGNAL(dataChanged(const AbstractColumn *)), this,
                      SLOT(inputDataChanged(const AbstractColumn *)));
-    QObject::connect(source, SIGNAL(aboutToBeReplaced(const AbstractColumn *,
-                                                      const AbstractColumn *)),
+    QObject::connect(source,
+                     SIGNAL(aboutToBeReplaced(const AbstractColumn *,
+                                              const AbstractColumn *)),
                      this,
                      SLOT(inputAboutToBeReplaced(const AbstractColumn *,
                                                  const AbstractColumn *)));

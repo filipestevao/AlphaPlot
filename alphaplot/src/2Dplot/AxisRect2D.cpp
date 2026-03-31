@@ -21,11 +21,13 @@
 
 #include <QMenu>
 
+#include "Channel2D.h"
 #include "ColorMap2D.h"
 #include "Curve2D.h"
 #include "DataManager2D.h"
 #include "ErrorBar2D.h"
 #include "Grid2D.h"
+#include "GridPair2D.h"
 #include "ImageItem2D.h"
 #include "Layout2D.h"
 #include "LayoutGrid2D.h"
@@ -40,6 +42,7 @@
 #include "QMessageBox"
 #include "Table.h"
 #include "TextItem2D.h"
+#include "core/IconLoader.h"
 #include "core/Utilities.h"
 #include "future/core/column/Column.h"
 #include "future/core/datatypes/DateTime2StringFilter.h"
@@ -53,13 +56,12 @@ AxisRect2D::AxisRect2D(Plot2D *parent, PickerTool2D *picker,
       axisRectLegend_(new Legend2D(this)),
       isAxisRectSelected_(false),
       printorexportjob_(false),
+      gridpair_(new GridPair2D(this,
+                               QPair<Grid2D *, Axis2D *>(nullptr, nullptr),
+                               QPair<Grid2D *, Axis2D *>(nullptr, nullptr))),
       picker_(picker) {
   setRangeDrag(Qt::Horizontal | Qt::Vertical);
   setRangeZoom(Qt::Horizontal | Qt::Vertical);
-  gridpair_.first.first = nullptr;
-  gridpair_.first.second = nullptr;
-  gridpair_.second.first = nullptr;
-  gridpair_.second.second = nullptr;
   setAxisRectBackground(axisRectBackGround_);
   insetLayout()->addElement(axisRectLegend_, Qt::AlignTop | Qt::AlignLeft);
   insetLayout()->setInsetPlacement(0, QCPLayoutInset::ipFree);
@@ -77,11 +79,59 @@ AxisRect2D::AxisRect2D(Plot2D *parent, PickerTool2D *picker,
           &AxisRect2D::axisColumnOrientationMismatch);
   connect(this, &AxisRect2D::NoMinimumDataPointsPlotRemoved, this,
           &AxisRect2D::noMinimumDataPointsPlotRemoved);
+  // created
+  connect(this, &AxisRect2D::Axis2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::Axis2DCloned, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::TextItem2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::LineItem2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::ImageItem2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::LineSpecial2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::LineSpecialChannel2DCreated, this,
+          &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::Curve2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::StatBox2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::Vector2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::Bar2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::Pie2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::ColorMap2DCreated, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::ErrorBar2DCreated, this, &AxisRect2D::refresh);
+  // Removed
+  connect(this, &AxisRect2D::Axis2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::TextItem2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::LineItem2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::ImageItem2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::LineSpecial2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::LineSpecialChannel2DRemoved, this,
+          &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::Curve2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::StatBox2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::Vector2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::Bar2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::Pie2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::ColorMap2DRemoved, this, &AxisRect2D::refresh);
+  connect(this, &AxisRect2D::ErrorBar2DRemoved, this, &AxisRect2D::refresh);
+  // Layer moved
+  connect(this, &AxisRect2D::LayerMoved, this, &AxisRect2D::refresh);
 }
 
 AxisRect2D::~AxisRect2D() {
   insetLayout()->take(axisRectLegend_);
   delete axisRectLegend_;
+}
+
+QString AxisRect2D::getItemName() {
+  return QString(QObject::tr("Layout") + QString(" : %1 (%2x%3)"));
+}
+
+QIcon AxisRect2D::getItemIcon() {
+  return IconLoader::load("graph2d-layout", IconLoader::LightDark);
+}
+
+QString AxisRect2D::getItemTooltip() { return getItemName(); }
+
+void AxisRect2D::refresh() {
+  parentPlot()->replot(QCustomPlot::RefreshPriority::rpQueuedRefresh);
+  emit addedOrRemoved();
 }
 
 StatBox2D::BoxWhiskerData AxisRect2D::generateBoxWhiskerData(Table *table,
@@ -144,6 +194,11 @@ StatBox2D::BoxWhiskerData AxisRect2D::generateBoxWhiskerData(Table *table,
 void AxisRect2D::setAxisRectBackground(const QBrush &brush) {
   axisRectBackGround_ = brush;
   setBackground(brush);
+}
+
+void AxisRect2D::setAutoMarginsBool(const bool status) {
+  (status) ? setAutoMargins(QCP::MarginSide::msAll)
+           : setAutoMargins(QCP::MarginSide::msNone);
 }
 
 Axis2D *AxisRect2D::addAxis2D(const Axis2D::AxisOreantation &orientation,
@@ -265,18 +320,18 @@ bool AxisRect2D::removeAxis2D(Axis2D *axis, bool force) {
     return false;
   }
 
-  if (gridpair_.first.second == axis) {
+  if (gridpair_->getXgridAxis() == axis) {
     if (!force) {
       status = false;
     } else {
-      gridpair_.first.second = nullptr;
+      gridpair_->setXgridAxis(nullptr);
     }
   }
-  if (gridpair_.second.second == axis) {
+  if (gridpair_->getYgridAxis() == axis) {
     if (!force) {
       status = false;
     } else {
-      gridpair_.second.second = nullptr;
+      gridpair_->setYgridAxis(nullptr);
     }
   }
 
@@ -292,10 +347,10 @@ bool AxisRect2D::removeAxis2D(Axis2D *axis, bool force) {
              "to remove the axis \"%1 :%2\" anyway and "
              "change the grid to another axis "
              "\"%3 :%4\"?")
-              .arg(axis->getname_axis())
-              .arg(QString::number(axis->getnumber_axis()))
-              .arg(xaxes.at(0)->getname_axis())
-              .arg(QString::number(xaxes.at(0)->getnumber_axis())),
+              .arg(axis->getname_axis(),
+                   QString::number(axis->getnumber_axis()),
+                   xaxes.at(0)->getname_axis(),
+                   QString::number(xaxes.at(0)->getnumber_axis())),
           QMessageBox::Yes | QMessageBox::No);
       if (reply == QMessageBox::Yes) {
         bindGridTo(xaxes.at(0));
@@ -310,10 +365,10 @@ bool AxisRect2D::removeAxis2D(Axis2D *axis, bool force) {
           tr("This Y axis \"%1 :%2\" is associated with vertical grid. Do you "
              "want to remove the axis \"%1 :%2\" anyway and change the grid to "
              "another axis \"%2 :\"?")
-              .arg(axis->getname_axis())
-              .arg(QString::number(axis->getnumber_axis()))
-              .arg(yaxes.at(0)->getname_axis())
-              .arg(QString::number(yaxes.at(0)->getnumber_axis())),
+              .arg(axis->getname_axis(),
+                   QString::number(axis->getnumber_axis()),
+                   yaxes.at(0)->getname_axis(),
+                   QString::number(yaxes.at(0)->getnumber_axis())),
           QMessageBox::Yes | QMessageBox::No);
       if (reply == QMessageBox::Yes) {
         bindGridTo(yaxes.at(0));
@@ -348,28 +403,28 @@ Grid2D *AxisRect2D::bindGridTo(Axis2D *axis) {
   switch (axis->getorientation_axis()) {
     case Axis2D::AxisOreantation::Bottom:
     case Axis2D::AxisOreantation::Top:
-      if (gridpair_.first.second == axis) return gridpair_.first.first;
-      if (gridpair_.first.first != nullptr) delete gridpair_.first.first;
-      gridpair_.first.first = nullptr;
-      gridpair_.first.second = nullptr;
-      gridpair_.first.first = new Grid2D(axis);
-      gridpair_.first.second = axis;
-      grid = gridpair_.first.first;
+      if (gridpair_->getXgridAxis() == axis) return gridpair_->getXgrid();
+      if (gridpair_->getXgrid() != nullptr) delete gridpair_->getXgrid();
+      gridpair_->setXgrid(nullptr);
+      gridpair_->setXgridAxis(nullptr);
+      gridpair_->setXgrid(new Grid2D(axis));
+      gridpair_->setXgridAxis(axis);
+      grid = gridpair_->getXgrid();
       break;
     case Axis2D::AxisOreantation::Left:
     case Axis2D::AxisOreantation::Right:
-      if (gridpair_.second.second == axis) return gridpair_.second.first;
-      if (gridpair_.second.first != nullptr) delete gridpair_.second.first;
-      gridpair_.second.first = nullptr;
-      gridpair_.second.second = nullptr;
-      gridpair_.second.first = new Grid2D(axis);
-      gridpair_.second.second = axis;
-      grid = gridpair_.second.first;
+      if (gridpair_->getYgridAxis() == axis) return gridpair_->getYgrid();
+      if (gridpair_->getYgrid() != nullptr) delete gridpair_->getYgrid();
+      gridpair_->setYgrid(nullptr);
+      gridpair_->setYgridAxis(nullptr);
+      gridpair_->setYgrid(new Grid2D(axis));
+      gridpair_->setYgridAxis(axis);
+      grid = gridpair_->getYgrid();
       break;
   }
 
-  if (gridpair_.first.second && gridpair_.second.second)
-    setItemAxes(gridpair_.first.second, gridpair_.second.second);
+  if (gridpair_->getXgridAxis() && gridpair_->getYgridAxis())
+    setItemAxes(gridpair_->getXgridAxis(), gridpair_->getYgridAxis());
 
   return grid;
 }
@@ -504,6 +559,13 @@ int AxisRect2D::getYAxisNo(Axis2D *axis) {
   }
 }
 
+bool AxisRect2D::getAutoMarginsBool() const {
+  if (autoMargins() == QCP::MarginSide::msAll)
+    return true;
+  else
+    return false;
+}
+
 LineSpecial2D *AxisRect2D::addLineSpecial2DPlot(
     const LineScatterSpecialType &type, Table *table, Column *xData,
     Column *yData, int from, const int to, Axis2D *xAxis, Axis2D *yAxis) {
@@ -571,20 +633,17 @@ LineSpecial2D *AxisRect2D::addLineSpecial2DPlot(
   return lineSpecial;
 }
 
-QPair<LineSpecial2D *, LineSpecial2D *> AxisRect2D::addLineSpecialChannel2DPlot(
+Channel2D *AxisRect2D::addLineSpecialChannel2DPlot(
     Table *table, Column *xData, Column *yData1, Column *yData2, const int from,
     const int to, Axis2D *xAxis, Axis2D *yAxis) {
   xAxis->settickertext(xData, from, to);
   yAxis->settickertext(yData1, from, to);
-  if (!axisColumTypeCompatibilityCheck(xAxis, xData, from, to))
-    return QPair<LineSpecial2D *, LineSpecial2D *>(nullptr, nullptr);
-  if (!axisColumTypeCompatibilityCheck(yAxis, yData1, from, to))
-    return QPair<LineSpecial2D *, LineSpecial2D *>(nullptr, nullptr);
-  if (!axisColumTypeCompatibilityCheck(yAxis, yData2, from, to))
-    return QPair<LineSpecial2D *, LineSpecial2D *>(nullptr, nullptr);
+  if (!axisColumTypeCompatibilityCheck(xAxis, xData, from, to)) return nullptr;
+  if (!axisColumTypeCompatibilityCheck(yAxis, yData1, from, to)) return nullptr;
+  if (!axisColumTypeCompatibilityCheck(yAxis, yData2, from, to)) return nullptr;
   if (!hasMinimumDataPointsToPlot(
           1, table, xData, QList<Column *>() << yData1 << yData2, from, to))
-    return QPair<LineSpecial2D *, LineSpecial2D *>(nullptr, nullptr);
+    return nullptr;
   LineSpecial2D *lineSpecial1 =
       new LineSpecial2D(table, xData, yData1, from, to, xAxis, yAxis);
   QColor color = Utilities::getRandColorGoldenRatio(Utilities::ColorPal::Light);
@@ -613,13 +672,12 @@ QPair<LineSpecial2D *, LineSpecial2D *> AxisRect2D::addLineSpecialChannel2DPlot(
           &AxisRect2D::legendClick);
   lineSpecial1->setName(table->name() + "_" + xData->name() + "_" +
                         yData1->name() + "_" + yData2->name());
-  auto pair =
-      QPair<LineSpecial2D *, LineSpecial2D *>(lineSpecial1, lineSpecial2);
-  channelvec_.append(pair);
+  auto channel = new Channel2D(lineSpecial1, lineSpecial2);
+  channelvec_.append(channel);
   layers_.append(lineSpecial1->layer());
   lockColumnModeChange(QList<Column *>() << xData << yData1 << yData2, true);
-  emit LineSpecialChannel2DCreated(pair);
-  return pair;
+  emit LineSpecialChannel2DCreated(channel);
+  return channel;
 }
 
 Curve2D *AxisRect2D::addCurve2DPlot(const AxisRect2D::LineScatterType &type,
@@ -743,7 +801,7 @@ Bar2D *AxisRect2D::addBox2DPlot(const AxisRect2D::BarType &type, Table *table,
       break;
   }
 
-  //bar->setWidth(1);
+  // bar->setWidth(1);
   bar->setAntialiased(false);
   bar->setAntialiasedFill(false);
   LegendItem2D *legendItem = new LegendItem2D(axisRectLegend_, bar);
@@ -846,7 +904,8 @@ StatBox2D *AxisRect2D::addStatBox2DPlot(Table *table, Column *ycol,
   StatBox2D *statbox = new StatBox2D(sboxdata, xAxis, yAxis);
   LegendItem2D *legendItem = new LegendItem2D(axisRectLegend_, statbox);
   axisRectLegend_->addItem(legendItem);
-  connect(legendItem, SIGNAL(legendItemClicked()), SLOT(legendClick()));
+  connect(legendItem, &LegendItem2D::legendItemClicked, this,
+          &AxisRect2D::legendClick);
   statbox->setName(sboxdata.name);
   getLegend()->setVisible(false);
   layers_.append(statbox->layer());
@@ -894,7 +953,8 @@ Bar2D *AxisRect2D::addHistogram2DPlot(const AxisRect2D::BarType &type,
   bar->setAntialiasedFill(false);
   LegendItem2D *legendItem = new LegendItem2D(axisRectLegend_, bar);
   axisRectLegend_->addItem(legendItem);
-  connect(legendItem, SIGNAL(legendItemClicked()), SLOT(legendClick()));
+  connect(legendItem, &LegendItem2D::legendItemClicked, this,
+          &AxisRect2D::legendClick);
   bar->setName(table->name() + "_" + yData->name());
   layers_.append(bar->layer());
   barvec_.append(bar);
@@ -906,6 +966,7 @@ Bar2D *AxisRect2D::addHistogram2DPlot(const AxisRect2D::BarType &type,
 Pie2D *AxisRect2D::addPie2DPlot(const Graph2DCommon::PieStyle &style,
                                 Table *table, Column *xData, Column *yData,
                                 const int from, const int to) {
+  if (!xData || !yData || !table) return nullptr;
   if (xData->dataType() != AlphaPlot::ColumnDataType::TypeString ||
       yData->dataType() != AlphaPlot::ColumnDataType::TypeDouble) {
     QMessageBox::warning(
@@ -919,7 +980,8 @@ Pie2D *AxisRect2D::addPie2DPlot(const Graph2DCommon::PieStyle &style,
     return nullptr;
   Pie2D *pie = new Pie2D(this, style, table, xData, yData, from, to);
   pie->setGraphData(table, xData, yData, from, to);
-  // connect(legendItem, SIGNAL(legendItemClicked()), SLOT(legendClick()));
+  // connect(legendItem, &LegendItem2D::legendItemClicked, this,
+  // &AxisRect2D::legendClick);
   layers_.append(pie->layer());
   pievec_.append(pie);
   emit Pie2DCreated(pie);
@@ -942,7 +1004,8 @@ ColorMap2D *AxisRect2D::addColorMap2DPlot(Matrix *matrix, Axis2D *xAxis,
 
 TextItem2D *AxisRect2D::addTextItem2D(const QString text) {
   TextItem2D *textitem = new TextItem2D(this, plot2d_);
-  textitem->position->setAxes(gridpair_.first.second, gridpair_.second.second);
+  textitem->position->setAxes(gridpair_->getXgridAxis(),
+                              gridpair_->getYgridAxis());
   textitem->setText(text);
   textitem->setpixelposition_textitem(this->rect().center());
   layers_.append(textitem->layer());
@@ -954,7 +1017,7 @@ TextItem2D *AxisRect2D::addTextItem2D(const QString text) {
 LineItem2D *AxisRect2D::addLineItem2D() {
   LineItem2D *lineitem = new LineItem2D(this, plot2d_);
   foreach (QCPItemPosition *position, lineitem->positions()) {
-    position->setAxes(gridpair_.first.second, gridpair_.second.second);
+    position->setAxes(gridpair_->getXgridAxis(), gridpair_->getYgridAxis());
   }
   QRectF rect = this->rect();
   int widthpercent = static_cast<int>((rect.width() * 20) / 100);
@@ -973,7 +1036,7 @@ LineItem2D *AxisRect2D::addArrowItem2D() {
   lineitem->setendstyle_lineitem(LineItem2D::LineEndLocation::Stop,
                                  QCPLineEnding::EndingStyle::esFlatArrow);
   foreach (QCPItemPosition *position, lineitem->positions()) {
-    position->setAxes(gridpair_.first.second, gridpair_.second.second);
+    position->setAxes(gridpair_->getXgridAxis(), gridpair_->getYgridAxis());
   }
   QRectF rect = this->rect();
   int widthpercent = static_cast<int>((rect.width() * 20) / 100);
@@ -990,7 +1053,7 @@ LineItem2D *AxisRect2D::addArrowItem2D() {
 ImageItem2D *AxisRect2D::addImageItem2D(const QString &filename) {
   ImageItem2D *imageitem = new ImageItem2D(this, plot2d_, filename);
   foreach (QCPItemPosition *position, imageitem->positions()) {
-    position->setAxes(gridpair_.first.second, gridpair_.second.second);
+    position->setAxes(gridpair_->getXgridAxis(), gridpair_->getYgridAxis());
   }
   imageitem->topLeft->setPixelPosition(rect().center());
   // anchor point adjustment
@@ -1056,7 +1119,8 @@ bool AxisRect2D::updateData(Table *table, const QString &name) {
     }
   }
   for (int i = 0; i < channelvec_.count(); i++) {
-    QPair<LineSpecial2D *, LineSpecial2D *> channel = channelvec_.at(i);
+    QPair<LineSpecial2D *, LineSpecial2D *> channel =
+        channelvec_.at(i)->getChannelPair();
     PlotData::AssociatedData *data1 =
         channel.first->getdatablock_lsplot()->getassociateddata();
     PlotData::AssociatedData *data2 =
@@ -1069,7 +1133,7 @@ bool AxisRect2D::updateData(Table *table, const QString &name) {
                 QList<Column *>() << data1->ycol << data2->ycol, data1->from,
                 data1->to)) {
           plotname = channel.first->name() + "_" + data2->ycol->name();
-          removeChannel2D(channel);
+          removeChannel2D(channelvec_.at(i));
         } else {
           channel.first->setGraphData(data1->table, data1->xcol, data1->ycol,
                                       data1->from, data1->to);
@@ -1543,31 +1607,30 @@ bool AxisRect2D::removeLineSpecial2D(LineSpecial2D *ls) {
   return result;
 }
 
-bool AxisRect2D::removeChannel2D(
-    QPair<LineSpecial2D *, LineSpecial2D *> channel) {
+bool AxisRect2D::removeChannel2D(Channel2D *channel) {
   for (int i = 0; i < channelvec_.size(); i++) {
     if (channelvec_.at(i) == channel) {
       channelvec_.remove(i);
-      layers_.removeOne(channel.first->layer());
+      layers_.removeOne(channel->getChannelFirst()->layer());
     }
   }
   axisRectLegend_->removeItem(
-      axisRectLegend_->itemWithPlottable(channel.first));
+      axisRectLegend_->itemWithPlottable(channel->getChannelFirst()));
   bool result = false;
-  Axis2D *xaxis = channel.first->getxaxis();
-  Axis2D *yaxis = channel.first->getyaxis();
+  Axis2D *xaxis = channel->getChannelFirst()->getxaxis();
+  Axis2D *yaxis = channel->getChannelFirst()->getyaxis();
 
   QList<Column *> collist;
   PlotData::AssociatedData *data1 =
-      channel.first->getdatablock_lsplot()->getassociateddata();
+      channel->getChannelFirst()->getdatablock_lsplot()->getassociateddata();
   PlotData::AssociatedData *data2 =
-      channel.second->getdatablock_lsplot()->getassociateddata();
+      channel->getChannelSecond()->getdatablock_lsplot()->getassociateddata();
   collist << data1->xcol << data1->ycol << data2->xcol << data2->ycol;
   lockColumnModeChange(collist, false);
 
-  result = plot2d_->removeGraph(channel.second);
+  result = plot2d_->removeGraph(channel->getChannelSecond());
   if (!result) return result;
-  result = plot2d_->removeGraph(channel.first);
+  result = plot2d_->removeGraph(channel->getChannelFirst());
   if (!result) return result;
   xaxis->removetickertext();
   yaxis->removetickertext();
@@ -1817,15 +1880,15 @@ bool AxisRect2D::movechannellayer(QCPLayer *layer, QCPLayer *layerswap) {
   bool layermoved = true;
   for (int i = 0; i < layers_.size(); i++) {
     foreach (auto channel, channelvec_) {
-      if (channel.first->layer() == layer) {
+      if (channel->getChannelFirst()->layer() == layer) {
         layermoved =
-            parentPlot()->moveLayer(channel.second->layer(), layer,
+            parentPlot()->moveLayer(channel->getChannelSecond()->layer(), layer,
                                     QCustomPlot::LayerInsertMode::limBelow);
         if (!layermoved) qDebug() << "unable to move channel layer(s). error ";
-      } else if (channel.first->layer() == layerswap) {
-        layermoved =
-            parentPlot()->moveLayer(channel.second->layer(), layerswap,
-                                    QCustomPlot::LayerInsertMode::limBelow);
+      } else if (channel->getChannelFirst()->layer() == layerswap) {
+        layermoved = parentPlot()->moveLayer(
+            channel->getChannelSecond()->layer(), layerswap,
+            QCustomPlot::LayerInsertMode::limBelow);
         if (!layermoved) qDebug() << "unable to move channel layer(s). error ";
       }
     }
@@ -1841,10 +1904,10 @@ void AxisRect2D::replotBareBones() const {
 }
 
 void AxisRect2D::setGridPairToNullptr() {
-  gridpair_.first.first = nullptr;
-  gridpair_.first.second = nullptr;
-  gridpair_.second.first = nullptr;
-  gridpair_.second.second = nullptr;
+  gridpair_->setXgrid(nullptr);
+  gridpair_->setXgridAxis(nullptr);
+  gridpair_->setYgrid(nullptr);
+  gridpair_->setYgridAxis(nullptr);
 }
 
 void AxisRect2D::setItemAxes(Axis2D *xaxis, Axis2D *yaxis) {
@@ -2362,9 +2425,9 @@ bool AxisRect2D::loadLineSpecialChannel2D(XmlStreamReader *xmlreader,
       xaxis1 && xaxis2 && yaxis1 && yaxis2 && xaxis1 == xaxis2 &&
       yaxis1 == yaxis2 && xcolumn1 == xcolumn2 && table1 == table2 &&
       from1 == from2 && to1 == to2) {
-    QPair<LineSpecial2D *, LineSpecial2D *> lspair =
-        addLineSpecialChannel2DPlot(table1, xcolumn1, ycolumn1, ycolumn2, from1,
-                                    to1, xaxis1, yaxis1);
+    Channel2D *channel = addLineSpecialChannel2DPlot(
+        table1, xcolumn1, ycolumn1, ycolumn2, from1, to1, xaxis1, yaxis1);
+    QPair<LineSpecial2D *, LineSpecial2D *> lspair = channel->getChannelPair();
     // ls1
     lspair.first->setlinetype_lsplot(lstype1);
     lspair.first->setlegendvisible_lsplot(legendvisible1);
@@ -2424,7 +2487,8 @@ QList<Column *> AxisRect2D::getPlotColumns() {
     }
   }
   for (int i = 0; i < channelvec_.count(); i++) {
-    QPair<LineSpecial2D *, LineSpecial2D *> channel = channelvec_.at(i);
+    QPair<LineSpecial2D *, LineSpecial2D *> channel =
+        channelvec_.at(i)->getChannelPair();
     PlotData::AssociatedData *data1 =
         channel.first->getdatablock_lsplot()->getassociateddata();
     PlotData::AssociatedData *data2 =
@@ -2566,8 +2630,8 @@ void AxisRect2D::save(XmlStreamWriter *xmlwriter, const QPair<int, int> rowcol,
   xmlwriter->writeBrush(backgroundBrush());
   getLegend()->save(xmlwriter);
   foreach (Axis2D *axis, getAxes2D()) { axis->save(xmlwriter); }
-  gridpair_.first.first->save(xmlwriter, "xgrid");
-  gridpair_.second.first->save(xmlwriter, "ygrid");
+  gridpair_->getXgrid()->save(xmlwriter, "xgrid");
+  gridpair_->getYgrid()->save(xmlwriter, "ygrid");
 
   if (!saveastemplate) {
     // assign to a new variable
@@ -2601,14 +2665,15 @@ void AxisRect2D::save(XmlStreamWriter *xmlwriter, const QPair<int, int> rowcol,
         }
       }
       for (int i = 0; i < chvec.size(); i++) {
-        if (layer == chvec.at(i).first->layer()) {
+        if (layer == chvec.at(i)->getChannelFirst()->layer()) {
           xmlwriter->writeStartElement("channel");
-          chvec.at(i).first->save(xmlwriter,
-                                  getXAxisNo(chvec.at(i).first->getxaxis()),
-                                  getYAxisNo(chvec.at(i).first->getyaxis()));
-          chvec.at(i).second->save(xmlwriter,
-                                   getXAxisNo(chvec.at(i).second->getxaxis()),
-                                   getYAxisNo(chvec.at(i).second->getyaxis()));
+          chvec.at(i)->getChannelFirst()->save(
+              xmlwriter, getXAxisNo(chvec.at(i)->getChannelFirst()->getxaxis()),
+              getYAxisNo(chvec.at(i)->getChannelFirst()->getyaxis()));
+          chvec.at(i)->getChannelSecond()->save(
+              xmlwriter,
+              getXAxisNo(chvec.at(i)->getChannelSecond()->getxaxis()),
+              getYAxisNo(chvec.at(i)->getChannelSecond()->getyaxis()));
           xmlwriter->writeEndElement();
           chvec.remove(i);
           continue;
@@ -2797,11 +2862,11 @@ bool AxisRect2D::load(XmlStreamReader *xmlreader, QList<Table *> tabs,
       } else
         // xgrid
         if (xmlreader->isStartElement() && xmlreader->name() == "xgrid") {
-          gridpair_.first.first->load(xmlreader, "xgrid");
+          gridpair_->getXgrid()->load(xmlreader, "xgrid");
         } else
           // ygrid
           if (xmlreader->isStartElement() && xmlreader->name() == "ygrid") {
-            gridpair_.second.first->load(xmlreader, "ygrid");
+            gridpair_->getYgrid()->load(xmlreader, "ygrid");
           } else
             // textitem
             if (xmlreader->isStartElement() &&
@@ -3758,9 +3823,9 @@ void AxisRect2D::mousePressEvent(QMouseEvent *event, const QVariant &variant) {
       event->button() == Qt::MouseButton::LeftButton)
     picker_->showtooltip(
         event->pos(),
-        gridpair_.first.second->pixelToCoord(event->localPos().x()),
-        gridpair_.second.second->pixelToCoord(event->localPos().y()),
-        gridpair_.first.second, gridpair_.second.second);
+        gridpair_->getXgridAxis()->pixelToCoord(event->localPos().x()),
+        gridpair_->getYgridAxis()->pixelToCoord(event->localPos().y()),
+        gridpair_->getXgridAxis(), gridpair_->getYgridAxis());
 
   emit AxisRectClicked(this);
   QCPAxisRect::mousePressEvent(event, variant);
@@ -3770,19 +3835,19 @@ void AxisRect2D::mouseMoveEvent(QMouseEvent *event, const QPointF &startPos) {
   if (picker_->getPicker() == Graph2DCommon::Picker::DataGraph)
     picker_->showtooltip(
         event->localPos(),
-        gridpair_.first.second->pixelToCoord(event->localPos().x()),
-        gridpair_.second.second->pixelToCoord(event->localPos().y()),
-        gridpair_.first.second, gridpair_.second.second);
+        gridpair_->getXgridAxis()->pixelToCoord(event->localPos().x()),
+        gridpair_->getYgridAxis()->pixelToCoord(event->localPos().y()),
+        gridpair_->getXgridAxis(), gridpair_->getYgridAxis());
   else if (picker_->getPicker() == Graph2DCommon::Picker::DataRange)
     picker_->rangepickermousedrag(
         event->pos(),
-        gridpair_.first.second->pixelToCoord(event->localPos().x()),
-        gridpair_.second.second->pixelToCoord(event->localPos().y()));
+        gridpair_->getXgridAxis()->pixelToCoord(event->localPos().x()),
+        gridpair_->getYgridAxis()->pixelToCoord(event->localPos().y()));
   else if (picker_->getPicker() == Graph2DCommon::Picker::DataMove)
     picker_->movepickermousedrag(
         event->pos(),
-        gridpair_.first.second->pixelToCoord(event->localPos().x()),
-        gridpair_.second.second->pixelToCoord(event->localPos().y()));
+        gridpair_->getXgridAxis()->pixelToCoord(event->localPos().x()),
+        gridpair_->getYgridAxis()->pixelToCoord(event->localPos().y()));
 
   QCPAxisRect::mouseMoveEvent(event, startPos);
 }

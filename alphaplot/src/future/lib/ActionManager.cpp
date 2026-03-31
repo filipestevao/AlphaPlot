@@ -28,6 +28,7 @@
  ***************************************************************************/
 
 #include "ActionManager.h"
+
 #include <QMutableMapIterator>
 
 ActionManager::ActionManager() {}
@@ -105,7 +106,6 @@ void ActionManager::removeAction(QObject *action) {
 
 void ActionManager::removeAction(QAction *action) {
   if (!action) return;
-
   disconnect(action, SIGNAL(destroyed(QObject *)), this,
              SLOT(removeAction(QObject *)));
 

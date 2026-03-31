@@ -26,6 +26,10 @@ class Layout3D : public MyWidget {
            Qt::WindowFlags flag = Qt::SubWindow);
   ~Layout3D();
 
+  QString getItemName() override;
+  QIcon getItemIcon() override;
+  QString getItemTooltip() override;
+
   Surface3D *getSurface3DModifier() const;
   Bar3D *getBar3DModifier() const;
   Scatter3D *getScatter3DModifier() const;
@@ -56,12 +60,11 @@ class Layout3D : public MyWidget {
   void saveTheme(XmlStreamWriter *xmlwriter);
   void saveValueAxis(XmlStreamWriter *xmlwriter, QValue3DAxis *axis);
   void saveCategoryAxis(XmlStreamWriter *xmlwriter, QCategory3DAxis *axis);
-  void setCloseWithoutColumnModeLockChange(const bool value);
   QList<MyWidget *> dependentTableMatrix();
   void copy(Layout3D *layout, QList<Table *> tables, QList<Matrix *> matrixs,
             ApplicationWindow *app);
   QList<Column *> getPlotColumns();
-  void print();
+  void print() override;
   void copyToClipbord();
 
  signals:
@@ -83,10 +86,15 @@ class Layout3D : public MyWidget {
   QSequentialAnimationGroup *m_animationCameraY_;
   QPropertyAnimation *upAnimation_;
   QPropertyAnimation *downAnimation_;
-  bool closewithoutcolumnmodelockchange_;
   static const int defaultlayout2dwidth_;
   static const int defaultlayout2dheight_;
   static const int minimumlayout2dwidth_;
   static const int minimumlayout2dheight_;
 };
+
+Q_DECLARE_METATYPE(QCategory3DAxis *);
+Q_DECLARE_METATYPE(QValue3DAxis *);
+Q_DECLARE_METATYPE(Q3DTheme *);
+Q_DECLARE_METATYPE(QAbstract3DGraph *);
+Q_DECLARE_METATYPE(Layout3D *);
 #endif  // LAYOUT3D_H

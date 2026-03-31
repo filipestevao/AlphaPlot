@@ -105,7 +105,11 @@ InterpolationDialog::InterpolationDialog(QWidget *parent, Qt::WindowFlags fl)
   hb->addWidget(gb1);
   hb->addLayout(vl);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+  connect(boxName, SIGNAL(textActivated(const QString &)), this,
+#else
   connect(boxName, SIGNAL(activated(const QString &)), this,
+#endif
           SLOT(activateCurve(const QString &)));
   connect(buttonFit, SIGNAL(clicked()), this, SLOT(interpolate()));
   connect(buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
