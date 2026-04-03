@@ -2136,7 +2136,8 @@ void Table::handleDataChange(const AbstractColumn *col) {
   int index = columnIndex(static_cast<const Column *>(col));
   if (index != -1) {
     if (col->rowCount() > rowCount()) setRowCount(col->rowCount());
-    emit dataChanged(0, index, col->rowCount() - 1, index);
+    if (col->rowCount() > 0)
+      emit dataChanged(0, index, col->rowCount() - 1, index);
   }
 }
 
@@ -2150,7 +2151,7 @@ void Table::handleRowsInserted(const AbstractColumn *col, int before,
                                int count) {
   Q_UNUSED(count);
   int index = columnIndex(static_cast<const Column *>(col));
-  if (index != -1 && before <= col->rowCount())
+  if (index != -1 && before < col->rowCount() && col->rowCount() > 0)
     emit dataChanged(before, index, col->rowCount() - 1, index);
 }
 
@@ -2164,7 +2165,8 @@ void Table::handleRowsAboutToBeRemoved(const AbstractColumn *col, int first,
 void Table::handleRowsRemoved(const AbstractColumn *col, int first, int count) {
   Q_UNUSED(count);
   int index = columnIndex(static_cast<const Column *>(col));
-  if (index != -1) emit dataChanged(first, index, col->rowCount() - 1, index);
+  if (index != -1 && first < col->rowCount() && col->rowCount() > 0)
+    emit dataChanged(first, index, col->rowCount() - 1, index);
 }
 
 void Table::connectColumn(const Column *col) {

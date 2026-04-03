@@ -792,7 +792,8 @@ void Matrix::copy(Matrix *other) {
   setDisplayedDigits(other->displayedDigits());
   setFormula(other->formula());
   d_matrix_private->blockChangeSignals(false);
-  emit dataChanged(0, 0, rows - 1, columns - 1);
+  if (rows > 0 && columns > 0)
+    emit dataChanged(0, 0, rows - 1, columns - 1);
   if (d_view) d_view->rereadSectionSizes();
   endMacro();
   RESET_CURSOR;
