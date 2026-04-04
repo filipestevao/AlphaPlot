@@ -122,8 +122,8 @@ int main(int argc, char** argv) {
   qInstallMessageHandler(logOutput);
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-  // Request Wayland with a fallback to X11 (xcb)
-  qputenv("QT_QPA_PLATFORM", "wayland;xcb");
+  // Force X11 (xcb) on Linux to avoid Wayland QtDataVisualization bugs
+  qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
 #ifdef Q_OS_WIN

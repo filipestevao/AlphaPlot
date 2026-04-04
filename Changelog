@@ -1,7 +1,5 @@
 === Progress ===
 * full porting to Qt6
-* update 3rdparty/qcustomplot to v.2.1.1
-* update 3rdparty/muparser to v.2.3.5
 * update license from GPL-2.0 to GPL-3.0 for Qt6 compatibility
 * fix last column auto-resize when "Set Column(s) As" is used
 * add compatibility with Flatpak
