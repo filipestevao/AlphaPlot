@@ -25,8 +25,9 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: ${{ matrix.qt_ver }}
-        modules: 'qtcore qtgui qtwidgets qtopengl qtnetwork qtsvg qtprintsupport qtdatavis3d qt5compat qtdeclarative qtshadertools'
+        version: '6.8.2'
+        modules: 'qtsvg qtprintsupport qtdatavis3d qt5compat qtdeclarative qtshadertools'
+        arch: ${{ runner.os == 'Windows' && 'win64_msvc2022_64' || '' }}
 
     # --- LINUX ---
     - name: Dependencies (Linux)
