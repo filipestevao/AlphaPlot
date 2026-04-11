@@ -15,6 +15,10 @@ unix:isEmpty(PRESET) {                     # command-line argument to override
   }
 }
 
+win32:isEmpty(PRESET) {
+  PRESET = win32
+}
+
 !contains(PRESET, linux_all_static) {                 # Linux Desktop integration
   unix:INSTALLS   += desktop_entry mime_package mime_link icons
 }
@@ -111,7 +115,7 @@ win32: {
     ### Static linking mostly.
     message(Build configuration: Win32)
 
-    GSL_ROOT_PATH = $$(GSL_ROOT)
+    GSL_ROOT_PATH = $$clean_path($$(GSL_ROOT))
     !isEmpty(GSL_ROOT_PATH) {
       INCLUDEPATH  += "$${GSL_ROOT_PATH}/include"
       LIBS         += "-L$${GSL_ROOT_PATH}/lib" gsl.lib gslcblas.lib

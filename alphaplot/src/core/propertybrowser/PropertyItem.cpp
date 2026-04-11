@@ -2806,6 +2806,104 @@ PropertyItem::Pair PropertyItem::value() const {
           break;
       }
     } break;
+    // Plot3D Axis Value (QValue3DAxis)
+    case ObjectBrowserTreeItem::ObjectType::Plot3DAxisValue: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (!status) break;
+      switch (property_) {
+        case PropertyItem::Property::Plot3DAxisVal_Base_Separator:
+          return Pair(tr("Base"), QString());
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_AutoRange:
+          return Pair(tr("Auto Range"), axis->isAutoAdjustRange());
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_From:
+          return Pair(tr("From"), static_cast<double>(axis->min()));
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_To:
+          return Pair(tr("To"), static_cast<double>(axis->max()));
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_Inverted:
+          return Pair(tr("Inverted"), axis->reversed());
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_Tick_Count:
+          return Pair(tr("Tick Count"), axis->segmentCount());
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_SubTick_Count:
+          return Pair(tr("Sub-Tick Count"), axis->subSegmentCount());
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_Tick_Separator:
+          return Pair(tr("Tick Label"), QString());
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_TickLabel_Format:
+          return Pair(tr("Format"), axis->labelFormat());
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_TickLabel_Rotation:
+          return Pair(tr("Rotation"),
+                      static_cast<double>(axis->labelAutoRotation()));
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_Label_Separator:
+          return Pair(tr("Title"), QString());
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_Label_Visible:
+          return Pair(tr("Title Visible"), axis->isTitleVisible());
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_Label_Fixed:
+          return Pair(tr("Title Fixed"), axis->isTitleFixed());
+          break;
+        case PropertyItem::Property::Plot3DAxisVal_Label_Text:
+          return Pair(tr("Title Text"), axis->title());
+          break;
+        default:
+          break;
+      }
+    } break;
+    // Plot3D Axis Category (QCategory3DAxis)
+    case ObjectBrowserTreeItem::ObjectType::Plot3DAxisCatagory: {
+      QCategory3DAxis *axis =
+          item_->getObjectTreeItem<QCategory3DAxis>(&status);
+      if (!status) break;
+      switch (property_) {
+        case PropertyItem::Property::Plot3DAxisCat_Base_Separator:
+          return Pair(tr("Base"), QString());
+          break;
+        case PropertyItem::Property::Plot3DAxisCat_AutoRange:
+          return Pair(tr("Auto Range"), axis->isAutoAdjustRange());
+          break;
+        case PropertyItem::Property::Plot3DAxisCat_From:
+          return Pair(tr("From"), static_cast<double>(axis->min()));
+          break;
+        case PropertyItem::Property::Plot3DAxisCat_To:
+          return Pair(tr("To"), static_cast<double>(axis->max()));
+          break;
+        case PropertyItem::Property::Plot3DAxisCat_TickLabel_Rotation:
+          return Pair(tr("Rotation"),
+                      static_cast<double>(axis->labelAutoRotation()));
+          break;
+        case PropertyItem::Property::Plot3DAxisCat_Label_Separator:
+          return Pair(tr("Title"), QString());
+          break;
+        case PropertyItem::Property::Plot3DAxisCat_Label_Visible:
+          return Pair(tr("Title Visible"), axis->isTitleVisible());
+          break;
+        case PropertyItem::Property::Plot3DAxisCat_Label_Fixed:
+          return Pair(tr("Title Fixed"), axis->isTitleFixed());
+          break;
+        case PropertyItem::Property::Plot3DAxisCat_Label_Text:
+          return Pair(tr("Title Text"), axis->title());
+          break;
+        default:
+          break;
+      }
+    } break;
+    // Plot3D Surface / Bar / Scatter (no properties shown yet)
+    case ObjectBrowserTreeItem::ObjectType::Plot3DSurface:
+    case ObjectBrowserTreeItem::ObjectType::Plot3DBar:
+    case ObjectBrowserTreeItem::ObjectType::Plot3DScatter:
+    case ObjectBrowserTreeItem::ObjectType::Plot3DSurfaceDataBlock:
+    case ObjectBrowserTreeItem::ObjectType::Plot3DBarDataBlock:
+    case ObjectBrowserTreeItem::ObjectType::Plot3DScatterDataBlock:
+      break;
   }
   return Pair(QString(), QVariant());
 }
@@ -2967,6 +3065,26 @@ void PropertyItem::setStringValue(const QString &val) {
         cm->setname_colormap(Utilities::splitstring(val));
         cm->layer()->replot();
         cm->getcolormapscale_colormap()->axis()->layer()->replot();
+      }
+    } break;
+    // Plot3D Axis Value (QValue3DAxis)
+    case PropertyItem::Property::Plot3DAxisVal_Label_Text: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (val != PropertyData<QString>() && status) {
+        axis->setTitle(val);
+      }
+    } break;
+    case PropertyItem::Property::Plot3DAxisVal_TickLabel_Format: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (val != PropertyData<QString>() && status) {
+        axis->setLabelFormat(val);
+      }
+    } break;
+    // Plot3D Axis Category (QCategory3DAxis)
+    case PropertyItem::Property::Plot3DAxisCat_Label_Text: {
+      QCategory3DAxis *axis = item_->getObjectTreeItem<QCategory3DAxis>(&status);
+      if (val != PropertyData<QString>() && status) {
+        axis->setTitle(val);
       }
     } break;
     default:
@@ -3362,6 +3480,19 @@ void PropertyItem::setIntValue(const int &val) {
         MyWidget *widget =
             item_->parentItem()->getObjectTreeItem<MyWidget>(&status);
         if (status) widget->resize(widget->size() + sizediff);
+      }
+    } break;
+    // Plot3D Axis Value
+    case PropertyItem::Property::Plot3DAxisVal_Tick_Count: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (val != PropertyData<int>() && status) {
+        axis->setSegmentCount(val);
+      }
+    } break;
+    case PropertyItem::Property::Plot3DAxisVal_SubTick_Count: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (val != PropertyData<int>() && status) {
+        axis->setSubSegmentCount(val);
       }
     } break;
     default:
@@ -4016,6 +4147,32 @@ void PropertyItem::setDoubleValue(const double &val) {
       if (!Utilities::isSameDouble(val, PropertyData<double>()) && status)
         theme->setAmbientLightStrength(val);
     } break;
+    // Plot3D Axis Value
+    case PropertyItem::Property::Plot3DAxisVal_TickLabel_Rotation: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status) {
+        axis->setLabelAutoRotation(static_cast<float>(val));
+      }
+    } break;
+    // Plot3D Axis Category
+    case PropertyItem::Property::Plot3DAxisCat_TickLabel_Rotation: {
+      QCategory3DAxis *axis = item_->getObjectTreeItem<QCategory3DAxis>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status) {
+        axis->setLabelAutoRotation(static_cast<float>(val));
+      }
+    } break;
+    case PropertyItem::Property::Plot3DAxisCat_From: {
+      QCategory3DAxis *axis = item_->getObjectTreeItem<QCategory3DAxis>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status) {
+        if (val < axis->max()) axis->setMin(val);
+      }
+    } break;
+    case PropertyItem::Property::Plot3DAxisCat_To: {
+      QCategory3DAxis *axis = item_->getObjectTreeItem<QCategory3DAxis>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status) {
+        if (val > axis->min()) axis->setMax(val);
+      }
+    } break;
     default:
       break;
   }
@@ -4084,6 +4241,19 @@ void PropertyItem::setScientificDoubleValue(const double &val) {
                 cm->getcolormapscale_colormap()->axis()->range().lower,
                 cm->getcolormapscale_colormap()->axis()->range().upper);
         }
+      }
+    } break;
+    // Plot3D Axis Value
+    case PropertyItem::Property::Plot3DAxisVal_From: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status) {
+        if (val < axis->max()) axis->setMin(static_cast<float>(val));
+      }
+    } break;
+    case PropertyItem::Property::Plot3DAxisVal_To: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status) {
+        if (val > axis->min()) axis->setMax(static_cast<float>(val));
       }
     } break;
     default:
@@ -4495,6 +4665,36 @@ void PropertyItem::setBoolValue(const bool &val) {
       Q3DTheme *theme = item_->getObjectTreeItem<Q3DTheme>(&status);
       if (val != PropertyData<bool>() && status)
         theme->setLabelBorderEnabled(val);
+    } break;
+    // Plot3D Axis Value
+    case PropertyItem::Property::Plot3DAxisVal_AutoRange: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (val != PropertyData<bool>() && status) axis->setAutoAdjustRange(val);
+    } break;
+    case PropertyItem::Property::Plot3DAxisVal_Inverted: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (val != PropertyData<bool>() && status) axis->setReversed(val);
+    } break;
+    case PropertyItem::Property::Plot3DAxisVal_Label_Visible: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (val != PropertyData<bool>() && status) axis->setTitleVisible(val);
+    } break;
+    case PropertyItem::Property::Plot3DAxisVal_Label_Fixed: {
+      QValue3DAxis *axis = item_->getObjectTreeItem<QValue3DAxis>(&status);
+      if (val != PropertyData<bool>() && status) axis->setTitleFixed(val);
+    } break;
+    // Plot3D Axis Category
+    case PropertyItem::Property::Plot3DAxisCat_AutoRange: {
+      QCategory3DAxis *axis = item_->getObjectTreeItem<QCategory3DAxis>(&status);
+      if (val != PropertyData<bool>() && status) axis->setAutoAdjustRange(val);
+    } break;
+    case PropertyItem::Property::Plot3DAxisCat_Label_Visible: {
+      QCategory3DAxis *axis = item_->getObjectTreeItem<QCategory3DAxis>(&status);
+      if (val != PropertyData<bool>() && status) axis->setTitleVisible(val);
+    } break;
+    case PropertyItem::Property::Plot3DAxisCat_Label_Fixed: {
+      QCategory3DAxis *axis = item_->getObjectTreeItem<QCategory3DAxis>(&status);
+      if (val != PropertyData<bool>() && status) axis->setTitleFixed(val);
     } break;
     default:
       break;

@@ -68,5 +68,5 @@ jobs:
       if: runner.os == 'Windows'
       shell: cmd
       run: |
-        qmake PRESET=win32
+        qmake
         nmake

@@ -1994,6 +1994,90 @@ void PropertyItemModel::buildUp(ObjectBrowserTreeItem *item) {
           rootItem_, item,
           PropertyItem::Property::Plot3DTheme_Label_Border_Visible);
     } break;
+    // Plot3D Axis Value (QValue3DAxis)
+    case ObjectBrowserTreeItem::ObjectType::Plot3DAxisValue: {
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Base_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_AutoRange);
+      auto pfrom = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisVal_From);
+      pfrom->setPrecision(precision);
+      pfrom->setLowerLimitDouble(-1e+308);
+      pfrom->setUpperLimitDouble(1e+308);
+      auto pto = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisVal_To);
+      pto->setPrecision(precision);
+      pto->setLowerLimitDouble(-1e+308);
+      pto->setUpperLimitDouble(1e+308);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Inverted);
+      auto tickcount = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisVal_Tick_Count);
+      tickcount->setLowerLimitInt(1);
+      auto subtickcount = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisVal_SubTick_Count);
+      subtickcount->setLowerLimitInt(0);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Tick_Separator);
+      PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DAxisVal_TickLabel_Format);
+      auto tickrot = PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DAxisVal_TickLabel_Rotation);
+      tickrot->setPrecision(2);
+      tickrot->setLowerLimitDouble(0);
+      tickrot->setUpperLimitDouble(90);
+      tickrot->setSuffix(tr(" °"));
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Label_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Label_Visible);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Label_Fixed);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Label_Text);
+    } break;
+    // Plot3D Axis Category (QCategory3DAxis)
+    case ObjectBrowserTreeItem::ObjectType::Plot3DAxisCatagory: {
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_Base_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_AutoRange);
+      auto catfrom = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisCat_From);
+      catfrom->setPrecision(2);
+      auto catto = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisCat_To);
+      catto->setPrecision(2);
+      auto catticklabelrot = PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DAxisCat_TickLabel_Rotation);
+      catticklabelrot->setPrecision(2);
+      catticklabelrot->setLowerLimitDouble(0);
+      catticklabelrot->setUpperLimitDouble(90);
+      catticklabelrot->setSuffix(tr(" °"));
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_Label_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_Label_Visible);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_Label_Fixed);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_Label_Text);
+    } break;
+    // Plot3D Surface
+    case ObjectBrowserTreeItem::ObjectType::Plot3DSurface:
+    // Plot3D Bar
+    case ObjectBrowserTreeItem::ObjectType::Plot3DBar:
+    // Plot3D Scatter
+    case ObjectBrowserTreeItem::ObjectType::Plot3DScatter:
+    // Plot3D DataBlocks (read-only placeholders)
+    case ObjectBrowserTreeItem::ObjectType::Plot3DSurfaceDataBlock:
+    case ObjectBrowserTreeItem::ObjectType::Plot3DBarDataBlock:
+    case ObjectBrowserTreeItem::ObjectType::Plot3DScatterDataBlock:
+      break;
   }
 
   endResetModel();
