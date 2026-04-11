@@ -14,7 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        qt_ver: [6.10.0]
 
     steps:
     - name: Checkout Code
@@ -56,9 +55,10 @@ jobs:
     # --- WINDOWS ---
     - name: Dependencies (Windows)
       if: runner.os == 'Windows'
+      shell: cmd
       run: |
         vcpkg install gsl:x64-windows
-        echo "GSL_ROOT=$VCPKG_INSTALLATION_ROOT/installed/x64-windows" >> $GITHUB_ENV
+        echo GSL_ROOT=%VCPKG_INSTALLATION_ROOT%/installed/x64-windows>> %GITHUB_ENV%
 
     - name: Set up MSVC (Windows)
       if: runner.os == 'Windows'
