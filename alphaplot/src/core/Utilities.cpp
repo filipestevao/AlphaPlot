@@ -72,6 +72,7 @@ QString Utilities::getOperatingSystem() {
       return QString("Windows");
   }
 #elif defined(Q_OS_MAC)
+#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
   switch (QSysInfo::MacVersion()) {
     case QSysInfo::MV_10_3:
       return QString("Mac OS X 10.3");
@@ -89,11 +90,12 @@ QString Utilities::getOperatingSystem() {
       return QString("Mac OS X 10.9");
     case QSysInfo::MV_10_10:
       return QString("Mac OS X 10.10");
-    // case QSysInfo::MV_10_11: (mot available in qt4)
-    // return QString("Mac OS X 10.11");
     default:
       return QString("Mac OS X");
   }
+#else
+  return QSysInfo::prettyProductName();
+#endif
 #elif defined(Q_OS_LINUX)
   QString exe("lsb_release");
   QStringList args;
