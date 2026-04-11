@@ -111,11 +111,16 @@ win32: {
     ### Static linking mostly.
     message(Build configuration: Win32)
 
-    isEmpty(LIBPATH): LIBPATH = ../3rdparty
-
-    INCLUDEPATH  += "$${LIBPATH}/gsl/include"
-    LIBS         += "$${LIBPATH}/gsl/lib/libgsl.a"
-    LIBS         += "$${LIBPATH}/gsl/lib/libgslcblas.a"
+    GSL_ROOT_PATH = $$(GSL_ROOT)
+    !isEmpty(GSL_ROOT_PATH) {
+      INCLUDEPATH  += "$${GSL_ROOT_PATH}/include"
+      LIBS         += "-L$${GSL_ROOT_PATH}/lib" gsl.lib gslcblas.lib
+    } else {
+      isEmpty(LIBPATH): LIBPATH = ../3rdparty
+      INCLUDEPATH  += "$${LIBPATH}/gsl/include"
+      LIBS         += "$${LIBPATH}/gsl/lib/libgsl.a"
+      LIBS         += "$${LIBPATH}/gsl/lib/libgslcblas.a"
+    }
   }
 }
 

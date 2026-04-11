@@ -68,5 +68,5 @@ jobs:
       if: runner.os == 'Windows'
       shell: cmd
       run: |
-        qmake PRESET=win32 INCLUDEPATH+=%GSL_ROOT%/include LIBS+=-L%GSL_ROOT%/lib LIBS+=gsl.lib LIBS+=gslcblas.lib
+        qmake PRESET=win32
         nmake
