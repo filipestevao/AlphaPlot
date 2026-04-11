@@ -66,7 +66,13 @@ jobs:
 
     - name: Build (Windows)
       if: runner.os == 'Windows'
-      shell: cmd
+      shell: pwsh
       run: |
-        qmake
+        # Pre-generate all Makefiles using qmake to avoid a known Qt6 MSVC bug 
+        # where qmake recursion inside nmake sub-shells crashes compiler detection.
+        Get-ChildItem -Recurse -Filter *.pro | ForEach-Object {
+            Push-Location $_.Directory.FullName
+            qmake $_.Name
+            Pop-Location
+        }
         nmake

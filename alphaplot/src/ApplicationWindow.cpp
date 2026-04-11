@@ -1920,8 +1920,8 @@ Layout2D *ApplicationWindow::newGraph2D(const QString &caption) {
   connect(layout2d, &Layout2D::showTitleBarMenu, this,
           &ApplicationWindow::showWindowTitleBarMenu);
   connect(layout2d, &Layout2D::mousepressevent, [=](MyWidget *widget) {
-    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
+    propertybrowser->populateObjectBrowser(widget);
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
   });
@@ -1972,8 +1972,8 @@ Layout3D *ApplicationWindow::newGraph3D(const Graph3DCommon::Plot3DType &type,
   // QWindow doesnt pass mousepressevent to the container widget
   // so do it here manually
   connect(layout3d, &Layout3D::mousepressevent, this, [=]() {
-    propertybrowser->populateObjectBrowser(layout3d);
     if (d_workspace->activeSubWindow() == layout3d) return;
+    propertybrowser->populateObjectBrowser(layout3d);
     d_workspace->setActiveSubWindow(layout3d);
   });
 
@@ -2231,8 +2231,8 @@ void ApplicationWindow::initNote(Note *note, const QString &caption) {
   connect(note, SIGNAL(showTitleBarMenu()), this,
           SLOT(showWindowTitleBarMenu()));
   connect(note, &Note::mousepressevent, [=](MyWidget *widget) {
-    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
+    propertybrowser->populateObjectBrowser(widget);
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
   });
@@ -2339,8 +2339,8 @@ void ApplicationWindow::initMatrix(Matrix *matrix) {
   connect(matrix, SIGNAL(showContextMenu()), this,
           SLOT(showWindowContextMenu()));
   connect(matrix, &Matrix::mousepressevent, [=](MyWidget *widget) {
-    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
+    propertybrowser->populateObjectBrowser(widget);
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
   });
@@ -6785,8 +6785,8 @@ void ApplicationWindow::connectTable(Table *table) {
   connect(table->d_future_table, SIGNAL(requestColumnStatistics()), this,
           SLOT(showColumnStatistics()));
   connect(table, &Table::mousepressevent, [=](MyWidget *widget) {
-    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
+    propertybrowser->populateObjectBrowser(widget);
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
 
