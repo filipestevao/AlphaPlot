@@ -8,7 +8,7 @@ QT += core gui widgets opengl network svg
 QT += printsupport datavisualization
 
 # Qt 6 specific modules
-greaterThan(QT_MAJOR_VERSION, 5) {
+greaterThan(QT_MAJOR_VERSION, 5) | greaterThan(QT_VERSION_MAJOR, 5) {
     QT += core5compat qml
 } else {
     QT += script scripttools

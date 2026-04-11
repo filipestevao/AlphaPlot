@@ -1,37 +1,72 @@
 name: Test Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main, master, release-* ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
-  test:
+  build:
+    name: Build (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [windows-latest, macOS-latest, ubuntu-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        qt_ver: [6.10.0]
 
     steps:
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v2
+    - name: Checkout Code
+      uses: actions/checkout@v4
       with:
-        modules: 'qtcore qtgui qtwidgets qtopengl qtnetwork qtsvg qtscript qtscripttools qtprintsupport qtdatavis3d'
-      
-    - name: clone repository
-      uses: actions/checkout@v2
+        submodules: recursive
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '6.8.2'
+        modules: 'qtdatavis3d qt5compat qtshadertools'
+        arch: ${{ runner.os == 'Windows' && 'win64_msvc2022_64' || '' }}
 
-    - name: Install Dependantcies And Make Linux
-      if: startsWith(matrix.os, 'ubuntu')
+    # --- LINUX ---
+    - name: Dependencies (Linux)
+      if: runner.os == 'Linux'
       run: |
-        sudo apt-get update -qq
+        sudo apt-get update
         sudo apt-get install -y libgsl-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev
-        qmake CONFIG+=linux_all_dynamic
-        make
-        
-        
-    - name: Install Dependantcies And Make Mac
-      if: startsWith(matrix.os, 'mac')
+
+    - name: Build (Linux)
+      if: runner.os == 'Linux'
       run: |
-        brew install gsl
-        qmake CONFIG+=osx_dist
-        make
- 
+        qmake PRESET=linux_all_dynamic INCLUDEPATH+=/usr/include QMAKE_LIBDIR+=/usr/lib/x86_64-linux-gnu
+        make -j$(nproc)
+
+    # --- MACOS ---
+    - name: Dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: brew install gsl
+
+    - name: Build (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        qmake PRESET=osx_dist INCLUDEPATH+=/opt/homebrew/include QMAKE_LIBDIR+=/opt/homebrew/lib
+        make -j$(sysctl -n hw.ncpu)
+
+    # --- WINDOWS ---
+    - name: Dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        vcpkg install gsl:x64-windows
+        echo "GSL_ROOT=$VCPKG_INSTALLATION_ROOT/installed/x64-windows" >> $GITHUB_ENV
+
+    - name: Set up MSVC (Windows)
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Build (Windows)
+      if: runner.os == 'Windows'
+      shell: cmd
+      run: |
+        qmake PRESET=win32 INCLUDEPATH+="%GSL_ROOT%/include" LIBS+="-L%GSL_ROOT%/lib gsl.lib gslcblas.lib"
+        nmake
