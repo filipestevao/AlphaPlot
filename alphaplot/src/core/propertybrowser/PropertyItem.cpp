@@ -30,6 +30,7 @@
 #include "3Dplot/Layout3D.h"
 #include "3Dplot/Scatter3D.h"
 #include "3Dplot/Surface3D.h"
+#include "3Dplot/DataManager3D.h"
 #include "ApplicationWindow.h"
 #include "CustomWidgets.h"
 #include "Matrix.h"
@@ -136,6 +137,13 @@ PropertyItem::PropertyItem(PropertyItem *parent, ObjectBrowserTreeItem *item,
     case PropertyItem::Property::Plot3DAxisVal_Label_Separator:
     case PropertyItem::Property::Plot3DAxisCat_Base_Separator:
     case PropertyItem::Property::Plot3DAxisCat_Label_Separator:
+    case PropertyItem::Property::Plot3DScatter_Base_Separator:
+    case PropertyItem::Property::Plot3DScatterDB_Base_Separator:
+    case PropertyItem::Property::Plot3DBar_Base_Separator:
+    case PropertyItem::Property::Plot3DBar_Spacing_Separator:
+    case PropertyItem::Property::Plot3DBarDB_Base_Separator:
+    case PropertyItem::Property::Plot3DSurface_Base_Separator:
+    case PropertyItem::Property::Plot3DSurfaceDB_Base_Separator:
       propertytype_ = PropertyItem::PropertyType::Separator;
       break;
     case PropertyItem::Property::None:
@@ -297,6 +305,16 @@ PropertyItem::PropertyItem(PropertyItem *parent, ObjectBrowserTreeItem *item,
     case PropertyItem::Property::Plot3DAxisCat_TickLabel_Rotation:
     case PropertyItem::Property::Plot3DAxisCat_From:
     case PropertyItem::Property::Plot3DAxisCat_To:
+    case PropertyItem::Property::Plot3DScatter_AspectRatio:
+    case PropertyItem::Property::Plot3DScatter_HorizontalAspectRatio:
+    case PropertyItem::Property::Plot3DScatterDB_Size:
+    case PropertyItem::Property::Plot3DBar_AspectRatio:
+    case PropertyItem::Property::Plot3DBar_HorizontalAspectRatio:
+    case PropertyItem::Property::Plot3DBar_SpacingX:
+    case PropertyItem::Property::Plot3DBar_SpacingY:
+    case PropertyItem::Property::Plot3DBar_Thickness:
+    case PropertyItem::Property::Plot3DSurface_AspectRatio:
+    case PropertyItem::Property::Plot3DSurface_HorizontalAspectRatio:
       propertytype_ = PropertyItem::PropertyType::Double;
       break;
     case PropertyItem::Property::Plot2DAxis_From_Double:
@@ -373,6 +391,21 @@ PropertyItem::PropertyItem(PropertyItem *parent, ObjectBrowserTreeItem *item,
     case PropertyItem::Property::Plot3DAxisCat_Inverted:
     case PropertyItem::Property::Plot3DAxisCat_Label_Visible:
     case PropertyItem::Property::Plot3DAxisCat_Label_Fixed:
+    case PropertyItem::Property::Plot3DScatter_OrthoProjection:
+    case PropertyItem::Property::Plot3DScatter_Polar:
+    case PropertyItem::Property::Plot3DScatterDB_Visible:
+    case PropertyItem::Property::Plot3DScatterDB_MeshSmooth:
+    case PropertyItem::Property::Plot3DBar_OrthoProjection:
+    case PropertyItem::Property::Plot3DBar_Polar:
+    case PropertyItem::Property::Plot3DBar_RelativeSpacing:
+    case PropertyItem::Property::Plot3DBarDB_Visible:
+    case PropertyItem::Property::Plot3DBarDB_MeshSmooth:
+    case PropertyItem::Property::Plot3DSurface_FlipHorizontalGrid:
+    case PropertyItem::Property::Plot3DSurface_OrthoProjection:
+    case PropertyItem::Property::Plot3DSurface_Polar:
+    case PropertyItem::Property::Plot3DSurfaceDB_Visible:
+    case PropertyItem::Property::Plot3DSurfaceDB_FlatShading:
+    case PropertyItem::Property::Plot3DSurfaceDB_MeshSmooth:
       propertytype_ = PropertyItem::PropertyType::Bool;
       break;
     case PropertyItem::Property::Plot2DLayout_FillStyle:
@@ -466,6 +499,16 @@ PropertyItem::PropertyItem(PropertyItem *parent, ObjectBrowserTreeItem *item,
     case PropertyItem::Property::Plot2DErrBar_Stroke_Style:
     case PropertyItem::Property::Plot2DErrBar_Fill_Style:
     case PropertyItem::Property::Plot3DCanvas_Theme:
+    case PropertyItem::Property::Plot3DScatter_ShadowQuality:
+    case PropertyItem::Property::Plot3DScatterDB_ColorStyle:
+    case PropertyItem::Property::Plot3DScatterDB_GradientColor:
+    case PropertyItem::Property::Plot3DBar_ShadowQuality:
+    case PropertyItem::Property::Plot3DBarDB_ColorStyle:
+    case PropertyItem::Property::Plot3DBarDB_GradientColor:
+    case PropertyItem::Property::Plot3DSurface_ShadowQuality:
+    case PropertyItem::Property::Plot3DSurfaceDB_DrawMode:
+    case PropertyItem::Property::Plot3DSurfaceDB_ColorStyle:
+    case PropertyItem::Property::Plot3DSurfaceDB_GradientColor:
       propertytype_ = PropertyItem::PropertyType::Enum;
       break;
     case PropertyItem::Property::Plot2DCanvas_Background:
@@ -529,6 +572,12 @@ PropertyItem::PropertyItem(PropertyItem *parent, ObjectBrowserTreeItem *item,
     case PropertyItem::Property::Plot3DTheme_Grid_Color:
     case PropertyItem::Property::Plot3DTheme_Label_Background_Color:
     case PropertyItem::Property::Plot3DTheme_Label_Color:
+    case PropertyItem::Property::Plot3DScatterDB_SolidColor:
+    case PropertyItem::Property::Plot3DScatterDB_HighlightColor:
+    case PropertyItem::Property::Plot3DBarDB_SolidColor:
+    case PropertyItem::Property::Plot3DBarDB_HighlightColor:
+    case PropertyItem::Property::Plot3DSurfaceDB_SolidColor:
+    case PropertyItem::Property::Plot3DSurfaceDB_HighlightColor:
       propertytype_ = PropertyItem::PropertyType::Color;
       break;
     case PropertyItem::Property::Plot2DLegend_Font:
@@ -2896,15 +2945,192 @@ PropertyItem::Pair PropertyItem::value() const {
           break;
       }
     } break;
-    // Plot3D Surface / Bar / Scatter (no properties shown yet)
-    case ObjectBrowserTreeItem::ObjectType::Plot3DSurface:
-    case ObjectBrowserTreeItem::ObjectType::Plot3DBar:
-    case ObjectBrowserTreeItem::ObjectType::Plot3DScatter:
-    case ObjectBrowserTreeItem::ObjectType::Plot3DSurfaceDataBlock:
-    case ObjectBrowserTreeItem::ObjectType::Plot3DBarDataBlock:
-    case ObjectBrowserTreeItem::ObjectType::Plot3DScatterDataBlock:
-      break;
+    // Plot3D Scatter
+    case ObjectBrowserTreeItem::ObjectType::Plot3DScatter: {
+      Scatter3D *scatter = item_->getObjectTreeItem<Scatter3D>(&status);
+      if (!status) break;
+      QAbstract3DGraph *graph = scatter->getGraph();
+      switch (property_) {
+        case PropertyItem::Property::Plot3DScatter_Base_Separator:
+          return Pair(tr("Scatter"), QString());
+        case PropertyItem::Property::Plot3DScatter_AspectRatio:
+          return Pair(tr("Aspect Ratio"),
+                      static_cast<double>(graph->aspectRatio()));
+        case PropertyItem::Property::Plot3DScatter_HorizontalAspectRatio:
+          return Pair(tr("Horizontal Aspect Ratio"),
+                      static_cast<double>(graph->horizontalAspectRatio()));
+        case PropertyItem::Property::Plot3DScatter_ShadowQuality:
+          return Pair(tr("Shadow Quality"),
+                      static_cast<int>(graph->shadowQuality()));
+        case PropertyItem::Property::Plot3DScatter_OrthoProjection:
+          return Pair(tr("Ortho Projection"), graph->isOrthoProjection());
+        case PropertyItem::Property::Plot3DScatter_Polar:
+          return Pair(tr("Polar Coords"), graph->isPolar());
+        default:
+          break;
+      }
+    } break;
+    // Plot3D Scatter DataBlock
+    case ObjectBrowserTreeItem::ObjectType::Plot3DScatterDataBlock: {
+      DataBlockScatter3D *block =
+          item_->getObjectTreeItem<DataBlockScatter3D>(&status);
+      if (!status) break;
+      QScatter3DSeries *series = block->getdataseries();
+      switch (property_) {
+        case PropertyItem::Property::Plot3DScatterDB_Base_Separator:
+          return Pair(tr("Series"), QString());
+        case PropertyItem::Property::Plot3DScatterDB_Visible:
+          return Pair(tr("Visible"), series->isVisible());
+        case PropertyItem::Property::Plot3DScatterDB_Size:
+          return Pair(tr("Size"), static_cast<double>(series->itemSize()));
+        case PropertyItem::Property::Plot3DScatterDB_MeshSmooth:
+          return Pair(tr("Mesh Smooth"), series->isMeshSmooth());
+        case PropertyItem::Property::Plot3DScatterDB_ColorStyle:
+          return Pair(tr("Color Style"),
+                      static_cast<int>(series->colorStyle()));
+        case PropertyItem::Property::Plot3DScatterDB_SolidColor:
+          return Pair(tr("Color"), series->baseColor());
+        case PropertyItem::Property::Plot3DScatterDB_GradientColor:
+          return Pair(tr("Gradient Color"),
+                      static_cast<int>(block->getgradient()));
+        case PropertyItem::Property::Plot3DScatterDB_HighlightColor:
+          return Pair(tr("Highlight Color"), series->singleHighlightColor());
+        default:
+          break;
+      }
+    } break;
+    // Plot3D Bar
+    case ObjectBrowserTreeItem::ObjectType::Plot3DBar: {
+      Bar3D *bar = item_->getObjectTreeItem<Bar3D>(&status);
+      if (!status) break;
+      Q3DBars *graph = bar->getGraph();
+      switch (property_) {
+        case PropertyItem::Property::Plot3DBar_Base_Separator:
+          return Pair(tr("Bar"), QString());
+        case PropertyItem::Property::Plot3DBar_AspectRatio:
+          return Pair(tr("Aspect Ratio"),
+                      static_cast<double>(graph->aspectRatio()));
+        case PropertyItem::Property::Plot3DBar_HorizontalAspectRatio:
+          return Pair(tr("Horizontal Aspect Ratio"),
+                      static_cast<double>(graph->horizontalAspectRatio()));
+        case PropertyItem::Property::Plot3DBar_ShadowQuality:
+          return Pair(tr("Shadow Quality"),
+                      static_cast<int>(graph->shadowQuality()));
+        case PropertyItem::Property::Plot3DBar_OrthoProjection:
+          return Pair(tr("Ortho Projection"), graph->isOrthoProjection());
+        case PropertyItem::Property::Plot3DBar_Polar:
+          return Pair(tr("Polar Coords"), graph->isPolar());
+        case PropertyItem::Property::Plot3DBar_Spacing_Separator:
+          return Pair(tr("Spacing"), QString());
+        case PropertyItem::Property::Plot3DBar_RelativeSpacing:
+          return Pair(tr("Relative Spacing"), graph->isBarSpacingRelative());
+        case PropertyItem::Property::Plot3DBar_SpacingX:
+          return Pair(tr("Spacing X"),
+                      static_cast<double>(graph->barSpacing().width()));
+        case PropertyItem::Property::Plot3DBar_SpacingY:
+          return Pair(tr("Spacing Y"),
+                      static_cast<double>(graph->barSpacing().height()));
+        case PropertyItem::Property::Plot3DBar_Thickness:
+          return Pair(tr("Bar Thickness"),
+                      static_cast<double>(graph->barThickness()));
+        default:
+          break;
+      }
+    } break;
+    // Plot3D Bar DataBlock
+    case ObjectBrowserTreeItem::ObjectType::Plot3DBarDataBlock: {
+      DataBlockBar3D *block =
+          item_->getObjectTreeItem<DataBlockBar3D>(&status);
+      if (!status) break;
+      QBar3DSeries *series = block->getdataseries();
+      switch (property_) {
+        case PropertyItem::Property::Plot3DBarDB_Base_Separator:
+          return Pair(tr("Series"), QString());
+        case PropertyItem::Property::Plot3DBarDB_Visible:
+          return Pair(tr("Visible"), series->isVisible());
+        case PropertyItem::Property::Plot3DBarDB_MeshSmooth:
+          return Pair(tr("Mesh Smooth"), series->isMeshSmooth());
+        case PropertyItem::Property::Plot3DBarDB_ColorStyle:
+          return Pair(tr("Color Style"),
+                      static_cast<int>(series->colorStyle()));
+        case PropertyItem::Property::Plot3DBarDB_SolidColor:
+          return Pair(tr("Color"), series->baseColor());
+        case PropertyItem::Property::Plot3DBarDB_GradientColor:
+          return Pair(tr("Gradient Color"),
+                      static_cast<int>(block->getgradient()));
+        case PropertyItem::Property::Plot3DBarDB_HighlightColor:
+          return Pair(tr("Highlight Color"), series->singleHighlightColor());
+        default:
+          break;
+      }
+    } break;
+    // Plot3D Surface
+    case ObjectBrowserTreeItem::ObjectType::Plot3DSurface: {
+      Surface3D *surface = item_->getObjectTreeItem<Surface3D>(&status);
+      if (!status) break;
+      Q3DSurface *graph = surface->getGraph();
+      switch (property_) {
+        case PropertyItem::Property::Plot3DSurface_Base_Separator:
+          return Pair(tr("Surface"), QString());
+        case PropertyItem::Property::Plot3DSurface_AspectRatio:
+          return Pair(tr("Aspect Ratio"),
+                      static_cast<double>(graph->aspectRatio()));
+        case PropertyItem::Property::Plot3DSurface_HorizontalAspectRatio:
+          return Pair(tr("Horizontal Aspect Ratio"),
+                      static_cast<double>(graph->horizontalAspectRatio()));
+        case PropertyItem::Property::Plot3DSurface_ShadowQuality:
+          return Pair(tr("Shadow Quality"),
+                      static_cast<int>(graph->shadowQuality()));
+        case PropertyItem::Property::Plot3DSurface_FlipHorizontalGrid:
+          return Pair(tr("Flip Horizontal Grid"),
+                      graph->flipHorizontalGrid());
+        case PropertyItem::Property::Plot3DSurface_OrthoProjection:
+          return Pair(tr("Ortho Projection"), graph->isOrthoProjection());
+        case PropertyItem::Property::Plot3DSurface_Polar:
+          return Pair(tr("Polar Coords"), graph->isPolar());
+        default:
+          break;
+      }
+    } break;
+    // Plot3D Surface DataBlock
+    case ObjectBrowserTreeItem::ObjectType::Plot3DSurfaceDataBlock: {
+      DataBlockSurface3D *block =
+          item_->getObjectTreeItem<DataBlockSurface3D>(&status);
+      if (!status) break;
+      QSurface3DSeries *series = block->getdataseries();
+      switch (property_) {
+        case PropertyItem::Property::Plot3DSurfaceDB_Base_Separator:
+          return Pair(tr("Series"), QString());
+        case PropertyItem::Property::Plot3DSurfaceDB_Visible:
+          return Pair(tr("Visible"), series->isVisible());
+        case PropertyItem::Property::Plot3DSurfaceDB_FlatShading:
+          return Pair(tr("Flat Shading"), series->isFlatShadingEnabled());
+        case PropertyItem::Property::Plot3DSurfaceDB_DrawMode: {
+          int mode = 0;
+          auto dm = series->drawMode();
+          if (dm == QSurface3DSeries::DrawSurface) mode = 0;
+          else if (dm == QSurface3DSeries::DrawWireframe) mode = 1;
+          else mode = 2;
+          return Pair(tr("Draw Mode"), mode);
+        }
+        case PropertyItem::Property::Plot3DSurfaceDB_MeshSmooth:
+          return Pair(tr("Mesh Smooth"), series->isMeshSmooth());
+        case PropertyItem::Property::Plot3DSurfaceDB_ColorStyle:
+          return Pair(tr("Color Style"),
+                      static_cast<int>(series->colorStyle()));
+        case PropertyItem::Property::Plot3DSurfaceDB_SolidColor:
+          return Pair(tr("Color"), series->baseColor());
+        case PropertyItem::Property::Plot3DSurfaceDB_GradientColor:
+          return Pair(tr("Gradient Color"),
+                      static_cast<int>(block->getgradient()));
+        case PropertyItem::Property::Plot3DSurfaceDB_HighlightColor:
+          return Pair(tr("Highlight Color"), series->singleHighlightColor());
+        default:
+          break;
+      }
+    } break;
   }
+
   return Pair(QString(), QVariant());
 }
 
@@ -4173,6 +4399,64 @@ void PropertyItem::setDoubleValue(const double &val) {
         if (val > axis->min()) axis->setMax(val);
       }
     } break;
+    // Plot3D Scatter graph
+    case PropertyItem::Property::Plot3DScatter_AspectRatio: {
+      Scatter3D *scatter = item_->getObjectTreeItem<Scatter3D>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status)
+        scatter->getGraph()->setAspectRatio(val);
+    } break;
+    case PropertyItem::Property::Plot3DScatter_HorizontalAspectRatio: {
+      Scatter3D *scatter = item_->getObjectTreeItem<Scatter3D>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status)
+        scatter->getGraph()->setHorizontalAspectRatio(val);
+    } break;
+    case PropertyItem::Property::Plot3DScatterDB_Size: {
+      DataBlockScatter3D *block =
+          item_->getObjectTreeItem<DataBlockScatter3D>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status)
+        block->getdataseries()->setItemSize(static_cast<float>(val));
+    } break;
+    // Plot3D Bar graph
+    case PropertyItem::Property::Plot3DBar_AspectRatio: {
+      Bar3D *bar = item_->getObjectTreeItem<Bar3D>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status)
+        bar->getGraph()->setAspectRatio(val);
+    } break;
+    case PropertyItem::Property::Plot3DBar_HorizontalAspectRatio: {
+      Bar3D *bar = item_->getObjectTreeItem<Bar3D>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status)
+        bar->getGraph()->setHorizontalAspectRatio(val);
+    } break;
+    case PropertyItem::Property::Plot3DBar_SpacingX: {
+      Bar3D *bar = item_->getObjectTreeItem<Bar3D>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status) {
+        QSizeF sp = bar->getGraph()->barSpacing();
+        bar->getGraph()->setBarSpacing(QSizeF(val, sp.height()));
+      }
+    } break;
+    case PropertyItem::Property::Plot3DBar_SpacingY: {
+      Bar3D *bar = item_->getObjectTreeItem<Bar3D>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status) {
+        QSizeF sp = bar->getGraph()->barSpacing();
+        bar->getGraph()->setBarSpacing(QSizeF(sp.width(), val));
+      }
+    } break;
+    case PropertyItem::Property::Plot3DBar_Thickness: {
+      Bar3D *bar = item_->getObjectTreeItem<Bar3D>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status)
+        bar->getGraph()->setBarThickness(static_cast<float>(val));
+    } break;
+    // Plot3D Surface graph
+    case PropertyItem::Property::Plot3DSurface_AspectRatio: {
+      Surface3D *surface = item_->getObjectTreeItem<Surface3D>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status)
+        surface->getGraph()->setAspectRatio(val);
+    } break;
+    case PropertyItem::Property::Plot3DSurface_HorizontalAspectRatio: {
+      Surface3D *surface = item_->getObjectTreeItem<Surface3D>(&status);
+      if (!Utilities::isSameDouble(val, PropertyData<double>()) && status)
+        surface->getGraph()->setHorizontalAspectRatio(val);
+    } break;
     default:
       break;
   }
@@ -4695,6 +4979,88 @@ void PropertyItem::setBoolValue(const bool &val) {
     case PropertyItem::Property::Plot3DAxisCat_Label_Fixed: {
       QCategory3DAxis *axis = item_->getObjectTreeItem<QCategory3DAxis>(&status);
       if (val != PropertyData<bool>() && status) axis->setTitleFixed(val);
+    } break;
+    // Plot3D Scatter
+    case PropertyItem::Property::Plot3DScatter_OrthoProjection: {
+      Scatter3D *scatter = item_->getObjectTreeItem<Scatter3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        scatter->getGraph()->setOrthoProjection(val);
+    } break;
+    case PropertyItem::Property::Plot3DScatter_Polar: {
+      Scatter3D *scatter = item_->getObjectTreeItem<Scatter3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        scatter->getGraph()->setPolar(val);
+    } break;
+    case PropertyItem::Property::Plot3DScatterDB_Visible: {
+      DataBlockScatter3D *block =
+          item_->getObjectTreeItem<DataBlockScatter3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        block->getdataseries()->setVisible(val);
+    } break;
+    case PropertyItem::Property::Plot3DScatterDB_MeshSmooth: {
+      DataBlockScatter3D *block =
+          item_->getObjectTreeItem<DataBlockScatter3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        block->getdataseries()->setMeshSmooth(val);
+    } break;
+    // Plot3D Bar
+    case PropertyItem::Property::Plot3DBar_OrthoProjection: {
+      Bar3D *bar = item_->getObjectTreeItem<Bar3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        bar->getGraph()->setOrthoProjection(val);
+    } break;
+    case PropertyItem::Property::Plot3DBar_Polar: {
+      Bar3D *bar = item_->getObjectTreeItem<Bar3D>(&status);
+      if (val != PropertyData<bool>() && status) bar->getGraph()->setPolar(val);
+    } break;
+    case PropertyItem::Property::Plot3DBar_RelativeSpacing: {
+      Bar3D *bar = item_->getObjectTreeItem<Bar3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        bar->getGraph()->setBarSpacingRelative(val);
+    } break;
+    case PropertyItem::Property::Plot3DBarDB_Visible: {
+      DataBlockBar3D *block = item_->getObjectTreeItem<DataBlockBar3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        block->getdataseries()->setVisible(val);
+    } break;
+    case PropertyItem::Property::Plot3DBarDB_MeshSmooth: {
+      DataBlockBar3D *block = item_->getObjectTreeItem<DataBlockBar3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        block->getdataseries()->setMeshSmooth(val);
+    } break;
+    // Plot3D Surface
+    case PropertyItem::Property::Plot3DSurface_FlipHorizontalGrid: {
+      Surface3D *surface = item_->getObjectTreeItem<Surface3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        surface->getGraph()->setFlipHorizontalGrid(val);
+    } break;
+    case PropertyItem::Property::Plot3DSurface_OrthoProjection: {
+      Surface3D *surface = item_->getObjectTreeItem<Surface3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        surface->getGraph()->setOrthoProjection(val);
+    } break;
+    case PropertyItem::Property::Plot3DSurface_Polar: {
+      Surface3D *surface = item_->getObjectTreeItem<Surface3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        surface->getGraph()->setPolar(val);
+    } break;
+    case PropertyItem::Property::Plot3DSurfaceDB_Visible: {
+      DataBlockSurface3D *block =
+          item_->getObjectTreeItem<DataBlockSurface3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        block->getdataseries()->setVisible(val);
+    } break;
+    case PropertyItem::Property::Plot3DSurfaceDB_FlatShading: {
+      DataBlockSurface3D *block =
+          item_->getObjectTreeItem<DataBlockSurface3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        block->getdataseries()->setFlatShadingEnabled(val);
+    } break;
+    case PropertyItem::Property::Plot3DSurfaceDB_MeshSmooth: {
+      DataBlockSurface3D *block =
+          item_->getObjectTreeItem<DataBlockSurface3D>(&status);
+      if (val != PropertyData<bool>() && status)
+        block->getdataseries()->setMeshSmooth(val);
     } break;
     default:
       break;
@@ -5526,6 +5892,80 @@ void PropertyItem::setEnumValue(const int &val) {
         plot->activeTheme()->setType(static_cast<Q3DTheme::Theme>(val));
       }
     } break;
+    // Plot3D Scatter
+    case PropertyItem::Property::Plot3DScatter_ShadowQuality: {
+      Scatter3D *scatter = item_->getObjectTreeItem<Scatter3D>(&status);
+      if (val != PropertyData<int>() && status)
+        scatter->getGraph()->setShadowQuality(
+            static_cast<QAbstract3DGraph::ShadowQuality>(val));
+    } break;
+    case PropertyItem::Property::Plot3DScatterDB_ColorStyle: {
+      DataBlockScatter3D *block =
+          item_->getObjectTreeItem<DataBlockScatter3D>(&status);
+      if (val != PropertyData<int>() && status)
+        block->getdataseries()->setColorStyle(
+            static_cast<Q3DTheme::ColorStyle>(val));
+    } break;
+    case PropertyItem::Property::Plot3DScatterDB_GradientColor: {
+      DataBlockScatter3D *block =
+          item_->getObjectTreeItem<DataBlockScatter3D>(&status);
+      if (val != PropertyData<int>() && status)
+        block->setgradient(block->getdataseries(),
+                           static_cast<Graph3DCommon::Gradient>(val));
+    } break;
+    // Plot3D Bar
+    case PropertyItem::Property::Plot3DBar_ShadowQuality: {
+      Bar3D *bar = item_->getObjectTreeItem<Bar3D>(&status);
+      if (val != PropertyData<int>() && status)
+        bar->getGraph()->setShadowQuality(
+            static_cast<QAbstract3DGraph::ShadowQuality>(val));
+    } break;
+    case PropertyItem::Property::Plot3DBarDB_ColorStyle: {
+      DataBlockBar3D *block = item_->getObjectTreeItem<DataBlockBar3D>(&status);
+      if (val != PropertyData<int>() && status)
+        block->getdataseries()->setColorStyle(
+            static_cast<Q3DTheme::ColorStyle>(val));
+    } break;
+    case PropertyItem::Property::Plot3DBarDB_GradientColor: {
+      DataBlockBar3D *block = item_->getObjectTreeItem<DataBlockBar3D>(&status);
+      if (val != PropertyData<int>() && status)
+        block->setgradient(block->getdataseries(),
+                           static_cast<Graph3DCommon::Gradient>(val));
+    } break;
+    // Plot3D Surface
+    case PropertyItem::Property::Plot3DSurface_ShadowQuality: {
+      Surface3D *surface = item_->getObjectTreeItem<Surface3D>(&status);
+      if (val != PropertyData<int>() && status)
+        surface->getGraph()->setShadowQuality(
+            static_cast<QAbstract3DGraph::ShadowQuality>(val));
+    } break;
+    case PropertyItem::Property::Plot3DSurfaceDB_DrawMode: {
+      DataBlockSurface3D *block =
+          item_->getObjectTreeItem<DataBlockSurface3D>(&status);
+      if (val != PropertyData<int>() && status) {
+        if (val == 0)
+          block->getdataseries()->setDrawMode(QSurface3DSeries::DrawSurface);
+        else if (val == 1)
+          block->getdataseries()->setDrawMode(QSurface3DSeries::DrawWireframe);
+        else
+          block->getdataseries()->setDrawMode(
+              QSurface3DSeries::DrawSurfaceAndWireframe);
+      }
+    } break;
+    case PropertyItem::Property::Plot3DSurfaceDB_ColorStyle: {
+      DataBlockSurface3D *block =
+          item_->getObjectTreeItem<DataBlockSurface3D>(&status);
+      if (val != PropertyData<int>() && status)
+        block->getdataseries()->setColorStyle(
+            static_cast<Q3DTheme::ColorStyle>(val));
+    } break;
+    case PropertyItem::Property::Plot3DSurfaceDB_GradientColor: {
+      DataBlockSurface3D *block =
+          item_->getObjectTreeItem<DataBlockSurface3D>(&status);
+      if (val != PropertyData<int>() && status)
+        block->setgradient(block->getdataseries(),
+                           static_cast<Graph3DCommon::Gradient>(val));
+    } break;
     default:
       break;
   }
@@ -5996,6 +6436,43 @@ void PropertyItem::setColorValue(const QColor &val) {
       Q3DTheme *theme = item_->getObjectTreeItem<Q3DTheme>(&status);
       if (val != PropertyData<QColor>() && status)
         theme->setLabelTextColor(val);
+    } break;
+    // Plot3D Scatter
+    case PropertyItem::Property::Plot3DScatterDB_SolidColor: {
+      DataBlockScatter3D *block =
+          item_->getObjectTreeItem<DataBlockScatter3D>(&status);
+      if (val != PropertyData<QColor>() && status)
+        block->getdataseries()->setBaseColor(val);
+    } break;
+    case PropertyItem::Property::Plot3DScatterDB_HighlightColor: {
+      DataBlockScatter3D *block =
+          item_->getObjectTreeItem<DataBlockScatter3D>(&status);
+      if (val != PropertyData<QColor>() && status)
+        block->getdataseries()->setSingleHighlightColor(val);
+    } break;
+    // Plot3D Bar
+    case PropertyItem::Property::Plot3DBarDB_SolidColor: {
+      DataBlockBar3D *block = item_->getObjectTreeItem<DataBlockBar3D>(&status);
+      if (val != PropertyData<QColor>() && status)
+        block->getdataseries()->setBaseColor(val);
+    } break;
+    case PropertyItem::Property::Plot3DBarDB_HighlightColor: {
+      DataBlockBar3D *block = item_->getObjectTreeItem<DataBlockBar3D>(&status);
+      if (val != PropertyData<QColor>() && status)
+        block->getdataseries()->setSingleHighlightColor(val);
+    } break;
+    // Plot3D Surface
+    case PropertyItem::Property::Plot3DSurfaceDB_SolidColor: {
+      DataBlockSurface3D *block =
+          item_->getObjectTreeItem<DataBlockSurface3D>(&status);
+      if (val != PropertyData<QColor>() && status)
+        block->getdataseries()->setBaseColor(val);
+    } break;
+    case PropertyItem::Property::Plot3DSurfaceDB_HighlightColor: {
+      DataBlockSurface3D *block =
+          item_->getObjectTreeItem<DataBlockSurface3D>(&status);
+      if (val != PropertyData<QColor>() && status)
+        block->getdataseries()->setSingleHighlightColor(val);
     } break;
     default:
       break;
