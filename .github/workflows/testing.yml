@@ -68,5 +68,9 @@ jobs:
       if: runner.os == 'Windows'
       shell: cmd
       run: |
-        qmake "QMAKE_MSC_VER=1939" "QMAKE_CXX_COMPILER_MACROS="
+        cl
+        qmake -v
+        qmake -query
+        qmake
+        nmake /version
         nmake
