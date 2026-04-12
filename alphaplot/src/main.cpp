@@ -18,7 +18,9 @@
 */
 
 #include <QApplication>
+#include <QMessageBox>
 #include <QSplashScreen>
+#include <QThread>
 #include <QTimer>
 #include <QtGlobal>
 #include <typeinfo>

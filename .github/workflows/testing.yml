@@ -71,6 +71,6 @@ jobs:
         cl
         qmake -v
         qmake -query
-        qmake
-        nmake /version
+        set
+        qmake PRESET=win32
         nmake
