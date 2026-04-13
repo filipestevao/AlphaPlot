@@ -155,7 +155,7 @@ void PlotWizard::accept() {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
       QStringList lst = text.split(",", Qt::SkipEmptyParts);
 #else
-      QStringList lst = text.split(",", QString::SkipEmptyParts);
+      QStringList lst = text.split(",", Qt::SkipEmptyParts);
 #endif
       lst.pop_back();
       QString master_curve = lst.join(",");

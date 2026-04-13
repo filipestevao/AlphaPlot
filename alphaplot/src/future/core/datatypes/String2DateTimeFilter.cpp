@@ -67,9 +67,9 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
     strings = strings.at(0).split(" ", Qt::SkipEmptyParts);
 #else
   QStringList strings =
-      input_value.simplified().split(",", QString::SkipEmptyParts);
+      input_value.simplified().split(",", Qt::SkipEmptyParts);
   if (strings.size() == 1)
-    strings = strings.at(0).split(" ", QString::SkipEmptyParts);
+    strings = strings.at(0).split(" ", Qt::SkipEmptyParts);
 #endif
 
   if (strings.size() < 1)

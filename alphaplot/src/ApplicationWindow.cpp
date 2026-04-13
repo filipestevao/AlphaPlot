@@ -3315,7 +3315,7 @@ void ApplicationWindow::loadSettings() {
 // Follows an ugly hack to fix Qt4 porting issues (only needed on Windows)
 #ifdef Q_OS_WIN
   if (!recentProjects.isEmpty() && recentProjects[0].contains("^e"))
-    recentProjects = recentProjects[0].split("^e", QString::SkipEmptyParts);
+    recentProjects = recentProjects[0].split("^e", Qt::SkipEmptyParts);
   else if (recentProjects.count() == 1) {
     QString s = recentProjects[0];
     if (s.remove(QRegularExpression("\\s")).isEmpty()) recentProjects = QStringList();

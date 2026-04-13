@@ -116,7 +116,7 @@ void AssociationsDialog::changePlotAssociation(int curve, const QString &text) {
 
    if (c->plotAssociation() == text) return;
 
-   QStringList lst = text.split(",", QString::SkipEmptyParts);
+   QStringList lst = text.split(",", Qt::SkipEmptyParts);
    if (lst.count() == 2) {
      c->setXColumnName(lst[0].remove("(X)"));
      c->setTitle(lst[1].remove("(Y)"));

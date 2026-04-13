@@ -24,7 +24,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: '6.8.2'
+        version: '6.8.6'
         modules: 'qtdatavis3d qt5compat qtshadertools'
         arch: ${{ runner.os == 'Windows' && 'win64_msvc2022_64' || '' }}
 
