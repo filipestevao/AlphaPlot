@@ -20,9 +20,12 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QSplashScreen>
+#include <QSysInfo>
 #include <QThread>
 #include <QTimer>
 #include <QtGlobal>
+#include <cstdio>
+#include <cstdlib>
 #include <typeinfo>
 
 #include "ApplicationWindow.h"

@@ -19,6 +19,7 @@
 
 #include "core/IconLoader.h"
 #include "core/Utilities.h"
+#include <QSysInfo>
 #include "globals.h"
 
 About::About(QWidget* parent) : QDialog(parent) {
