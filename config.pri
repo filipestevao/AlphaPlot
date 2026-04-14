@@ -118,7 +118,7 @@ win32: {
     GSL_ROOT_PATH = $$clean_path($$(GSL_ROOT))
     !isEmpty(GSL_ROOT_PATH) {
       INCLUDEPATH  += "$${GSL_ROOT_PATH}/include"
-      LIBS         += "-L$${GSL_ROOT_PATH}/lib" gsl.lib gslcblas.lib
+      LIBS         += "-L$${GSL_ROOT_PATH}/lib" gsl.lib gslcblas.lib opengl32.lib
     } else {
       isEmpty(LIBPATH): LIBPATH = ../3rdparty
       INCLUDEPATH  += "$${LIBPATH}/gsl/include"
