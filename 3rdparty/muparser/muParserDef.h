@@ -57,7 +57,7 @@
 */
 //#define MUP_USE_OPENMP
 
-#if defined(_UNICODE)
+#if defined(_UNICODE) && defined(MUP_USE_UNICODE)
 	/** \brief Definition of the basic parser string type. */
 	#define MUP_STRING_TYPE std::wstring
 
@@ -92,7 +92,7 @@
 
 namespace mu
 {
-#if defined(_UNICODE)
+#if defined(_UNICODE) && defined(MUP_USE_UNICODE)
 
 	/** \brief Encapsulate wcout. */
 	inline std::wostream& console()
