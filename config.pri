@@ -122,8 +122,8 @@ win32: {
     } else {
       isEmpty(LIBPATH): LIBPATH = ../3rdparty
       INCLUDEPATH  += "$${LIBPATH}/gsl/include"
-      LIBS         += "$${LIBPATH}/gsl/lib/libgsl.a"
-      LIBS         += "$${LIBPATH}/gsl/lib/libgslcblas.a"
+      LIBS         += "$${LIBPATH}/gsl/lib/gsl.lib"
+      LIBS         += "$${LIBPATH}/gsl/lib/gslcblas.lib"
     }
   }
 }
