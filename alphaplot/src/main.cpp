@@ -23,6 +23,7 @@
 #include <QSysInfo>
 #include <QThread>
 #include <QTimer>
+#include <QElapsedTimer>
 #include <QtGlobal>
 #include <cstdio>
 #include <cstdlib>
@@ -59,10 +60,6 @@
     General format used through out the project should be
     Google style(clang format) with a line wrap of 80 characters.
 */
-class Delay : public QThread {
- public:
-  static void sleep(unsigned long secs) { QThread::sleep(secs); }
-};
 
 struct Application : public QApplication {
   Application(int& argc, char** argv);
@@ -158,13 +155,17 @@ int main(int argc, char** argv) {
   QPixmap pixmap(":splash/splash.png");
   QSplashScreen* splash = new QSplashScreen(pixmap);
   if (args.count() == 0) {
+    // Close splashscreen after 2 seconds
     splash->show();
-    // Close splashscreen after 3 sec
-    Delay::sleep(3);
+    QElapsedTimer splashTimer;
+    splashTimer.start();
+    while (splashTimer.elapsed() < 2000) {
+      app->processEvents();
+      QThread::msleep(10);
+    }
   }
 
   ApplicationWindow* mw = new ApplicationWindow();
-  // Process more events here before starting app.
   mw->applyUserSettings();
   mw->newTable();
   mw->savedProject();
