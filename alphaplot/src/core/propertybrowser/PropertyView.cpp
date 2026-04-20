@@ -23,3 +23,14 @@ void PropertyView::drawBranches(QPainter *painter, const QRect &rect,
     painter->fillRect(rect, brush);
   }
 }
+
+QItemSelectionModel::SelectionFlags PropertyView::selectionCommand(const QModelIndex & index,
+  const QEvent * event) const {
+  if (index.isValid()) {
+    PropertyItem * item = static_cast < PropertyItem * > (index.internalPointer());
+    if (item && item -> propertyType() == PropertyItem::PropertyType::Separator) {
+      return QItemSelectionModel::NoUpdate;
+    }
+  }
+  return QTreeView::selectionCommand(index, event);
+}
