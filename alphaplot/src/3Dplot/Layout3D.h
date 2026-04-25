@@ -16,7 +16,7 @@ class XmlStreamReader;
 class XmlStreamWriter;
 class Custom3DInteractions;
 class ApplicationWindow;
-using namespace QtDataVisualization;
+
 
 class Layout3D : public MyWidget {
   Q_OBJECT

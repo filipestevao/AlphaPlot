@@ -2,6 +2,8 @@
 ####################### MuParser #############################
 ##############################################################
 
+DEFINES += MUPARSER_STATIC
+
 HEADERS +=  ../3rdparty/muparser/muParser.h \
 	        ../3rdparty/muparser/muParserBase.h \
 	        ../3rdparty/muparser/muParserBytecode.h \

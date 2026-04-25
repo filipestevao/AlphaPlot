@@ -14,7 +14,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -106,7 +106,7 @@ void Table::init() {
   TableView::setTable(d_future_table);
   setMinimumSize(QSize(400, 300));
 
-  birthdate = d_future_table->creationTime().toString(Qt::LocalDate);
+  birthdate = QLocale().toString(d_future_table->creationTime(), QLocale::ShortFormat);
   ui.formula_tab_layout->removeWidget(ui.formula_box);
   delete ui.formula_box;
   ui.formula_box = new ScriptEdit(scriptEnv, ui.formula_tab);
@@ -216,7 +216,7 @@ void Table::setTableBackgroundColor(const QColor &col) {
   QPalette palette = d_view_widget->palette();
   palette.setColor(QPalette::Base, col);
   palette.setColor(QPalette::Window, col);
-  palette.setColor(QPalette::Background, col);
+  palette.setColor(QPalette::Window, col);
   d_view_widget->setPalette(palette);
 }
 
@@ -754,7 +754,7 @@ bool Table::exportASCII(const QString &fname, const QString &separator,
 
   if (withLabels) {
     QStringList header = colNames();
-    QStringList ls = header.filter(QRegExp("\\D"));
+    QStringList ls = header.filter(QRegularExpression("\\D"));
     if (exportSelection) {
       for (i = 1; i < selectedCols; i++) {
         if (ls.count() > 0)
@@ -1052,87 +1052,60 @@ void Table::importASCII(const QString &fname, const QString &sep,
 }
 
 // Scripting Functions
-int Table::rowCount() {
-  if (context()->argumentCount() != 0) {
-    context()->throwError(tr("rowCount() take no arguments!"));
+int Table::rowCount() { return numRows(); }
+
+int Table::colCount() { return numCols(); }
+
+double Table::getCell(int row, int col) {
+  if (row <= 0 || col <= 0) {
+    // context()->throwError(tr("row/col index cannot be 0 or -ve"));
+    return 0.0;
+  } else if (row > numRows()) {
+    // context()->throwError(tr("row index out of range!"));
+    return 0.0;
+  } else if (col > numCols()) {
+    // context()->throwError(tr("col index out of range!"));
+    return 0.0;
   }
-  return numRows();
+  return cell(row - 1, col - 1);
 }
 
-int Table::colCount() {
-  if (context()->argumentCount() != 0) {
-    context()->throwError(tr("colCount() take no arguments!"));
+void Table::setCell(int row, int col, double val) {
+  if (row <= 0 || col <= 0) {
+    // context()->throwError(tr("row/col index cannot be 0 or -ve!"));
+    return;
+  } else if (row > numRows()) {
+    // context()->throwError(tr("row index out of range!"));
+    return;
+  } else if (col > numCols()) {
+    // context()->throwError(tr("col index out of range!"));
+    return;
   }
-  return numCols();
+  setCellValue(row - 1, col - 1, val);
 }
 
-double Table::getCell() {
-  if (context()->argumentCount() != 2 || !context()->argument(0).isNumber() ||
-      !context()->argument(1).isNumber()) {
-    context()->throwError(
-        tr("getCell(intiger<row>, intiger<col>) take two arguments!"));
-  } else if (context()->argument(0).toNumber() <= 0 ||
-             context()->argument(1).toNumber() <= 0) {
-    context()->throwError(tr("row/col index cannot be 0 or -ve"));
-  } else if (context()->argument(0).toNumber() > numRows()) {
-    context()->throwError(tr("row index out of range!"));
-  } else if (context()->argument(1).toNumber() > numCols()) {
-    context()->throwError(tr("col index out of range!"));
+void Table::setRowCount(int rows) {
+  if (rows <= 0) {
+    // context()->throwError(tr("cannot set row count to 0 or -ve!"));
+    return;
   }
-  return cell(context()->argument(0).toInt32() - 1,
-              context()->argument(1).toInt32() - 1);
+  setNumRows(rows);
 }
 
-void Table::setCell() {
-  if (context()->argumentCount() != 3 || !context()->argument(0).isNumber() ||
-      !context()->argument(1).isNumber() ||
-      !context()->argument(2).isNumber()) {
-    context()->throwError(
-        tr("setCell(intiger, intiger, double) take three "
-           "arguments!"));
-  } else if (context()->argument(0).toNumber() <= 0 ||
-             context()->argument(1).toNumber() <= 0) {
-    context()->throwError(tr("row/col index cannot be 0 or -ve!"));
-  } else if (context()->argument(0).toNumber() > numRows()) {
-    context()->throwError(tr("row index out of range!"));
-  } else if (context()->argument(1).toNumber() > numCols()) {
-    context()->throwError(tr("col index out of range!"));
+void Table::setColCount(int cols) {
+  if (cols <= 0) {
+    // context()->throwError(tr("cannot set col count to 0 or -ve!"));
+    return;
   }
-  setCellValue(context()->argument(0).toInt32() - 1,
-               context()->argument(1).toInt32() - 1,
-               context()->argument(2).toInt32());
+  setNumCols(cols);
 }
 
-void Table::setRowCount() {
-  if (context()->argumentCount() != 1 || !context()->argument(0).isNumber()) {
-    context()->throwError(tr("setRowCount(intiger) take one argument!"));
-  } else if (context()->argument(0).toNumber() <= 0) {
-    context()->throwError(tr("cannot set row count to 0 or -ve!"));
-  }
-  setNumRows(context()->argument(0).toInt32());
-}
-
-void Table::setColCount() {
-  if (context()->argumentCount() != 1 || !context()->argument(0).isNumber()) {
-    context()->throwError(tr("setColCount(intiger) take one argument!"));
-  } else if (context()->argument(0).toNumber() <= 0) {
-    context()->throwError(tr("cannot set col count to 0 or -ve!"));
-  }
-  setNumCols(context()->argument(0).toInt32());
-}
-
-void Table::applyFunction() {
-  if (context()->argumentCount() != 2 || !context()->argument(0).isNumber() ||
-      !context()->argument(1).isString()) {
-    context()->throwError(tr("f(string) take one argument!"));
-  }
-
-  selectColumn(context()->argument(0).toInt32() - 1);
-  for (int col = firstSelectedColumn(); col <= lastSelectedColumn(); col++) {
-    Column *col_ptr = column(context()->argument(0).toInt32() - 1);
+void Table::applyFunction(int col, const QString &formula) {
+  selectColumn(col - 1);
+  for (int i = firstSelectedColumn(); i <= lastSelectedColumn(); i++) {
+    Column *col_ptr = column(col - 1);
     col_ptr->insertRows(col_ptr->rowCount(), numRows() - col_ptr->rowCount());
-    col_ptr->setFormula(Interval<int>(0, numRows() - 1),
-                        context()->argument(1).toString());
-    if (!recalculate(col, false)) break;
+    col_ptr->setFormula(Interval<int>(0, numRows() - 1), formula);
+    if (!recalculate(i, false)) break;
   }
 }

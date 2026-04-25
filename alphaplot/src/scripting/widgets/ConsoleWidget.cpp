@@ -20,15 +20,15 @@
 #include <QPainter>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QJSValueIterator>
+#include "ui_ConsoleWidget.h"
 
-#include "../ScriptingFunctions.h"
 #include "scripting/widgets/Console.h"
 #include "ui_ConsoleWidget.h"
 
 ConsoleWidget::ConsoleWidget(QWidget *parent)
     : QDockWidget(parent),
-      engine(new QScriptEngine(this)),
-      debugger(new QScriptEngineDebugger(this)),
+      engine(new QJSEngine(this)),
       ui_(new Ui_ConsoleWidget),
       scriptGlobalObjectsModel(new QStandardItemModel(this)) {
   ui_->setupUi(this);
@@ -53,37 +53,50 @@ ConsoleWidget::ConsoleWidget(QWidget *parent)
   ui_->tableView->setAlternatingRowColors(true);
   addScriptGlobalsToTableView();
 
-  connect(ui_->console, &Console::command, this, &ConsoleWidget::evaluate);
+  connect(ui_->console, SIGNAL(command(QString)), this,
+          SLOT(evaluate(QString)));
 
-  engine->setProcessEventsInterval(50);  // 1 sec process interval
-  // Basic console functions
-  // print() function
-  QScriptValue consoleObjectValue = engine->newQObject(ui_->console);
-  QScriptValue consoleWidgetObjectValue = engine->newQObject(this);
-  QScriptValue printFunction = engine->newFunction(&print);
-  printFunction.setData(consoleObjectValue);
-  engine->globalObject().setProperty("print", printFunction);
-  // clear() function
-  QScriptValue clearFunction = engine->newFunction(&clear);
-  clearFunction.setData(consoleObjectValue);
-  engine->globalObject().setProperty("clear", clearFunction);
-  // collectGarbage() function
-  QScriptValue garbageFunction = engine->newFunction(&collectGarbage);
-  engine->globalObject().setProperty("collectGarbage", garbageFunction);
-  // attachDebugger(bool) function
-  QScriptValue debuggerFunction = engine->newFunction(&attachDebugger);
-  debuggerFunction.setData(consoleWidgetObjectValue);
-  engine->globalObject().setProperty("attachDebugger", debuggerFunction);
+  // In Qt 6, use newQObject() to expose a QObject's Q_INVOKABLE methods to JS.
+  // We expose ConsoleWidget itself as the global 'Console' object.
+  engine->installExtensions(QJSEngine::ConsoleExtension);
+  QJSValue consoleHelper = engine->newQObject(this);
+  engine->globalObject().setProperty("Console", consoleHelper);
+  
+  // Also expose the UI console widget for direct output access
+  QJSValue uiConsole = engine->newQObject(ui_->console);
+  engine->globalObject().setProperty("_console", uiConsole);
+
+  // Inject JS wrapper functions for backward compatibility
+  engine->evaluate(
+    "function print() {\n"
+    "  var args = Array.prototype.slice.call(arguments);\n"
+    "  Console.jsPrint(args.join(' '));\n"
+    "}\n"
+    "function clear() { Console.jsClear(); }\n"
+    "function collectGarbage() { Console.jsCollectGarbage(); }\n"
+    "function attachDebugger(b) { Console.jsAttachDebugger(b); }\n"
+  );
 }
 
 ConsoleWidget::~ConsoleWidget() {
   delete ui_;
   if (engine) delete engine;
-  if (debugger) delete debugger;
 }
 
 void ConsoleWidget::printError(QString err) {
   ui_->console->result("muParser error: " + err, Console::Error);
+}
+
+void ConsoleWidget::jsPrint(const QString &text) {
+  ui_->console->append(text);
+}
+
+void ConsoleWidget::jsClear() {
+  ui_->console->clearConsole();
+}
+
+void ConsoleWidget::jsCollectGarbage() {
+  if (engine) engine->collectGarbage();
 }
 
 void ConsoleWidget::setSplitterPosition(QByteArray state) {
@@ -100,36 +113,34 @@ void ConsoleWidget::addScriptGlobalsToTableView() {
   scriptGlobalObjectsModel->setHorizontalHeaderLabels(QStringList()
                                                       << "variables"
                                                       << "values");
-  QScriptValueIterator it(engine->globalObject());
+  QJSValue globalObj = engine->globalObject();
+  QJSValueIterator it(globalObj);
   while (it.hasNext()) {
     it.next();
-    if (it.value().isArray()) {
-      // Array variables
-      rowPair.first = it.name() + QString("[%0]").arg(
-                                      it.value().property("length").toString());
+    QString name = it.name();
+    QJSValue value = it.value();
+
+    if (value.isArray()) {
+      rowPair.first = name + QString("[%0]").arg(
+                                       value.property("length").toString());
       QString arrayValue;
-      double arrayLength = it.value().property("length").toInteger();
-      for (quint32 i = 0; i < 3; i++) {
-        if (i < arrayLength)
-          arrayValue += it.value().property(i).toString() + " ,";
+      int arrayLength = value.property("length").toInt();
+      for (int j = 0; j < 3; j++) {
+        if (j < arrayLength)
+          arrayValue += value.property(j).toString() + " ,";
       }
-      if (arrayLength > 3) {
-        arrayValue += "...";
-      }
+      if (arrayLength > 3) arrayValue += "...";
       rowPair.second = arrayValue;
       appendRowToTableView(rowPair);
-
-    } else if (!it.value().isFunction() && !it.value().isObject()) {
-      if (it.name() != "NaN" && it.name() != "Infinity" &&
-          it.name() != "undefined") {
-        // Other variables
-        rowPair.first = it.name();
-        rowPair.second = it.value().toString();
+    } else if (!value.isCallable() && !value.isObject()) {
+      if (name != "NaN" && name != "Infinity" && name != "undefined") {
+        rowPair.first = name;
+        rowPair.second = value.toString();
         appendRowToTableView(rowPair);
       }
-    } else if (it.value().isObject() && !it.value().isFunction()) {
-      rowPair.first = it.name();
-      rowPair.second = it.value().toString();
+    } else if (value.isObject() && !value.isCallable()) {
+      rowPair.first = name;
+      rowPair.second = value.toString();
       appendRowToTableView(rowPair);
     }
   }
@@ -144,36 +155,32 @@ void ConsoleWidget::appendRowToTableView(QPair<QString, QString> rowPair) {
 void ConsoleWidget::evaluate(QString line) {
   snippet.append(line);
   snippet += QLatin1Char('\n');
-  if (engine->canEvaluate(snippet)) {
-    QString syntaxError;
-    // Check syntax errors
-    QScriptSyntaxCheckResult error = engine->checkSyntax(snippet);
-    (error.state() != QScriptSyntaxCheckResult::Valid)
-        ? syntaxError += error.errorMessage() + " "
-        : syntaxError = "";
-    QScriptValue result = engine->evaluate(snippet, "line", 1);
-    snippet.clear();
-    if (!result.isUndefined()) {
-      if (!result.isError()) {
-        ui_->console->result(result.toString(), Console::Success);
-      } else {
-        if (engine->hasUncaughtException()) {
-          QStringList backtrace = engine->uncaughtExceptionBacktrace();
-          ui_->console->result(
-              syntaxError + result.toString() + " | " + backtrace.join("\n"),
-              Console::Error);
-        } else {
-          ui_->console->result(syntaxError + result.toString(), Console::Error);
-        }
+  
+  // QJSEngine doesn't have canEvaluate, we'll try to evaluate and check for errors 
+  // but a partial input logic is harder. For now, let's just evaluate.
+  QJSValue result = engine->evaluate(snippet, "line", 1);
+  if (result.isError()) {
+      // If it's a syntax error that looks like partial input, we might want to continue.
+      // But QJSEngine makes this hard.
+      QString msg = result.toString();
+      if (msg.contains("SyntaxError") && (msg.contains("Expected") || msg.contains("Unexpected end of input"))) {
+          // Likely partial input
+          ui_->console->partialResult();
+          return;
       }
-
-    } else {
-      ui_->console->promptWithoutResult();
-    }
-    addScriptGlobalsToTableView();
-  } else {
-    ui_->console->partialResult();
   }
+
+  snippet.clear();
+  if (!result.isUndefined()) {
+    if (!result.isError()) {
+      ui_->console->result(result.toString(), Console::Success);
+    } else {
+      ui_->console->result(result.toString(), Console::Error);
+    }
+  } else {
+    ui_->console->promptWithoutResult();
+  }
+  addScriptGlobalsToTableView();
 }
 
 void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,

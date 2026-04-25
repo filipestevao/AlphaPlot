@@ -12,7 +12,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -27,8 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "AspectPrivate.h"
-
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStringList>
 
 #include "AbstractAspect.h"
@@ -145,12 +144,14 @@ int AbstractAspect::Private::indexOfMatchingBrace(const QString &str,
 
 QString AbstractAspect::Private::caption() const {
   QString result = d_caption_spec;
-  QRegExp magic("%(.)");
-  for (int pos = magic.indexIn(result, 0); pos >= 0;
-       pos = magic.indexIn(result, pos)) {
-    QString replacement = QString();
-    int length = 0;
-    switch (magic.cap(1).at(0).toLatin1()) {
+  QRegularExpression magic("%(.)");
+  int pos = 0;
+  QRegularExpressionMatch m = magic.match(result, pos);
+  while (m.hasMatch()) {
+    pos = m.capturedStart();
+    QString replacement;
+    int length;
+    switch (m.captured(1).at(0).toLatin1()) {
       case '%':
         replacement = "%";
         length = 2;
@@ -172,9 +173,13 @@ QString AbstractAspect::Private::caption() const {
         replacement =
             d_comment.isEmpty() ? "" : result.mid(pos + 3, length - 4);
         break;
+      default:
+        length = 2;
+        break;
     }
     result.replace(pos, length, replacement);
     pos += replacement.size();
+    m = magic.match(result, pos);
   }
   return result;
 }
@@ -202,7 +207,7 @@ QString AbstractAspect::Private::uniqueNameFor(
       base[last_non_digit].category() != QChar::Separator_Space)
     base.append(" ");
 
-  int new_nr = current_name.rightRef(current_name.size() - base.size()).toInt();
+  int new_nr = current_name.right(current_name.size() - base.size()).toInt();
   QString new_name;
   do new_name = base + QString::number(++new_nr);
   while (child_names.contains(new_name));

@@ -4,6 +4,7 @@
 #include <QtDataVisualization/Q3DSurface>
 #include <QtDataVisualization/QHeightMapSurfaceDataProxy>
 #include <QtDataVisualization/QItemModelSurfaceDataProxy>
+#include <QtDataVisualization/QSurface3DSeries>
 
 #include "3Dplot/Graph3DCommon.h"
 
@@ -14,7 +15,7 @@ class DataBlockSurface3D;
 class XmlStreamWriter;
 class XmlStreamReader;
 class ApplicationWindow;
-using namespace QtDataVisualization;
+
 
 class Surface3D : public QObject {
   Q_OBJECT
@@ -30,7 +31,7 @@ class Surface3D : public QObject {
   void setSurfaceMeshType(const QSurface3DSeries::DrawFlag &type,
                           QSurface3DSeries *series);
 
-  QtDataVisualization::QSurface3DSeries::DrawFlag getSurfaceMeshType(
+  QSurface3DSeries::DrawFlag getSurfaceMeshType(
       QSurface3DSeries *series) const;
 
   void setfunctiondata(QList<QPair<QPair<double, double>, double>> *data,

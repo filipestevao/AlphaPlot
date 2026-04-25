@@ -14,7 +14,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -35,7 +35,7 @@
 #include <QHash>
 #include <QMap>
 #include <QVarLengthArray>
-#include <QtScript>
+#include <QVarLengthArray>
 
 #include "MyWidget.h"
 
@@ -49,8 +49,7 @@
  */
 
 class Table : public TableView,
-              public scripted,
-              public QScriptable {
+              public scripted {
   Q_OBJECT
 
  public:
@@ -298,11 +297,11 @@ class Table : public TableView,
  public slots:
   int rowCount();
   int colCount();
-  double getCell();
-  void setCell();
-  void setRowCount();
-  void setColCount();
-  void applyFunction();
+  double getCell(int row, int col);
+  void setCell(int row, int col, double val);
+  void setRowCount(int rows);
+  void setColCount(int cols);
+  void applyFunction(int col, const QString &formula);
 };
 
 Q_DECLARE_METATYPE(Table*);

@@ -47,74 +47,7 @@ int Utilities::getWordSizeApp() {
 #endif
 }
 
-QString Utilities::getOperatingSystem() {
-#if defined(Q_OS_WIN32)
-  switch (QSysInfo::windowsVersion()) {
-    case QSysInfo::WV_NT:
-      return QString("Windows NT");
-    case QSysInfo::WV_2000:
-      return QString("Windows 2000");
-    case QSysInfo::WV_XP:
-      return QString("Windows XP");
-    case QSysInfo::WV_2003:
-      return QString("Windows Server 2003");
-    case QSysInfo::WV_VISTA:
-      return QString("Windows Vista");
-    case QSysInfo::WV_WINDOWS7:
-      return QString("Windows 7");
-    case QSysInfo::WV_WINDOWS8:
-      return QString("Windows 8");
-    case QSysInfo::WV_WINDOWS8_1:
-      return QString("Windows 8.1");
-    case QSysInfo::WV_WINDOWS10:
-      return QString("Windows 10");
-    default:
-      return QString("Windows");
-  }
-#elif defined(Q_OS_MAC)
-  switch (QSysInfo::MacVersion()) {
-    case QSysInfo::MV_10_3:
-      return QString("Mac OS X 10.3");
-    case QSysInfo::MV_10_4:
-      return QString("Mac OS X 10.4");
-    case QSysInfo::MV_10_5:
-      return QString("Mac OS X 10.5");
-    case QSysInfo::MV_10_6:
-      return QString("Mac OS X 10.6");
-    case QSysInfo::MV_10_7:
-      return QString("Mac OS X 10.7");
-    case QSysInfo::MV_10_8:
-      return QString("Mac OS X 10.8");
-    case QSysInfo::MV_10_9:
-      return QString("Mac OS X 10.9");
-    case QSysInfo::MV_10_10:
-      return QString("Mac OS X 10.10");
-    // case QSysInfo::MV_10_11: (mot available in qt4)
-    // return QString("Mac OS X 10.11");
-    default:
-      return QString("Mac OS X");
-  }
-#elif defined(Q_OS_LINUX)
-  QString exe("lsb_release");
-  QStringList args;
-  args << "-ds";
-  QProcess proc;
-  proc.setEnvironment(QProcess::systemEnvironment());
-  proc.start(exe, args);
-  if (proc.waitForStarted() && proc.waitForFinished()) {
-    QByteArray info = proc.readAll();
-    info.replace('\n', "");
-    info.replace("\"", "");
-    return QString(info);
-  }
-
-  return QString("Linux");
-#elif defined(Q_OS_UNIX)
-  return QString("UNIX");
-#else
-  return QString("Unknown");
-#endif
-}
+QString Utilities::getOperatingSystem() { return QSysInfo::prettyProductName(); }
 
 int Utilities::getWordSizeOfOS() {
 #if defined(Q_OS_WIN64)

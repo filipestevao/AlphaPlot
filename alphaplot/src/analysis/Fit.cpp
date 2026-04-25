@@ -12,7 +12,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -222,7 +222,7 @@ void Fit::generateFunction(bool yes, int points) {
 QString Fit::logFitInfo(const std::vector<double> &par, int iterations,
                         int status, const QString &plotName) {
   QDateTime dt = QDateTime::currentDateTime();
-  QString info = "<b>[" + dt.toString(Qt::LocalDate) + "&emsp;" + tr("Plot") +
+  QString info = "<b>[" + QLocale().toString(dt, QLocale::ShortFormat) + "&emsp;" + tr("Plot") +
                  ": ''" + plotName + "'']</b><hr>";
   info += d_explanation + " " + tr("fit of dataset") + ": <br>" +
           "Table: " + associateddata_->table->name() + "<br>" +

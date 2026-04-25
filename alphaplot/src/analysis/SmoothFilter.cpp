@@ -14,7 +14,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -32,6 +32,7 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#include <algorithm>
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_fft_halfcomplex.h>
@@ -345,7 +346,7 @@ void SmoothFilter::smoothSavGol(double *, double *y_inout) {
   gsl_matrix_free(h);
 
   // write result into *y_inout
-  qCopy(result.begin(), result.end(), y_inout);
+  std::copy(result.begin(), result.end(), y_inout);
 }
 
 /**
@@ -436,7 +437,7 @@ void SmoothFilter::smoothModifiedSavGol(double *x_in, double *y_inout) {
   gsl_matrix_free(vandermonde);
 
   // write result into *y_inout
-  qCopy(result.begin(), result.end(), y_inout);
+  std::copy(result.begin(), result.end(), y_inout);
 }
 
 void SmoothFilter::setSmoothPoints(int points, int left_points) {

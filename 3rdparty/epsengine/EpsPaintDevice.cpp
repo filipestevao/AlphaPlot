@@ -9,7 +9,8 @@ Description          : Enables the export of QPainter grafics to .eps files
 #include "EpsEngine.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
+#include <QGuiApplication>
 
 EpsPaintDevice::EpsPaintDevice(const QString& fileName, const QSize& s)
 : QPaintDevice()
@@ -49,7 +50,7 @@ void EpsPaintDevice::setCreator(const QString& s)
 
 int EpsPaintDevice::metric(PaintDeviceMetric metric) const
 {
-	QDesktopWidget *desktop = QApplication::desktop();
+	QScreen *desktop = QGuiApplication::primaryScreen();
 	int dpi_x = desktop->logicalDpiX();
 	int dpi_y = desktop->logicalDpiY();
 	switch (metric){

@@ -12,7 +12,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -134,7 +134,7 @@ QString Integration::logInfo() {
                       associateddata_->xcol->name() + "_" +
                       associateddata_->ycol->name();
   QString logInfo = "<b>[" +
-                    QDateTime::currentDateTime().toString(Qt::LocalDate) +
+                    QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat) +
                     "&emsp;" + tr("Plot") + ": ''" + curvename + "'']</b><hr>";
   logInfo += tr("Numerical integration of") + ": " + curvename + tr(" using ") +
              method_name + tr("Interpolation") + ": <br>" +

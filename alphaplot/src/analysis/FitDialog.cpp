@@ -12,7 +12,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -216,7 +216,11 @@ void FitDialog::initFitPage() {
   fitPage->setLayout(vbox1);
   tw->addWidget(fitPage);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+  connect(boxCurve, SIGNAL(textActivated(const QString &)), this,
+#else
   connect(boxCurve, SIGNAL(activated(const QString &)), this,
+#endif
           SLOT(activateCurve(const QString &)));
   connect(buttonOk, SIGNAL(clicked()), this, SLOT(accept()));
   connect(buttonCancel1, SIGNAL(clicked()), this, SLOT(close()));
@@ -554,7 +558,7 @@ void FitDialog::saveUserFunction() {
                           tr("Please enter a function name!"));
     boxName->setFocus();
     return;
-  } else if (boxParam->text().remove(QRegExp("[,;\\s]")).isEmpty()) {
+  } else if (boxParam->text().remove(QRegularExpression("[,;\\s]")).isEmpty()) {
     QMessageBox::critical(this, tr("Input function error"),
                           tr("Please enter at least one parameter name!"));
     boxParam->setFocus();
@@ -638,7 +642,7 @@ void FitDialog::showFitPage() {
 
   QString par = boxParam->text().simplified();
   QStringList paramList =
-      par.split(QRegExp("[,;]+[\\s]*"), QString::SkipEmptyParts);
+      par.split(QRegularExpression("[,;]+[\\s]*"), Qt::SkipEmptyParts);
   int parameters = paramList.count();
   boxParams->setRowCount(parameters);
   boxParams->hideColumn(2);
@@ -1269,7 +1273,7 @@ void FitDialog::setSrcTables(QList<QMdiSubWindow *> *tables) {
     tableNamesBox->addItem(i->objectName());
 
   tableNamesBox->setCurrentIndex(tableNamesBox->findText(
-      boxCurve->currentText().split("_", QString::SkipEmptyParts)[0]));
+      boxCurve->currentText().split("_", Qt::SkipEmptyParts)[0]));
   selectSrcTable(tableNamesBox->currentIndex());
 }
 

@@ -39,7 +39,7 @@ QStringList Folder::currentFolderNames = {};
 Folder::Folder(Folder *parent, const QString &name)
     : QObject(parent), d_active_window(nullptr) {
   QObject::setObjectName(name);
-  birthdate = QDateTime::currentDateTime().toString(Qt::LocalDate);
+  birthdate = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
 }
 
 QList<Folder *> Folder::folders() const {

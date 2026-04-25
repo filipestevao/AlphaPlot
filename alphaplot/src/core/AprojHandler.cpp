@@ -369,10 +369,10 @@ Folder *AprojHandler::readxmlstream(ApplicationWindow *app, QFile *file,
       if (ok) {
         table->setBirthDate(
             QDateTime::fromString(time, "yyyy-dd-MM hh:mm:ss:zzz")
-                .toString(Qt::LocalDate));
+                .toString(Qt::ISODate)); // Using ISODate instead of LocalDate for proj files if appropriate, or QLocale().toString()
       } else {
         table->setBirthDate(
-            QDateTime::currentDateTime().toString(Qt::LocalDate));
+            QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat));
         xmlreader->raiseWarning(
             tr("Invalid creation time. Using current time insted."));
       }
@@ -481,8 +481,6 @@ bool AprojHandler::saveproject(const QString &filename, Folder *folder) {
         std::unique_ptr<XmlStreamWriter>(new XmlStreamWriter(bytearray.get()));
   }
 
-  xmlwriter->setCodec("UTF-8");
-
   xmlwriter->setAutoFormatting(false);
   Folder *root = folder;
   xmlwriter->writeStartDocument();
@@ -576,7 +574,6 @@ bool AprojHandler::saveTemplate(const QString &filename, MyWidget *mywidget) {
   }
   std::unique_ptr<XmlStreamWriter> xmlwriter =
       std::unique_ptr<XmlStreamWriter>(new XmlStreamWriter(file.get()));
-  xmlwriter->setCodec("UTF-8");
   xmlwriter->setAutoFormatting(false);
 
   xmlwriter->writeStartDocument();

@@ -12,7 +12,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -752,6 +752,8 @@ void TableView::handleHeaderDataChanged(Qt::Orientation orientation, int first,
                                         int last) {
   if (orientation != Qt::Horizontal) return;
 
+  rereadSectionSizes();
+
   QItemSelectionModel *sel_model = d_view_widget->selectionModel();
 
   int col = sel_model->currentIndex().column();
@@ -997,10 +999,12 @@ void TableViewWidget::updateHeaderGeometry(Qt::Orientation o, int first,
   Q_UNUSED(first)
   Q_UNUSED(last)
   if (o != Qt::Horizontal) return;
+  bool signalsBlocked = horizontalHeader()->blockSignals(true);
   horizontalHeader()->setStretchLastSection(
       true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
   horizontalHeader()->updateGeometry();
   horizontalHeader()->setStretchLastSection(false);  // ugly hack part 2
+  horizontalHeader()->blockSignals(signalsBlocked);
 }
 
 void TableViewWidget::keyPressEvent(QKeyEvent *event) {
@@ -1078,7 +1082,7 @@ void TableView::drawSpikinessData(QPainter *painter, QRect &rect,
   double yDeltaDiff = rect.height() / static_cast<double>(yMax - yMin);
 
   // set pen
-  QColor color = palette().color(QPalette::Foreground);
+  QColor color = palette().color(QPalette::WindowText);
   color.setAlpha(40);
   painter->setPen(QPen(color, 0, Qt::SolidLine));
   painter->setBrush(QBrush(color));

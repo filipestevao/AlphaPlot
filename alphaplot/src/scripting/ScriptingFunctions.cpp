@@ -1,5 +1,4 @@
-#include <QScriptEngine>
-#include <QScriptContext>
+#include <QJSEngine>
 #include <QFile>
 #include <QFileInfo>
 #include <QtDebug>
@@ -11,102 +10,75 @@
 #include "ScriptingFunctions.h"
 
 // ScriptingConsole print() function reimplimentation
-QScriptValue print(QScriptContext *context, QScriptEngine *egne) {
-  if (context->argumentCount() == 0) {
-    context->throwError(
-        QObject::tr("print() should have atleast one argument"));
+QJSValue print(QJSEngine *engine, QJSValue thisObject, QJSValue arguments) {
+  int argCount = arguments.property("length").toInt();
+  if (argCount == 0) {
+    return engine->evaluate("Error('print() should have atleast one argument')");
   }
-  QScriptValue result;
-  for (int i = 0; i < context->argumentCount(); i++) {
-    result = result.toString() + " " + context->argument(i).toString();
-    if (context->state() == QScriptContext::ExceptionState) {
-      result = result.toString() + " Unhandled Exception";
-      break;
-    }
+  QString result;
+  for (int i = 0; i < argCount; i++) {
+    result += " " + arguments.property(i).toString();
   }
-  QScriptValue calleeData = context->callee().data();
-  Console *console = qobject_cast<Console *>(calleeData.toQObject());
+  
+  // In QJSEngine, we set the console object via property on the function object or similar.
+  // We'll use the 'this' object which should be the console if we set it up that way.
+  Console *console = qobject_cast<Console *>(thisObject.toQObject());
   if (console) {
-    console->append(result.toString());
+    console->append(result);
   } else {
     qDebug() << "Scripting console print() unable to access Console object";
     return false;
   }
-  return egne->undefinedValue();
+  return QJSValue(QJSValue::UndefinedValue);
 }
 
 // ScriptingConsole clear() function
-QScriptValue clear(QScriptContext *context, QScriptEngine *egne) {
-  if (context->argumentCount() != 0) {
-    context->throwError(QObject::tr("clear() take no arguments!"));
-  }
-  QScriptValue calleeData = context->callee().data();
-  Console *console = qobject_cast<Console *>(calleeData.toQObject());
+QJSValue clear(QJSEngine *engine, QJSValue thisObject, QJSValue arguments) {
+  Q_UNUSED(arguments);
+  Console *console = qobject_cast<Console *>(thisObject.toQObject());
   if (console) {
     console->clearConsole();
   } else {
     qDebug() << "Scripting console clear() unable to access Console object";
     return false;
   }
-  return egne->undefinedValue();
+  return QJSValue(QJSValue::UndefinedValue);
 }
 
 // ScriptingConsole openAproj() function
-QScriptValue openProj(QScriptContext *context, QScriptEngine *egne) {
-  if (context->argumentCount() > 1) {
-    context->throwError(QObject::tr("openAproj(string) take one argument!"));
-  }
-  QScriptValue calleeData = context->callee().data();
+QJSValue openProj(QJSEngine *engine, QJSValue thisObject, QJSValue arguments) {
+  int argCount = arguments.property("length").toInt();
   ApplicationWindow *app =
-      qobject_cast<ApplicationWindow *>(calleeData.toQObject());
+      qobject_cast<ApplicationWindow *>(thisObject.toQObject());
   if (app) {
-    if (context->argumentCount() == 0) {
+    if (argCount == 0) {
       app->openAproj();
     } else {
-      QFileInfo fileInfo(context->argument(0).toString());
+      QFileInfo fileInfo(arguments.property(0).toString());
       if (fileInfo.exists()) {
         app->openAproj(fileInfo.absoluteFilePath());
       } else {
-        context->throwError(QString(fileInfo.absoluteFilePath()) +
-                            QObject::tr(" file not found!"));
+         return engine->evaluate(QString("Error('%1 file not found!')").arg(fileInfo.absoluteFilePath()));
       }
     }
   } else {
-    qDebug() << "Scripting console clear() unable to access Console object";
+    qDebug() << "Scripting console openProj() unable to access ApplicationWindow object";
     return false;
   }
-  return egne->undefinedValue();
+  return QJSValue(QJSValue::UndefinedValue);
 }
 
-QScriptValue collectGarbage(QScriptContext *context, QScriptEngine *egne) {
-  if (context->argumentCount() != 0) {
-    context->throwError(QObject::tr("collectGarbage() take no arguments!"));
-  }
-  egne->collectGarbage();
-  return egne->undefinedValue();
+QJSValue collectGarbage(QJSEngine *engine, QJSValue thisObject, QJSValue arguments) {
+  Q_UNUSED(thisObject);
+  Q_UNUSED(arguments);
+  engine->collectGarbage();
+  return QJSValue(QJSValue::UndefinedValue);
 }
 
-QScriptValue attachDebugger(QScriptContext *context, QScriptEngine *egne) {
-  if (context->argumentCount() != 1) {
-    context->throwError(QObject::tr("attachDebugger(bool) take one argument!"));
-  }
-  if (!context->argument(0).isBool()) {
-    context->throwError(
-        QObject::tr("argument should be a bool attachDebugger(bool)"));
-  }
-  QScriptValue calleeData = context->callee().data();
-  ConsoleWidget *consoleWidget =
-      qobject_cast<ConsoleWidget *>(calleeData.toQObject());
-  if (consoleWidget) {
-    if (context->argument(0).toBool()) {
-      consoleWidget->debugger->attachTo(egne);
-    } else {
-      consoleWidget->debugger->detach();
-    }
-  } else {
-    qDebug() << "Scripting console attachDebugger(bool) unable to access "
-                "Console object";
-    return false;
-  }
-  return egne->undefinedValue();
+QJSValue attachDebugger(QJSEngine *engine, QJSValue thisObject, QJSValue arguments) {
+  Q_UNUSED(engine);
+  Q_UNUSED(thisObject);
+  Q_UNUSED(arguments);
+  qDebug() << "Scripting console attachDebugger(bool) is no longer available in Qt 6 (QJSEngine)";
+  return QJSValue(QJSValue::UndefinedValue);
 }

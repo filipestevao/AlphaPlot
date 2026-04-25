@@ -14,7 +14,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -34,6 +34,8 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QPrinter>
+#include <QPageSize>
+#include <QPageLayout>
 #include <QSpinBox>
 
 #include "ui/ExtensibleFileDialog.h"
@@ -87,10 +89,10 @@ class ImageExportDlg : public ExtensibleFileDialog {
   bool keepAspect() const { return d_keep_aspect->isChecked(); }
   //! For vector formats: returns a standard output page size (default:
   //! QPrinter::Custom).
-  QPrinter::PageSize pageSize() const;
-  void setPageSize(QPrinter::PageSize size);
-  QPrinter::Orientation pageOrientation() const;
-  void setOrientation(QPrinter::Orientation orientation);
+  QPageSize::PageSizeId pageSize() const;
+  void setPageSize(QPageSize::PageSizeId size);
+  QPageLayout::Orientation pageOrientation() const;
+  void setOrientation(QPageLayout::Orientation orientation);
   //! Return the quality (in percent) the user selected for export to raster
   //! formats.
   int quality() const { return d_quality->value(); }

@@ -186,6 +186,7 @@ bool ObjectBrowserTreeItemModel::setHeaderData(int section,
                                                const QVariant &value,
                                                int role) {
   emit headerDataChanged(orientation, section, section);
+  return true;
 }
 
 void ObjectBrowserTreeItemModel::buildUpNone() {

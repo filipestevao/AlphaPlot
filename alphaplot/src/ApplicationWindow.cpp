@@ -96,7 +96,7 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QProgressDialog>
-#include <QScriptValue>
+#include <QJSValue>
 #include <QSettings>
 #include <QShortcut>
 #include <QSignalMapper>
@@ -507,7 +507,7 @@ ApplicationWindow::ApplicationWindow()
   connect(ui_->actionRestartScripting, SIGNAL(triggered()), this,
           SLOT(restartScriptingEnv()));
   // Plot menu
-  connect(d_plot_mapper, SIGNAL(mapped(int)), this, SLOT(selectPlotType(int)));
+  connect(d_plot_mapper, SIGNAL(mappedInt(int)), this, SLOT(selectPlotType(int)));
   connect(ui_->actionPlot2DLine, SIGNAL(triggered()), d_plot_mapper,
           SLOT(map()));
   d_plot_mapper->setMapping(ui_->actionPlot2DLine,
@@ -1920,8 +1920,8 @@ Layout2D *ApplicationWindow::newGraph2D(const QString &caption) {
   connect(layout2d, &Layout2D::showTitleBarMenu, this,
           &ApplicationWindow::showWindowTitleBarMenu);
   connect(layout2d, &Layout2D::mousepressevent, [=](MyWidget *widget) {
-    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
+    propertybrowser->populateObjectBrowser(widget);
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
   });
@@ -1972,8 +1972,8 @@ Layout3D *ApplicationWindow::newGraph3D(const Graph3DCommon::Plot3DType &type,
   // QWindow doesnt pass mousepressevent to the container widget
   // so do it here manually
   connect(layout3d, &Layout3D::mousepressevent, this, [=]() {
-    propertybrowser->populateObjectBrowser(layout3d);
     if (d_workspace->activeSubWindow() == layout3d) return;
+    propertybrowser->populateObjectBrowser(layout3d);
     d_workspace->setActiveSubWindow(layout3d);
   });
 
@@ -2231,8 +2231,8 @@ void ApplicationWindow::initNote(Note *note, const QString &caption) {
   connect(note, SIGNAL(showTitleBarMenu()), this,
           SLOT(showWindowTitleBarMenu()));
   connect(note, &Note::mousepressevent, [=](MyWidget *widget) {
-    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
+    propertybrowser->populateObjectBrowser(widget);
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
   });
@@ -2271,7 +2271,7 @@ void ApplicationWindow::matrixDeterminant() {
   if (!matrix) return;
 
   QDateTime dt = QDateTime::currentDateTime();
-  QString info = "<b>[" + dt.toString(Qt::LocalDate);
+  QString info = "<b>[" + QLocale().toString(dt, QLocale::ShortFormat);
   info += tr("Determinant of ''") + QString(matrix->name()) + "'']</b><hr>";
   info += "<p>det = " + QString::number(matrix->determinant()) + "</p><br>";
 
@@ -2339,8 +2339,8 @@ void ApplicationWindow::initMatrix(Matrix *matrix) {
   connect(matrix, SIGNAL(showContextMenu()), this,
           SLOT(showWindowContextMenu()));
   connect(matrix, &Matrix::mousepressevent, [=](MyWidget *widget) {
-    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
+    propertybrowser->populateObjectBrowser(widget);
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
   });
@@ -3315,10 +3315,10 @@ void ApplicationWindow::loadSettings() {
 // Follows an ugly hack to fix Qt4 porting issues (only needed on Windows)
 #ifdef Q_OS_WIN
   if (!recentProjects.isEmpty() && recentProjects[0].contains("^e"))
-    recentProjects = recentProjects[0].split("^e", QString::SkipEmptyParts);
+    recentProjects = recentProjects[0].split("^e", Qt::SkipEmptyParts);
   else if (recentProjects.count() == 1) {
     QString s = recentProjects[0];
-    if (s.remove(QRegExp("\\s")).isEmpty()) recentProjects = QStringList();
+    if (s.remove(QRegularExpression("\\s")).isEmpty()) recentProjects = QStringList();
   }
 #endif
 
@@ -3630,7 +3630,7 @@ void ApplicationWindow::loadSettings() {
   strip_spaces = settings.value("StripSpaces", false).toBool();
   simplify_spaces = settings.value("SimplifySpaces", false).toBool();
   d_ASCII_file_filter = settings.value("AsciiFileTypeFilter", "*").toString();
-  d_ASCII_import_locale = settings.value("AsciiImportLocale", "C").toString();
+  d_ASCII_import_locale = QLocale(settings.value("AsciiImportLocale", "C").toString());
   d_convert_to_numeric = settings.value("ConvertToNumeric", true).toBool();
   settings.endGroup();  // Import ASCII
 
@@ -3642,10 +3642,10 @@ void ApplicationWindow::loadSettings() {
   d_export_resolution = settings.value("Resolution", 72).toInt();
   d_export_color = settings.value("ExportColor", true).toBool();
   d_export_vector_size =
-      settings.value("ExportPageSize", QPrinter::Custom).toInt();
+      settings.value("ExportPageSize", QPageSize::Custom).toInt();
   d_keep_plot_aspect = settings.value("KeepAspect", true).toBool();
   d_export_orientation =
-      settings.value("Orientation", QPrinter::Landscape).toInt();
+      settings.value("Orientation", QPageLayout::Landscape).toInt();
   settings.endGroup();  // ExportImage
 }
 
@@ -4259,7 +4259,7 @@ bool ApplicationWindow::renameWindow(MyWidget *w, const QString &text) {
   if (newName.isEmpty()) {
     QMessageBox::critical(this, tr("Error"), tr("Please enter a valid name!"));
     return false;
-  } else if (!newName.contains(QRegExp("^[a-zA-Z0-9-]*$"))) {
+  } else if (!newName.contains(QRegularExpression("^[a-zA-Z0-9-]*$"))) {
     QMessageBox::critical(this, tr("Error"),
                           tr("The name you chose is not valid: only letters, "
                              "digits and hyphen are allowed!") +
@@ -5249,7 +5249,7 @@ void ApplicationWindow::addTimeStamp() {
     return;
   }
 
-  QString date = QDateTime::currentDateTime().toString(Qt::LocalDate);
+  QString date = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
   axisrect->addTextItem2D(date);
 }
 
@@ -6785,8 +6785,8 @@ void ApplicationWindow::connectTable(Table *table) {
   connect(table->d_future_table, SIGNAL(requestColumnStatistics()), this,
           SLOT(showColumnStatistics()));
   connect(table, &Table::mousepressevent, [=](MyWidget *widget) {
-    propertybrowser->populateObjectBrowser(widget);
     if (d_workspace->activeSubWindow() == widget) return;
+    propertybrowser->populateObjectBrowser(widget);
     widget->setNormal();
     d_workspace->setActiveSubWindow(widget);
 
@@ -6806,7 +6806,7 @@ void ApplicationWindow::setAppColors() {
     QPalette palet = qApp->palette();
     palet.setColor(QPalette::Text, panelsTextColor);
     palet.setColor(QPalette::WindowText, panelsTextColor);
-    palet.setColor(QPalette::Foreground, panelsTextColor);
+    palet.setColor(QPalette::WindowText, QColor(Qt::darkGray));
     palet.setColor(QPalette::ToolTipText, panelsTextColor);
     palet.setColor(QPalette::PlaceholderText, panelsTextColor);
     palet.setColor(QPalette::ButtonText, panelsTextColor);
@@ -7586,7 +7586,7 @@ void ApplicationWindow::showFolderPopupMenu(QTreeWidgetItem *it,
   connect(&windowsInActiveFolder, SIGNAL(triggered()), &mapper, SLOT(map()));
   connect(&windowsInActiveFoldersAndSubs, SIGNAL(triggered()), &mapper,
           SLOT(map()));
-  connect(&mapper, SIGNAL(mapped(int)), this, SLOT(setShowWindowsPolicy(int)));
+  connect(&mapper, SIGNAL(mappedInt(int)), this, SLOT(setShowWindowsPolicy(int)));
 
   cm.addMenu(&viewWindowsMenu);
   cm.addSeparator();
@@ -8026,8 +8026,8 @@ void ApplicationWindow::folderProperties() {
       (saved) ? properties.status = tr("Saved")
               : properties.status = tr("Not Saved");
       properties.size = QString::number(fileInfo.size());
-      properties.created = fileInfo.birthTime().toString(Qt::LocalDate);
-      properties.modified = fileInfo.lastModified().toString(Qt::LocalDate);
+      properties.created = QLocale().toString(fileInfo.birthTime(), QLocale::ShortFormat);
+      properties.modified = QLocale().toString(fileInfo.lastModified(), QLocale::ShortFormat);
       properties.label = "";
     } else {
       properties.path = projectname;
@@ -9761,128 +9761,49 @@ bool ApplicationWindow::isActiveSubWindow(
 
 //----------------------------scripting related code---------------------------
 void ApplicationWindow::attachQtScript() {
-  // pass mainwindow as global object
-  QScriptValue objectValue = consoleWindow->engine->newQObject(this);
-  consoleWindow->engine->globalObject().setProperty("Alpha", objectValue);
+  if (!consoleWindow || !consoleWindow->engine) return;
 
-  QScriptValue clearFunction = consoleWindow->engine->newFunction(&openProj);
-  clearFunction.setData(objectValue);
-  consoleWindow->engine->globalObject().setProperty("openAproj", clearFunction);
+  QJSEngine *engine = consoleWindow->engine;
+  // Expose the main window as 'Alpha' — all Q_INVOKABLE methods and public
+  // slots on ApplicationWindow become callable from JavaScript.
+  QJSValue objectValue = engine->newQObject(this);
+  engine->globalObject().setProperty("Alpha", objectValue);
 
-  qScriptRegisterMetaType<Table *>(consoleWindow->engine,
-                                   tableObjectToScriptValue,
-                                   tableObjectFromScriptValue);
-  qScriptRegisterMetaType<Note *>(consoleWindow->engine,
-                                  tableObjectToScriptValue,
-                                  tableObjectFromScriptValue);
-  qScriptRegisterMetaType<Matrix *>(consoleWindow->engine,
-                                    tableObjectToScriptValue,
-                                    tableObjectFromScriptValue);
-  qScriptRegisterMetaType<Column *>(consoleWindow->engine,
-                                    tableObjectToScriptValue,
-                                    tableObjectFromScriptValue);
-  qScriptRegisterMetaType<QVector<int>>(consoleWindow->engine, toScriptValue,
-                                        fromScriptValue);
-  qScriptRegisterMetaType<QVector<float>>(consoleWindow->engine, toScriptValue,
-                                          fromScriptValue);
-  qScriptRegisterMetaType<QVector<double>>(consoleWindow->engine, toScriptValue,
-                                           fromScriptValue);
-  qScriptRegisterMetaType<QVector<long>>(consoleWindow->engine, toScriptValue,
-                                         fromScriptValue);
-  qScriptRegisterMetaType<QVector<QString>>(consoleWindow->engine,
-                                            toScriptValue, fromScriptValue);
-  qScriptRegisterMetaType<QVector<QDate>>(consoleWindow->engine, toScriptValue,
-                                          fromScriptValue);
-  qScriptRegisterMetaType<QVector<QDateTime>>(consoleWindow->engine,
-                                              toScriptValue, fromScriptValue);
+  // Inject JS convenience wrappers
+  engine->evaluate(
+    "function openAproj(path) { Alpha.open(path); }\n"
+  );
 }
 
-Table *ApplicationWindow::getTableHandle() {
-  if (context()->argumentCount() != 1 || !context()->argument(0).isString()) {
-    context()->throwError(tr("getTableHandle(string) take one argument!"));
-  }
-
-  bool namedWidgetPresent = false;
+Table *ApplicationWindow::getTableHandle(const QString &name) {
   QList<QMdiSubWindow *> subwindowlist = subWindowsList();
   foreach (QMdiSubWindow *subwindow, subwindowlist) {
-    if (subwindow->objectName() == context()->argument(0).toString()) {
-      if (qobject_cast<Table *>(subwindow)) {
-        namedWidgetPresent = true;
-        Table *table = qobject_cast<Table *>(subwindow);
-        return table;
-      } else {
-        context()->throwError(context()->argument(0).toString() +
-                              tr(" is not a valid Table object name!"));
-      }
+    if (subwindow->objectName() == name) {
+      Table *table = qobject_cast<Table *>(subwindow);
+      if (table) return table;
     }
   }
-
-  if (!namedWidgetPresent) {
-    context()->throwError(context()->argument(0).toString() +
-                          tr(" is not a valid Table object name!"));
-  }
-
-  // will never reach here
   return nullptr;
 }
 
-Matrix *ApplicationWindow::getMatrixHandle() {
-  if (context()->argumentCount() != 1 || !context()->argument(0).isString()) {
-    context()->throwError(tr("getMatrixHandle(string) take one argument!"));
-  }
-
-  bool namedWidgetPresent = false;
+Matrix *ApplicationWindow::getMatrixHandle(const QString &name) {
   QList<QMdiSubWindow *> subwindowlist = subWindowsList();
   foreach (QMdiSubWindow *subwindow, subwindowlist) {
-    if (subwindow->objectName() == context()->argument(0).toString()) {
-      if (qobject_cast<Matrix *>(subwindow)) {
-        namedWidgetPresent = true;
-        Matrix *matrix = qobject_cast<Matrix *>(subwindow);
-        return matrix;
-      } else {
-        context()->throwError(context()->argument(0).toString() +
-                              tr(" is not a valid Matrix object name!"));
-      }
+    if (subwindow->objectName() == name) {
+      Matrix *matrix = qobject_cast<Matrix *>(subwindow);
+      if (matrix) return matrix;
     }
   }
-
-  if (!namedWidgetPresent) {
-    context()->throwError(context()->argument(0).toString() +
-                          tr(" is not a valid Matrix object name!"));
-  }
-
-  // will never reach here
   return nullptr;
 }
 
-Note *ApplicationWindow::getNoteHandle() {
-  if (context()->argumentCount() != 1 || !context()->argument(0).isString()) {
-    context()->throwError(tr("getNoteHandle(string) take one argument!"));
-  }
-
-  bool namedWidgetPresent = false;
+Note *ApplicationWindow::getNoteHandle(const QString &name) {
   QList<QMdiSubWindow *> subwindowlist = subWindowsList();
   foreach (QMdiSubWindow *subwindow, subwindowlist) {
-    if (subwindow->objectName() == context()->argument(0).toString()) {
-      if (qobject_cast<Note *>(subwindow)) {
-        namedWidgetPresent = true;
-        Note *note = qobject_cast<Note *>(subwindow);
-        if (!note) {
-          context()->throwError(tr("Unable to get Note handle!"));
-        }
-        return note;
-      } else {
-        context()->throwError(context()->argument(0).toString() +
-                              tr(" is not a valid Note object name!"));
-      }
+    if (subwindow->objectName() == name) {
+      Note *note = qobject_cast<Note *>(subwindow);
+      if (note) return note;
     }
   }
-
-  if (!namedWidgetPresent) {
-    context()->throwError(context()->argument(0).toString() +
-                          tr(" is not a valid Note object name!"));
-  }
-
-  // will never reach here
   return nullptr;
 }

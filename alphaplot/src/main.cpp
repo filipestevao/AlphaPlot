@@ -17,11 +17,16 @@
    Description : AlphaPlot main function
 */
 
-#include <QAction>
 #include <QApplication>
+#include <QMessageBox>
 #include <QSplashScreen>
+#include <QSysInfo>
+#include <QThread>
 #include <QTimer>
-#include <QtMsgHandler>
+#include <QElapsedTimer>
+#include <QtGlobal>
+#include <cstdio>
+#include <cstdlib>
 #include <typeinfo>
 
 #include "ApplicationWindow.h"
@@ -55,10 +60,6 @@
     General format used through out the project should be
     Google style(clang format) with a line wrap of 80 characters.
 */
-class Delay : public QThread {
- public:
-  static void sleep(unsigned long secs) { QThread::sleep(secs); }
-};
 
 struct Application : public QApplication {
   Application(int& argc, char** argv);
@@ -121,6 +122,12 @@ void logOutput(QtMsgType type, const QMessageLogContext& context,
 
 int main(int argc, char** argv) {
   qInstallMessageHandler(logOutput);
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+  // Force X11 (xcb) on Linux to avoid Wayland QtDataVisualization bugs
+  qputenv("QT_QPA_PLATFORM", "xcb");
+#endif
+
 #ifdef Q_OS_WIN
   // solves high density dpi scaling in windows
   // https://vicrucann.github.io/tutorials/osg-qt-high-dpi/
@@ -129,7 +136,6 @@ int main(int argc, char** argv) {
 #endif  // Q_OS_WIN
 
   // https://vicrucann.github.io/tutorials/osg-qt-high-dpi/
-  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   Application* app = new Application(argc, argv);
 
   // icon initiation (mandatory)
@@ -149,13 +155,17 @@ int main(int argc, char** argv) {
   QPixmap pixmap(":splash/splash.png");
   QSplashScreen* splash = new QSplashScreen(pixmap);
   if (args.count() == 0) {
+    // Close splashscreen after 2 seconds
     splash->show();
-    // Close splashscreen after 3 sec
-    Delay::sleep(3);
+    QElapsedTimer splashTimer;
+    splashTimer.start();
+    while (splashTimer.elapsed() < 2000) {
+      app->processEvents();
+      QThread::msleep(10);
+    }
   }
 
   ApplicationWindow* mw = new ApplicationWindow();
-  // Process more events here before starting app.
   mw->applyUserSettings();
   mw->newTable();
   mw->savedProject();

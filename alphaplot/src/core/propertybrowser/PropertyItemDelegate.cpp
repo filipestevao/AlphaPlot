@@ -21,7 +21,10 @@ PropertyItemDelegate::~PropertyItemDelegate() {}
 QSize PropertyItemDelegate::sizeHint(const QStyleOptionViewItem& option,
                                      const QModelIndex& index) const {
   QSize size = QStyledItemDelegate::sizeHint(option, index);
-  // size += QSize(0, 5);
+  // Enforce a minimum line height to ensure text (e.g. True/False) is fully visible
+  // across all themes like Fusion or Windows.
+  int minHeight = qMax(26, option.fontMetrics.height() + 8);
+  size.setHeight(qMax(size.height(), minHeight));
   return size;
 }
 
@@ -33,7 +36,9 @@ void PropertyItemDelegate::paint(QPainter* painter,
   PropertyItem* property = static_cast<PropertyItem*>(index.internalPointer());
 
   if (property->propertyType() == PropertyItem::PropertyType::Separator) {
-    QColor color = option.palette.color(QPalette::Text);
+    QColor color;
+    (IconLoader::lumen_ > 100) ? color = option.palette.light().color()
+                               : color = option.palette.dark().color();
     QObject* par = parent();
     if (par) {
       QVariant value = par->property("groupTextColor");
@@ -41,7 +46,7 @@ void PropertyItemDelegate::paint(QPainter* painter,
     }
     option.palette.setColor(QPalette::Text, color);
     option.font.setBold(true);
-    option.state &= ~QStyle::State_Selected;
+    option.state &= ~(QStyle::State_Selected | QStyle::State_MouseOver);
   }
 
   if (index.column() == 1) {
@@ -57,7 +62,7 @@ void PropertyItemDelegate::paint(QPainter* painter,
                                : brush = option.palette.light();
     pal.setColor(QPalette::Base, brush.color());
     pal.setColor(QPalette::AlternateBase, brush.color());
-    pal.setColor(QPalette::Background, brush.color());
+    pal.setColor(QPalette::Window, brush.color());
     QObject* par = parent();
     if (par) {
       QVariant value = par->property("groupBackground");
@@ -94,6 +99,10 @@ void PropertyItemDelegate::paint(QPainter* painter,
   // Grid Lines
   QColor color = static_cast<QRgb>(QApplication::style()->styleHint(
       QStyle::SH_Table_GridLineColor, &opt, qobject_cast<QWidget*>(parent())));
+  if (property->propertyType() == PropertyItem::PropertyType::Separator) {
+    color = Qt::transparent;
+  }
+  
   painter->setPen(QPen(color));
   if (index.column() == 1 &&
       property->propertyType() != PropertyItem::PropertyType::Separator) {
@@ -135,9 +144,11 @@ void PropertyItemDelegate::paintBoolProperty(
       &buttonOption);  // Only used to get size of native checkbox widget.
   buttonOption.text = property->toString();
   buttonOption.palette = option.palette;
-  buttonOption.rect =
-      QStyle::alignedRect(option.direction, Qt::AlignLeft, checkBoxRect.size(),
-                          option.rect);  // Our checkbox rect.
+  buttonOption.rect = option.rect;  // Use the full cell rect so the text doesn't get clipped
+  int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin, &option) + 1;
+  buttonOption.rect.adjust(margin, 0, 0, 0); // Align with standard text margin
+
+
   QApplication::style()->drawControl(QStyle::CE_CheckBox, &buttonOption,
                                      painter);
 }

@@ -13,7 +13,7 @@ class DataBlockBar3D;
 class XmlStreamWriter;
 class XmlStreamReader;
 
-using namespace QtDataVisualization;
+
 
 class Bar3D : public QObject {
   Q_OBJECT

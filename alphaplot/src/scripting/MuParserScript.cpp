@@ -12,7 +12,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -38,8 +38,7 @@
 #include "Folder.h"
 #include <math.h>
 #include <QtCore/QByteArray>
-#include <QtCore/QRegExp>
-#include <QSettings>
+#include <QtCore/QRegularExpression>
 
 /**
  * \class MuParserScript
@@ -207,15 +206,15 @@ MuParserScript::MuParserScript(ScriptingEnv *environment, const QString &code,
   : (localestring == QLocale(QLocale::French).name())
       ? locale = QLocale(QLocale::French)
       : locale = QLocale::system();
-  QChar decimalseperator = locale.decimalPoint();
-  QChar groupseperator = locale.groupSeparator();
+  QChar decimalseperator = locale.decimalPoint().at(0);
+  QChar groupseperator = locale.groupSeparator().at(0);
   QChar argseperator = QChar(',');
   if(decimalseperator != QChar(',') && groupseperator != QChar(','))
     argseperator = QChar(',');
   else if(decimalseperator != QChar(';') && groupseperator != QChar(';'))
     argseperator = QChar(';');
-  m_parser.SetDecSep(locale.decimalPoint().toLatin1());
-  m_parser.SetThousandsSep(locale.groupSeparator().toLatin1());
+  m_parser.SetDecSep(locale.decimalPoint().at(0).toLatin1());
+  m_parser.SetThousandsSep(locale.groupSeparator().at(0).toLatin1());
 
   // redefine characters for operators to include ";"
   static const char opChars[] =
@@ -515,7 +514,7 @@ Column *MuParserScript::resolveColumnPath(const QString &path) {
   // Split path into components.
   // While escape handling would be possible using a regular expression, it
   // would require
-  // lookbehind assertions, which are currently not supported by QRegExp. Thus,
+  // lookbehind assertions, which are currently not supported by QRegularExpression. Thus,
   // we can't simply
   // use QString::split() and have to explicitly loop over the characters in
   // path.
@@ -618,18 +617,19 @@ Column *MuParserScript::resolveColumnPath(const QString &path) {
  * argument of the new column() and cell() functions (see resolveColumnPath()).
  */
 bool MuParserScript::translateLegacyFunctions(QString &input) {
-  QRegExp legacyFunction("(\\W||^)(col|tablecol|cell)\\s*\\(");
+  QRegularExpression legacyFunction("(\\W|^)(col|tablecol|cell)\\s*\\(");
 
-  int functionStart = legacyFunction.indexIn(input, 0);
-  while (functionStart != -1) {
+  QRegularExpressionMatch match = legacyFunction.match(input);
+  while (match.hasMatch()) {
+    int functionStart = match.capturedStart();
     QStringList arguments;
     int functionEnd = functionStart;  // initialization is a failsafe
     QString replacement;
 
     // parse arguments of function
     QString currentArgument;
-    for (int i = functionStart + legacyFunction.matchedLength(),
-             parenthesisLevel = 1;
+    int parenthesisLevel = 1;
+    for (int i = functionStart + match.capturedLength();
          parenthesisLevel > 0 && i < input.size(); i++) {
       switch (input.at(i).toLatin1()) {
         case '"':
@@ -673,7 +673,7 @@ bool MuParserScript::translateLegacyFunctions(QString &input) {
 
     // select replacement function call
     Table *table = qobject_cast<Table *>(Context);
-    if (legacyFunction.cap(2) == "col") {
+    if (match.captured(2) == "col") {
       QString columnArgument;
       bool numericColumn = false;
       if (arguments.at(0).startsWith("\"")) {
@@ -704,7 +704,7 @@ bool MuParserScript::translateLegacyFunctions(QString &input) {
       } else
         replacement = QString("column") + (numericColumn ? "_" : "") + "(" +
                       columnArgument + ")";
-    } else if (legacyFunction.cap(2) == "tablecol") {
+    } else if (match.captured(2) == "tablecol") {
       // assert number of arguments == 2
       if (arguments.size() != 2) {
         emit_error(tr("tablecol: wrong number of arguments (need 2, got %1)")
@@ -734,7 +734,7 @@ bool MuParserScript::translateLegacyFunctions(QString &input) {
         replacement =
             QString("column__(") + arguments.at(0) + "," + rowArgument + ")";
       }
-    } else {  // legacyFunction.cap(2) == "cell"
+    } else {  // match.captured(2) == "cell"
       // assert number of arguments == 2
       if (arguments.size() != 2) {
         emit_error(tr("cell: wrong number of arguments (need 2, got %1)")
@@ -761,7 +761,7 @@ bool MuParserScript::translateLegacyFunctions(QString &input) {
     }
 
     // do replacement
-    if (legacyFunction.cap(1).isEmpty())
+    if (match.captured(1).isEmpty())
       // matched with ^, not \W (lookbehind assertion would be darn handy...)
       input.replace(functionStart, functionEnd - functionStart + 1,
                     replacement);
@@ -770,9 +770,8 @@ bool MuParserScript::translateLegacyFunctions(QString &input) {
       input.replace(functionStart + 1, functionEnd - functionStart,
                     replacement);
     // search for next match, starting at the end of the replaced text
-    functionStart =
-        legacyFunction.indexIn(input, functionStart + replacement.length());
-  }  // while (functionStart != -1)
+    match = legacyFunction.match(input, functionStart + replacement.length());
+  }  // while (match.hasMatch())
   return true;
 }
 
@@ -812,7 +811,7 @@ bool MuParserScript::compile(bool asFunction) {
     intermediate.remove(commentStart, intermediate.size() - commentStart);
 
   // simplify statement separators
-  intermediate.replace(QRegExp("([;\\n]\\s*)+"), ", ");
+  intermediate.replace(QRegularExpression("([;\\n]\\s*)+"), ", ");
 
   // recursively translate legacy functions col(), tablecol() and cell()
   if (Context && Context->inherits("Table"))

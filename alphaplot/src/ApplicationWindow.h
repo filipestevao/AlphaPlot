@@ -124,8 +124,7 @@ class Function2DDialog;
  * Project/ProjectExplorer.*/
 
 class ApplicationWindow : public QMainWindow,
-                          public scripted,
-                          public QScriptable {
+                          public scripted {
   Q_OBJECT
  public:
   ApplicationWindow();
@@ -1145,9 +1144,9 @@ class ApplicationWindow : public QMainWindow,
   void lockToolbars(const bool status);
 
  public slots:
-  Table* getTableHandle();
-  Matrix* getMatrixHandle();
-  Note* getNoteHandle();
+  Table* getTableHandle(const QString &name);
+  Matrix* getMatrixHandle(const QString &name);
+  Note* getNoteHandle(const QString &name);
 };
 
 #endif  // APPLICATION_H

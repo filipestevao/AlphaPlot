@@ -5,10 +5,17 @@ DEFINES += QCUSTOMPLOT_USE_OPENGL
 
 # Qt modules
 QT += core gui widgets opengl network svg
-QT += script scripttools printsupport datavisualization
+QT += printsupport datavisualization
 
-# enable C++14 support
-CONFIG += c++14
+# Qt 6 specific modules
+greaterThan(QT_MAJOR_VERSION, 5) | greaterThan(QT_VERSION_MAJOR, 5) {
+    QT += core5compat qml
+} else {
+    QT += script scripttools
+}
+
+# enable C++17 runtime support
+CONFIG += c++17
 CONFIG += qt warn_on exceptions opengl thread
 
 
@@ -121,7 +128,7 @@ documentation.files += ../data/manual \
                        ../data/alphaplot-logo.png \
                        ../data/README.md \
                        ../data/CHANGES \
-                       ../data/gpl.txt
+                       ../data/gpl-3.0.txt
 
 INSTALLS        += documentation
 

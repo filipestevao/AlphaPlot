@@ -15,7 +15,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -264,7 +264,7 @@ void Matrix::pasteIntoSelection() {
   if (mimeData->hasText()) {
     QString input_str = QString(clipboard->text());
     QList<QStringList> cell_texts;
-    QStringList input_rows(input_str.split(QRegExp("\\n|\\r\\n|\\r")));
+    QStringList input_rows(input_str.split(QRegularExpression("\\n|\\r\\n|\\r")));
     input_row_count = input_rows.count();
     input_col_count = 0;
     for (int i = 0; i < input_row_count; i++) {
@@ -792,7 +792,8 @@ void Matrix::copy(Matrix *other) {
   setDisplayedDigits(other->displayedDigits());
   setFormula(other->formula());
   d_matrix_private->blockChangeSignals(false);
-  emit dataChanged(0, 0, rows - 1, columns - 1);
+  if (rows > 0 && columns > 0)
+    emit dataChanged(0, 0, rows - 1, columns - 1);
   if (d_view) d_view->rereadSectionSizes();
   endMacro();
   RESET_CURSOR;

@@ -12,7 +12,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -37,11 +37,11 @@
 #include <QObject>
 #include <QtDebug>
 
-const int AlphaPlot::AlphaPlot_versionNo = 1022022;
-const char* AlphaPlot::AlphaPlot_version = "1.02";
+const int AlphaPlot::AlphaPlot_versionNo = 1030000;
+const char* AlphaPlot::AlphaPlot_version = "1.3.0";
 const char* AlphaPlot::extra_version = "stable";
 const QDate AlphaPlot::release_date =
-    QDate::fromString(QString("18-01-2022"), "dd-MM-yyyy");
+    QDate::fromString(QString("28-03-2026"), "dd-MM-yyyy");
 const char* AlphaPlot::homepage_Uri = "https://alphaplot.sourceforge.io/";
 const char* AlphaPlot::wiki_Uri = "https://alphaplot.sourceforge.io/wiki";
 const char* AlphaPlot::forum_Uri =

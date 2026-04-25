@@ -56,7 +56,7 @@ Layout2D::Layout2D(const QString &label, QWidget *parent, const QString name,
 
   if (name.isEmpty()) setObjectName("layout2d");
   QDateTime birthday = QDateTime::currentDateTime();
-  setBirthDate(birthday.toString(Qt::LocalDate));
+  setBirthDate(QLocale().toString(birthday, QLocale::ShortFormat));
 
   layoutManagebuttonsBox_ = new QHBoxLayout();
   refreshPlotButton_ = new ToolButton();
@@ -132,7 +132,7 @@ Layout2D::Layout2D(const QString &label, QWidget *parent, const QString name,
   layout->addLayout(hbox);
   layout->addWidget(plot2dCanvas_, 1);
   setWidget(main_widget_);
-  layout->setMargin(0);
+  layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);
   setGeometry(QRect(0, 0, defaultlayout2dwidth_, defaultlayout2dheight_));
   setMinimumSize(QSize(minimumlayout2dwidth_, minimumlayout2dheight_));
@@ -1554,7 +1554,7 @@ void Layout2D::save(XmlStreamWriter *xmlwriter, const bool saveastemplate) {
   xmlwriter->writeAttribute("y", QString::number(pos().y()));
   xmlwriter->writeAttribute("width", QString::number(width()));
   xmlwriter->writeAttribute("height", QString::number(height()));
-  QDateTime datetime = QDateTime::fromString(birthDate(), Qt::LocalDate);
+  QDateTime datetime = QLocale().toDateTime(birthDate(), QLocale::ShortFormat);
   xmlwriter->writeAttribute("creation_time",
                             datetime.toString("yyyy-dd-MM hh:mm:ss:zzz"));
   xmlwriter->writeAttribute("caption_spec", QString::number(captionPolicy()));
@@ -1608,11 +1608,11 @@ bool Layout2D::load(XmlStreamReader *xmlreader, QList<Table *> tabs,
     QDateTime creation_time =
         QDateTime::fromString(time, "yyyy-dd-MM hh:mm:ss:zzz");
     if (!time.isEmpty() && creation_time.isValid() && ok) {
-      setBirthDate(creation_time.toString(Qt::LocalDate));
+      setBirthDate(QLocale().toString(creation_time, QLocale::ShortFormat));
     } else {
       xmlreader->raiseWarning(
           tr("Invalid creation time. Using current time insted."));
-      setBirthDate(QDateTime::currentDateTime().toString(Qt::LocalDate));
+      setBirthDate(QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat));
     }
     // read caption spec
     int captionspec = xmlreader->readAttributeInt("caption_spec", &ok);
@@ -1787,7 +1787,6 @@ void Layout2D::copy(Layout2D *layout, QList<Table *> tables,
   }
   std::unique_ptr<XmlStreamWriter> xmlwriter =
       std::unique_ptr<XmlStreamWriter>(new XmlStreamWriter(file.get()));
-  xmlwriter->setCodec("UTF-8");
   xmlwriter->setAutoFormatting(false);
   layout->save(xmlwriter.get());
   file->close();

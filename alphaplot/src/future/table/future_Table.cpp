@@ -15,7 +15,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -49,6 +49,7 @@
 #include <QModelIndex>
 #include <QModelIndexList>
 #include <QRandomGenerator>
+#include <QRegularExpression>
 #include <QShortcut>
 #include <QTime>
 #include <QToolBar>
@@ -414,11 +415,11 @@ void Table::pasteIntoSelection() {
   if (mimeData->hasText()) {
     QString input_str = clipboard->text().trimmed();
     QList<QStringList> cell_texts;
-    QStringList input_rows(input_str.split(QRegExp("\\n|\\r\\n|\\r")));
+    QStringList input_rows(input_str.split(QRegularExpression("\\n|\\r\\n|\\r")));
     input_row_count = input_rows.count();
     input_col_count = 0;
     for (int i = 0; i < input_row_count; i++) {
-      cell_texts.append(input_rows.at(i).trimmed().split(QRegExp("\\s+")));
+      cell_texts.append(input_rows.at(i).trimmed().split(QRegularExpression("\\s+")));
       if (cell_texts.at(i).count() > input_col_count)
         input_col_count = cell_texts.at(i).count();
     }
@@ -587,7 +588,7 @@ void Table::fillSelectedCellsWithRandomNumbers() {
     switch (col_ptr->columnMode()) {
       case AlphaPlot::Numeric: {
         QVector<qreal> results(last - first + 1);
-        for (int row = first; row <= last; row++)
+          for (int row = first; row <= last; row++)
           if (d_view->isCellSelected(row, col))
             results[row - first] =
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
@@ -2135,7 +2136,8 @@ void Table::handleDataChange(const AbstractColumn *col) {
   int index = columnIndex(static_cast<const Column *>(col));
   if (index != -1) {
     if (col->rowCount() > rowCount()) setRowCount(col->rowCount());
-    emit dataChanged(0, index, col->rowCount() - 1, index);
+    if (col->rowCount() > 0)
+      emit dataChanged(0, index, col->rowCount() - 1, index);
   }
 }
 
@@ -2149,7 +2151,7 @@ void Table::handleRowsInserted(const AbstractColumn *col, int before,
                                int count) {
   Q_UNUSED(count);
   int index = columnIndex(static_cast<const Column *>(col));
-  if (index != -1 && before <= col->rowCount())
+  if (index != -1 && before < col->rowCount() && col->rowCount() > 0)
     emit dataChanged(before, index, col->rowCount() - 1, index);
 }
 
@@ -2163,7 +2165,8 @@ void Table::handleRowsAboutToBeRemoved(const AbstractColumn *col, int first,
 void Table::handleRowsRemoved(const AbstractColumn *col, int first, int count) {
   Q_UNUSED(count);
   int index = columnIndex(static_cast<const Column *>(col));
-  if (index != -1) emit dataChanged(first, index, col->rowCount() - 1, index);
+  if (index != -1 && first < col->rowCount() && col->rowCount() > 0)
+    emit dataChanged(first, index, col->rowCount() - 1, index);
 }
 
 void Table::connectColumn(const Column *col) {

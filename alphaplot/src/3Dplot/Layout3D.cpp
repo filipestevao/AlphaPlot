@@ -26,6 +26,11 @@
 #include "future/core/column/Column.h"
 #include "future/lib/XmlStreamReader.h"
 #include "future/lib/XmlStreamWriter.h"
+ 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+using namespace QtDataVisualization;
+#endif
+
 #include "plotcommon/widgets/ImageExportDialog.h"
 
 const int Layout3D::defaultlayout2dwidth_ = 500;
@@ -76,7 +81,7 @@ Layout3D::Layout3D(const Graph3DCommon::Plot3DType &plottype,
   QWidget *widget = new QWidget(this);
   widget->setContentsMargins(0, 0, 0, 0);
   QHBoxLayout *hLayout = new QHBoxLayout(widget);
-  hLayout->setMargin(0);
+  hLayout->setContentsMargins(0, 0, 0, 0);
   hLayout->addWidget(main_widget_, 1);
   hLayout->setAlignment(Qt::AlignTop);
   widget->setLayout(hLayout);
@@ -88,7 +93,7 @@ Layout3D::Layout3D(const Graph3DCommon::Plot3DType &plottype,
 
   if (name.isEmpty()) setObjectName("layout3d");
   QDateTime birthday = QDateTime::currentDateTime();
-  setBirthDate(birthday.toString(Qt::LocalDate));
+  setBirthDate(QLocale().toString(birthday, QLocale::ShortFormat));
   setFocusPolicy(Qt::TabFocus);
 
   setGeometry(QRect(0, 0, defaultlayout2dwidth_, defaultlayout2dheight_));
@@ -348,11 +353,11 @@ void Layout3D::load(XmlStreamReader *xmlreader, QList<Table *> tabs,
     QDateTime creation_time =
         QDateTime::fromString(time, "yyyy-dd-MM hh:mm:ss:zzz");
     if (!time.isEmpty() && creation_time.isValid() && ok) {
-      setBirthDate(creation_time.toString(Qt::LocalDate));
+      setBirthDate(QLocale().toString(creation_time, QLocale::ShortFormat));
     } else {
       xmlreader->raiseWarning(
           tr("Invalid creation time. Using current time insted."));
-      setBirthDate(QDateTime::currentDateTime().toString(Qt::LocalDate));
+      setBirthDate(QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat));
     }
 
     // read caption spec
@@ -796,7 +801,7 @@ void Layout3D::save(XmlStreamWriter *xmlwriter, const bool saveastemplate) {
   xmlwriter->writeAttribute("y", QString::number(pos().y()));
   xmlwriter->writeAttribute("width", QString::number(width()));
   xmlwriter->writeAttribute("height", QString::number(height()));
-  QDateTime datetime = QDateTime::fromString(birthDate(), Qt::LocalDate);
+  QDateTime datetime = QLocale().toDateTime(birthDate(), QLocale::ShortFormat);
   xmlwriter->writeAttribute("creation_time",
                             datetime.toString("yyyy-dd-MM hh:mm:ss:zzz"));
   xmlwriter->writeAttribute("caption_spec", QString::number(captionPolicy()));
@@ -1020,7 +1025,9 @@ void Layout3D::copy(Layout3D *layout, QList<Table *> tables,
   }
   std::unique_ptr<XmlStreamWriter> xmlwriter =
       std::unique_ptr<XmlStreamWriter>(new XmlStreamWriter(file.get()));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   xmlwriter->setCodec("UTF-8");
+#endif
   xmlwriter->setAutoFormatting(false);
   layout->save(xmlwriter.get());
   file->close();

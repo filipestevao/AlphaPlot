@@ -12,7 +12,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -155,7 +155,7 @@ void PlotWizard::accept() {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
       QStringList lst = text.split(",", Qt::SkipEmptyParts);
 #else
-      QStringList lst = text.split(",", QString::SkipEmptyParts);
+      QStringList lst = text.split(",", Qt::SkipEmptyParts);
 #endif
       lst.pop_back();
       QString master_curve = lst.join(",");

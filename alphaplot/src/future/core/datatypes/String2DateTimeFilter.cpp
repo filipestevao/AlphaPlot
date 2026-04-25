@@ -13,7 +13,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -67,9 +67,9 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
     strings = strings.at(0).split(" ", Qt::SkipEmptyParts);
 #else
   QStringList strings =
-      input_value.simplified().split(",", QString::SkipEmptyParts);
+      input_value.simplified().split(",", Qt::SkipEmptyParts);
   if (strings.size() == 1)
-    strings = strings.at(0).split(" ", QString::SkipEmptyParts);
+    strings = strings.at(0).split(" ", Qt::SkipEmptyParts);
 #endif
 
   if (strings.size() < 1)

@@ -12,7 +12,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -172,8 +172,7 @@ QString PolynomialFit::legendInfo() {
     double cj = d_results[j];
     if (cj > 0 && !legend.isEmpty()) legend += "+";
 
-    QString s;
-    s.sprintf("%.5f", cj);
+    QString s = QString::asprintf("%.5f", cj);
     if (s != "1.00000") legend += QLocale().toString(cj, 'g', d_prec);
 
     legend += "X";

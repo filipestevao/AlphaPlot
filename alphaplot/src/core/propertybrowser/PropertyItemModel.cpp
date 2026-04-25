@@ -1994,7 +1994,317 @@ void PropertyItemModel::buildUp(ObjectBrowserTreeItem *item) {
           rootItem_, item,
           PropertyItem::Property::Plot3DTheme_Label_Border_Visible);
     } break;
+    // Plot3D Axis Value (QValue3DAxis)
+    case ObjectBrowserTreeItem::ObjectType::Plot3DAxisValue: {
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Base_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_AutoRange);
+      auto pfrom = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisVal_From);
+      pfrom->setPrecision(precision);
+      pfrom->setLowerLimitDouble(-1e+308);
+      pfrom->setUpperLimitDouble(1e+308);
+      auto pto = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisVal_To);
+      pto->setPrecision(precision);
+      pto->setLowerLimitDouble(-1e+308);
+      pto->setUpperLimitDouble(1e+308);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Inverted);
+      auto tickcount = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisVal_Tick_Count);
+      tickcount->setLowerLimitInt(1);
+      auto subtickcount = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisVal_SubTick_Count);
+      subtickcount->setLowerLimitInt(0);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Tick_Separator);
+      PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DAxisVal_TickLabel_Format);
+      auto tickrot = PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DAxisVal_TickLabel_Rotation);
+      tickrot->setPrecision(2);
+      tickrot->setLowerLimitDouble(0);
+      tickrot->setUpperLimitDouble(90);
+      tickrot->setSuffix(tr(" °"));
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Label_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Label_Visible);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Label_Fixed);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisVal_Label_Text);
+    } break;
+    // Plot3D Axis Category (QCategory3DAxis)
+    case ObjectBrowserTreeItem::ObjectType::Plot3DAxisCatagory: {
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_Base_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_AutoRange);
+      auto catfrom = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisCat_From);
+      catfrom->setPrecision(2);
+      auto catto = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DAxisCat_To);
+      catto->setPrecision(2);
+      auto catticklabelrot = PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DAxisCat_TickLabel_Rotation);
+      catticklabelrot->setPrecision(2);
+      catticklabelrot->setLowerLimitDouble(0);
+      catticklabelrot->setUpperLimitDouble(90);
+      catticklabelrot->setSuffix(tr(" °"));
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_Label_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_Label_Visible);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_Label_Fixed);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DAxisCat_Label_Text);
+    } break;
+    // Plot3D Scatter
+    case ObjectBrowserTreeItem::ObjectType::Plot3DScatter: {
+      QList<QPair<QIcon, QString>> shadowquality;
+      shadowquality << QPair<QIcon, QString>(QIcon(), tr("None"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Low"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Medium"))
+                    << QPair<QIcon, QString>(QIcon(), tr("High"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Soft Low"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Soft Medium"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Soft High"));
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DScatter_Base_Separator);
+      auto ar = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DScatter_AspectRatio);
+      ar->setPrecision(4);
+      ar->setLowerLimitDouble(0.1);
+      auto har = PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DScatter_HorizontalAspectRatio);
+      har->setPrecision(4);
+      har->setLowerLimitDouble(0);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DScatter_ShadowQuality,
+                           shadowquality);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DScatter_OrthoProjection);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DScatter_Polar);
+    } break;
+    // Plot3D Scatter DataBlock
+    case ObjectBrowserTreeItem::ObjectType::Plot3DScatterDataBlock: {
+      QList<QPair<QIcon, QString>> colorstyle;
+      colorstyle << QPair<QIcon, QString>(QIcon(), tr("Uniform"))
+                 << QPair<QIcon, QString>(QIcon(), tr("Range Gradient"))
+                 << QPair<QIcon, QString>(QIcon(), tr("Object Gradient"));
+      QList<QPair<QIcon, QString>> gradients;
+      gradients << QPair<QIcon, QString>(QIcon(), tr("Grayscale"))
+                << QPair<QIcon, QString>(QIcon(), tr("Hot"))
+                << QPair<QIcon, QString>(QIcon(), tr("Cold"))
+                << QPair<QIcon, QString>(QIcon(), tr("Night"))
+                << QPair<QIcon, QString>(QIcon(), tr("Candy"))
+                << QPair<QIcon, QString>(QIcon(), tr("Geography"))
+                << QPair<QIcon, QString>(QIcon(), tr("Ion"))
+                << QPair<QIcon, QString>(QIcon(), tr("Thermal"))
+                << QPair<QIcon, QString>(QIcon(), tr("Polar"))
+                << QPair<QIcon, QString>(QIcon(), tr("Spectrum"))
+                << QPair<QIcon, QString>(QIcon(), tr("Jet"))
+                << QPair<QIcon, QString>(QIcon(), tr("Hues"))
+                << QPair<QIcon, QString>(QIcon(), tr("BBRY"))
+                << QPair<QIcon, QString>(QIcon(), tr("GYRD"));
+      PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DScatterDB_Base_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DScatterDB_Visible);
+      auto sz = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DScatterDB_Size);
+      sz->setPrecision(4);
+      sz->setLowerLimitDouble(0);
+      sz->setUpperLimitDouble(1);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DScatterDB_MeshSmooth);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DScatterDB_ColorStyle,
+                           colorstyle);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DScatterDB_SolidColor);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DScatterDB_GradientColor,
+                           gradients);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DScatterDB_HighlightColor);
+    } break;
+    // Plot3D Bar
+    case ObjectBrowserTreeItem::ObjectType::Plot3DBar: {
+      QList<QPair<QIcon, QString>> shadowquality;
+      shadowquality << QPair<QIcon, QString>(QIcon(), tr("None"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Low"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Medium"))
+                    << QPair<QIcon, QString>(QIcon(), tr("High"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Soft Low"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Soft Medium"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Soft High"));
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBar_Base_Separator);
+      auto ar = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DBar_AspectRatio);
+      ar->setPrecision(4);
+      ar->setLowerLimitDouble(0.1);
+      auto har = PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DBar_HorizontalAspectRatio);
+      har->setPrecision(4);
+      har->setLowerLimitDouble(0);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBar_ShadowQuality,
+                           shadowquality);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBar_OrthoProjection);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBar_Polar);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBar_Spacing_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBar_RelativeSpacing);
+      auto sx = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DBar_SpacingX);
+      sx->setPrecision(4);
+      sx->setLowerLimitDouble(0);
+      auto sy = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DBar_SpacingY);
+      sy->setPrecision(4);
+      sy->setLowerLimitDouble(0);
+      auto th = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DBar_Thickness);
+      th->setPrecision(4);
+      th->setLowerLimitDouble(0);
+      th->setUpperLimitDouble(1);
+    } break;
+    // Plot3D Bar DataBlock
+    case ObjectBrowserTreeItem::ObjectType::Plot3DBarDataBlock: {
+      QList<QPair<QIcon, QString>> colorstyle;
+      colorstyle << QPair<QIcon, QString>(QIcon(), tr("Uniform"))
+                 << QPair<QIcon, QString>(QIcon(), tr("Range Gradient"))
+                 << QPair<QIcon, QString>(QIcon(), tr("Object Gradient"));
+      QList<QPair<QIcon, QString>> gradients;
+      gradients << QPair<QIcon, QString>(QIcon(), tr("Grayscale"))
+                << QPair<QIcon, QString>(QIcon(), tr("Hot"))
+                << QPair<QIcon, QString>(QIcon(), tr("Cold"))
+                << QPair<QIcon, QString>(QIcon(), tr("Night"))
+                << QPair<QIcon, QString>(QIcon(), tr("Candy"))
+                << QPair<QIcon, QString>(QIcon(), tr("Geography"))
+                << QPair<QIcon, QString>(QIcon(), tr("Ion"))
+                << QPair<QIcon, QString>(QIcon(), tr("Thermal"))
+                << QPair<QIcon, QString>(QIcon(), tr("Polar"))
+                << QPair<QIcon, QString>(QIcon(), tr("Spectrum"))
+                << QPair<QIcon, QString>(QIcon(), tr("Jet"))
+                << QPair<QIcon, QString>(QIcon(), tr("Hues"))
+                << QPair<QIcon, QString>(QIcon(), tr("BBRY"))
+                << QPair<QIcon, QString>(QIcon(), tr("GYRD"));
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBarDB_Base_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBarDB_Visible);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBarDB_MeshSmooth);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBarDB_ColorStyle,
+                           colorstyle);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBarDB_SolidColor);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBarDB_GradientColor,
+                           gradients);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DBarDB_HighlightColor);
+    } break;
+    // Plot3D Surface
+    case ObjectBrowserTreeItem::ObjectType::Plot3DSurface: {
+      QList<QPair<QIcon, QString>> shadowquality;
+      shadowquality << QPair<QIcon, QString>(QIcon(), tr("None"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Low"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Medium"))
+                    << QPair<QIcon, QString>(QIcon(), tr("High"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Soft Low"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Soft Medium"))
+                    << QPair<QIcon, QString>(QIcon(), tr("Soft High"));
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurface_Base_Separator);
+      auto ar = PropertyItem::create(
+          rootItem_, item, PropertyItem::Property::Plot3DSurface_AspectRatio);
+      ar->setPrecision(4);
+      ar->setLowerLimitDouble(0.1);
+      auto har = PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DSurface_HorizontalAspectRatio);
+      har->setPrecision(4);
+      har->setLowerLimitDouble(0);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurface_ShadowQuality,
+                           shadowquality);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurface_FlipHorizontalGrid);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurface_OrthoProjection);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurface_Polar);
+    } break;
+    // Plot3D Surface DataBlock
+    case ObjectBrowserTreeItem::ObjectType::Plot3DSurfaceDataBlock: {
+      QList<QPair<QIcon, QString>> colorstyle;
+      colorstyle << QPair<QIcon, QString>(QIcon(), tr("Uniform"))
+                 << QPair<QIcon, QString>(QIcon(), tr("Range Gradient"))
+                 << QPair<QIcon, QString>(QIcon(), tr("Object Gradient"));
+      QList<QPair<QIcon, QString>> gradients;
+      gradients << QPair<QIcon, QString>(QIcon(), tr("Grayscale"))
+                << QPair<QIcon, QString>(QIcon(), tr("Hot"))
+                << QPair<QIcon, QString>(QIcon(), tr("Cold"))
+                << QPair<QIcon, QString>(QIcon(), tr("Night"))
+                << QPair<QIcon, QString>(QIcon(), tr("Candy"))
+                << QPair<QIcon, QString>(QIcon(), tr("Geography"))
+                << QPair<QIcon, QString>(QIcon(), tr("Ion"))
+                << QPair<QIcon, QString>(QIcon(), tr("Thermal"))
+                << QPair<QIcon, QString>(QIcon(), tr("Polar"))
+                << QPair<QIcon, QString>(QIcon(), tr("Spectrum"))
+                << QPair<QIcon, QString>(QIcon(), tr("Jet"))
+                << QPair<QIcon, QString>(QIcon(), tr("Hues"))
+                << QPair<QIcon, QString>(QIcon(), tr("BBRY"))
+                << QPair<QIcon, QString>(QIcon(), tr("GYRD"));
+      QList<QPair<QIcon, QString>> drawmode;
+      drawmode << QPair<QIcon, QString>(QIcon(), tr("Surface"))
+               << QPair<QIcon, QString>(QIcon(), tr("Wireframe"))
+               << QPair<QIcon, QString>(QIcon(), tr("Surface & Wireframe"));
+      PropertyItem::create(
+          rootItem_, item,
+          PropertyItem::Property::Plot3DSurfaceDB_Base_Separator);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurfaceDB_Visible);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurfaceDB_FlatShading);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurfaceDB_DrawMode,
+                           drawmode);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurfaceDB_MeshSmooth);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurfaceDB_ColorStyle,
+                           colorstyle);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurfaceDB_SolidColor);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurfaceDB_GradientColor,
+                           gradients);
+      PropertyItem::create(rootItem_, item,
+                           PropertyItem::Property::Plot3DSurfaceDB_HighlightColor);
+    } break;
   }
+
 
   endResetModel();
   emit modelResetComplete();

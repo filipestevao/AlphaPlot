@@ -33,6 +33,7 @@
 #include <QCheckBox>
 #include <QRadioButton>
 #include <QGroupBox>
+#include <QGridLayout>
 #include <QHBoxLayout>
 
 TeXTableSettingsWidget::TeXTableSettingsWidget(QWidget* parent)

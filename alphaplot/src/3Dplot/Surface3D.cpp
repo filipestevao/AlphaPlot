@@ -13,7 +13,9 @@
 #include "scripting/Script.h"
 #include "scripting/ScriptingEnv.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 using namespace QtDataVisualization;
+#endif
 
 Surface3D::Surface3D(Q3DSurface *surface)
     : graph_(surface),
@@ -612,7 +614,7 @@ void Surface3D::setSurfaceMeshType(const QSurface3DSeries::DrawFlag &type,
   series->setDrawMode(type);
 }
 
-QtDataVisualization::QSurface3DSeries::DrawFlag Surface3D::getSurfaceMeshType(
+QSurface3DSeries::DrawFlag Surface3D::getSurfaceMeshType(
     QSurface3DSeries *series) const {
   if (series->drawMode().testFlag(QSurface3DSeries::DrawFlag::DrawSurface))
     return QSurface3DSeries::DrawFlag::DrawSurface;

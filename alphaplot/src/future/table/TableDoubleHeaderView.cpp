@@ -13,7 +13,7 @@
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
+ *  the Free Software Foundation; either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
  *  This program is distributed in the hope that it will be useful,        *
@@ -141,14 +141,20 @@ void TableDoubleHeaderView::showComments(bool on) {
 void TableDoubleHeaderView::refresh() {
   // adjust geometry and repaint header (still looking for a more elegant
   // solution)
+  bool slaveSignalsBlocked = d_slave->blockSignals(true);
   d_slave->setStretchLastSection(
       true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
   d_slave->updateGeometry();
   d_slave->setStretchLastSection(false);  // ugly hack part 2
+  d_slave->blockSignals(slaveSignalsBlocked);
+
+  bool masterSignalsBlocked = blockSignals(true);
   setStretchLastSection(
       true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
   updateGeometry();
   setStretchLastSection(false);  // ugly hack part 2
+  blockSignals(masterSignalsBlocked);
+
   update();
 }
 

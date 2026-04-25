@@ -29,6 +29,7 @@
 #include "TeXTableSettings.h"
 #include "TeXTableSettingsWidget.h"
 #include "TeXTableExportDialog.h"
+#include <QFileDialog>
 
 TeXTableExportDialog::TeXTableExportDialog(QWidget* parent)
     : ExtensibleFileDialog(parent) {
