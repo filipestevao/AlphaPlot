@@ -60,6 +60,7 @@ compile_commands.json
 *.log
 *.bak
 *.swp
+.DS_Store
 
 # test output & cache
 Run-make.sh

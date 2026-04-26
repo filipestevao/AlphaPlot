@@ -9,6 +9,7 @@
   <url type="bugtracker">https://github.com/narunlifescience/AlphaPlot/issues</url>
   <url type="donation">https://www.patreon.com/alphaplot</url>
   <url type="help">https://alphaplot.sourceforge.io/wiki/index.php</url>
+  <url type="vcs-browser">https://github.com/narunlifescience/AlphaPlot</url>
   <launchable type="desktop-id">alphaplot.desktop</launchable>
   <summary>AlphaPlot is a free application for Scientific Data Analysis and Visualization</summary>
   <description>
